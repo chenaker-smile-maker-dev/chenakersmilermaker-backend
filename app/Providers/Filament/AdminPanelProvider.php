@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -28,9 +29,21 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->colors([
-                'primary' => Color::Amber,
-            ])
+            ->colors(
+                [
+                    'primary' => Color::hex('#053B3F'),
+                    'success' => Color::hex('#12D18E'),
+                    'error' => Color::hex('#F85556'),
+                    'warning' => Color::hex('#FF9500'),
+                    'info' => Color::hex('#F037A5'),
+                    'neutral' => Color::hex('#E5E7EB'),
+                ]
+            )
+            ->databaseTransactions()
+            ->databaseNotifications()
+            ->databaseNotificationsPolling("30s")
+            ->lazyLoadedDatabaseNotifications(false)
+            ->font('Poppins')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
@@ -54,6 +67,13 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugins([
+                FilamentDeveloperLoginsPlugin::make()
+                    ->enabled(config('app.debug'))
+                    ->users([
+                        'ADMINISTRATEUR' => 'admin@admin.dev',
+                    ])
             ]);
     }
 }
