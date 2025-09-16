@@ -10,6 +10,7 @@
         "dedoc/scramble": "^0.12.34",
         "dutchcodingcompany/filament-developer-logins": "^2.0",
         "filament/filament": "^4.0",
+        "joaopaulolndev/filament-edit-profile": "^2.0",
         "laravel/framework": "^12.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
