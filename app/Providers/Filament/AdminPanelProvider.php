@@ -31,7 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->colors(
                 [
-                    'primary' => Color::hex('#053B3F'),
+                    'primary' => Color::hex('#8FFDC6'),
                     'success' => Color::hex('#12D18E'),
                     'error' => Color::hex('#F85556'),
                     'warning' => Color::hex('#FF9500'),
@@ -39,11 +39,15 @@ class AdminPanelProvider extends PanelProvider
                     'neutral' => Color::hex('#E5E7EB'),
                 ]
             )
+            ->favicon(fn() => asset('favicon.svg'))
+            ->brandLogo(fn() => view('panels.admin.components.brand'))
+            ->darkModeBrandLogo(fn() => view('panels.admin.components.brand-dark'))
+            ->brandLogoHeight('2rem')
             ->databaseTransactions()
             ->databaseNotifications()
             ->databaseNotificationsPolling("30s")
             ->lazyLoadedDatabaseNotifications(false)
-            ->font('Poppins')
+            ->font('Inter')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([

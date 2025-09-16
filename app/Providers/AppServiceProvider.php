@@ -40,7 +40,7 @@ class AppServiceProvider extends ServiceProvider
                 "title" => config('app.name') . " API v1",
                 "theme" => "light",
                 'hide_schemas' => true,
-                // 'logo' => '/favicon.ico',
+                'logo' => asset('favicon.svg'),
                 'layout' => 'responsive',
             ],
         ])
