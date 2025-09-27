@@ -1,0 +1,10 @@
+// filament base theme
+@import "../../../../vendor/filament/filament/resources/css/theme.css";
+
+// local filament customizations
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+// filament calendar package
+@source '../../../../vendor/guava/calendar/resources/**/*';
+@import "../../../../vendor/guava/calendar/resources/css/theme.css";

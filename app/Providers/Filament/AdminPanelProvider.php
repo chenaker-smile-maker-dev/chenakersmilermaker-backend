@@ -30,34 +30,39 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->colors(
-                [
-                    'primary' => Color::hex('#8FFDC6'),
-                    'success' => Color::hex('#12D18E'),
-                    'error' => Color::hex('#F85556'),
-                    'warning' => Color::hex('#FF9500'),
-                    'info' => Color::hex('#F037A5'),
-                    'neutral' => Color::hex('#E5E7EB'),
-                ]
-            )
+
+            ->colors([
+                'primary' => Color::hex('#8FFDC6'),
+                'success' => Color::hex('#12D18E'),
+                'error' => Color::hex('#F85556'),
+                'warning' => Color::hex('#FF9500'),
+                'info' => Color::hex('#F037A5'),
+                'neutral' => Color::hex('#E5E7EB'),
+            ])
             ->favicon(fn() => asset('favicon.svg'))
             ->brandLogo(fn() => view('panels.admin.components.brand'))
             ->darkModeBrandLogo(fn() => view('panels.admin.components.brand-dark'))
             ->brandLogoHeight('2rem')
+            ->font('Inter')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->databaseTransactions()
             ->databaseNotifications()
             ->databaseNotificationsPolling("30s")
             ->lazyLoadedDatabaseNotifications(false)
-            ->font('Inter')
-            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
-            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
-            ->pages([
-                Dashboard::class,
-            ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+
+            ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
+            ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\Filament\Admin\Pages')
+            ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\Filament\Admin\Widgets')
+
+            ->pages([Dashboard::class])
             ->widgets([
                 AccountWidget::class,
-                FilamentInfoWidget::class,
+                FilamentInfoWidget::class
+            ])
+
+            ->plugins([
+                FilamentDeveloperLoginsPlugin::make()->enabled(config('app.debug'))->users(['ADMINISTRATEUR' => 'admin@admin.dev']),
+                FilamentEditProfilePlugin::make()->setIcon('heroicon-o-user-circle')
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -70,18 +75,6 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
-            ->authMiddleware([
-                Authenticate::class,
-            ])
-            ->plugins([
-                FilamentDeveloperLoginsPlugin::make()
-                    ->enabled(config('app.debug'))
-                    ->users([
-                        'ADMINISTRATEUR' => 'admin@admin.dev',
-                    ]),
-                FilamentEditProfilePlugin::make()
-                    ->setIcon('heroicon-o-user-circle')
-
-            ]);
+            ->authMiddleware([Authenticate::class]);
     }
 }

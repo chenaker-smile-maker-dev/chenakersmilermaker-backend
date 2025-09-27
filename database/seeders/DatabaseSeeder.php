@@ -11,9 +11,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        User::factory()->create([
-            'name' => 'admin',
-            'email' => 'admin@admin.dev',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'admin',
+        //     'email' => 'admin@admin.dev',
+        // ]);
+        \App\Models\Reservation::factory()->count(50)->create();
     }
 }
