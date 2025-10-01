@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'admin',
         //     'email' => 'admin@admin.dev',
         // ]);
-        \App\Models\Reservation::factory()->count(50)->create();
+        $doctor = \App\Models\Doctor::factory()->count(10)->create();
+        // \App\Models\Reservation::factory()->count(50)->create();
     }
 }
