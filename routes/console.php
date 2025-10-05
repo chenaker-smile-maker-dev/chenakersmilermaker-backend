@@ -7,16 +7,16 @@ use Spatie\Health\Commands\DispatchQueueCheckJobsCommand;
 use Spatie\Health\Commands\ScheduleCheckHeartbeatCommand;
 use Spatie\Health\Commands\RunHealthChecksCommand;
 
-Schedule::command(RunHealthChecksCommand::class)->everyMinute();
-Schedule::command(DispatchQueueCheckJobsCommand::class)->everyMinute();
-Schedule::command(ScheduleCheckHeartbeatCommand::class)->everyMinute();
+Schedule::command(RunHealthChecksCommand::class)->hourly();
+Schedule::command(DispatchQueueCheckJobsCommand::class)->hourly();
+Schedule::command(ScheduleCheckHeartbeatCommand::class)->hourly();
 
-Schedule::command('auth:clear-resets')->everyMinute();
-Schedule::command('queue:prune-batches')->everyMinute();
-Schedule::command('queue:prune-failed')->everyMinute();
-Schedule::command('sanctum:prune-expired')->everyMinute();
-Schedule::command('media-library:clean')->everyMinute();
-Schedule::command('activitylog:clean')->everyMinute();
+Schedule::command('auth:clear-resets')->daily();
+Schedule::command('queue:prune-batches')->daily();
+Schedule::command('queue:prune-failed')->daily();
+Schedule::command('sanctum:prune-expired')->daily();
+Schedule::command('media-library:clean')->daily();
+Schedule::command('activitylog:clean')->daily();
 
 Artisan::command('testing', function () {
     $this->comment("testing");
