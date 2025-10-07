@@ -8,3 +8,6 @@
 /* filament calendar package */
 @source '../../../../vendor/guava/calendar/resources/**/*';
 @import "../../../../vendor/guava/calendar/resources/css/theme.css";
+
+/* filament language switch package */
+@source '../../../../vendor/bezhansalleh/filament-language-switch/resources/views/**/*.blade.php';

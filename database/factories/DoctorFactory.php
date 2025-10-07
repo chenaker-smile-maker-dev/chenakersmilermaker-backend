@@ -32,7 +32,7 @@ class DoctorFactory extends Factory
                     'جراح عظام',
                 ]),
             ],
-            'diplomas' => ['a', 'b', 'c'],
+            'diplomas' => [["diploma" => 'a'], ["diploma" => 'b'], ["diploma" => 'c']],
         ];
     }
 

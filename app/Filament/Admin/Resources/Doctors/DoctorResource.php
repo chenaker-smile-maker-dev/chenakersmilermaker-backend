@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Doctors;
 
+use App\Filament\Admin\AdminNavigation;
 use App\Filament\Admin\Resources\Doctors\Pages\CreateDoctor;
 use App\Filament\Admin\Resources\Doctors\Pages\EditDoctor;
 use App\Filament\Admin\Resources\Doctors\Pages\ListDoctors;
@@ -22,8 +23,28 @@ class DoctorResource extends Resource
 {
     protected static ?string $model = Doctor::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    public static function getNavigationGroup(): ?string
+    {
+        return  __(AdminNavigation::MANAGEMENT_GROUP);
+    }
 
+    public static function getModelLabel(): string
+    {
+        return 'Doctor';
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return 'Doctors';
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    protected static string|BackedEnum|null $navigationIcon = AdminNavigation::DOCTORS_RESOURCE['icon'];
+    protected static ?int $navigationSort = AdminNavigation::DOCTORS_RESOURCE['sort'];
     protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
