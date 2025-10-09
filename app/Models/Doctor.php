@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravolt\Avatar\Avatar;
+use Locale;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
@@ -36,7 +38,6 @@ class Doctor extends Model implements HasMedia
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg'])
             ->useDisk('public');
     }
-    // register media conversions for the media doctor photo
     public function registerMediaConversions(?Media $media = null): void
     {
         if ($media && $media->collection_name === 'doctor_photo') {
@@ -57,7 +58,11 @@ class Doctor extends Model implements HasMedia
     {
         return $this->hasMedia('doctor_photo')
             ? $this->getFirstMediaUrl('doctor_photo', 'thumb')
-            : null;
+            : (new Avatar())->create($this->getTranslation('name', app()->getLocale()))
+            ->setDimension(100)
+            ->setBackground('#25703e')
+            ->setForeground('#ffffff')
+            ->toBase64();
     }
 
     public function getDiplomasCountAttribute()

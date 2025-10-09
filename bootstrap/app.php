@@ -1,8 +1,10 @@
 <?php
 
+use App\Enums\Api\TokenAbility;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Laravel\Sanctum\Http\Middleware\CheckForAnyAbility;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,7 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+
+        $middleware->alias([
+            'access' => CheckForAnyAbility::class . ':' . TokenAbility::ACCESS_API->value,
+            'refresh' => CheckForAnyAbility::class . ':' . TokenAbility::REFRESH_ACCESS_TOKEN->value,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

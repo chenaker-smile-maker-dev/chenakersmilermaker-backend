@@ -14,4 +14,10 @@ class AdminNavigation
         'sort' => 1,
         'group' => self::MANAGEMENT_GROUP,
     ];
+
+    public const PATIENTS_RESOURCE = [
+        'icon' => Heroicon::UserGroup,
+        'sort' => 2,
+        'group' => self::MANAGEMENT_GROUP,
+    ];
 }

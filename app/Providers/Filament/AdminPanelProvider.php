@@ -45,6 +45,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogoHeight('2rem')
             ->font('Inter')
             ->viteTheme('resources/css/filament/admin/theme.css')
+            ->spa()
             ->databaseTransactions()
             ->databaseNotifications()
             ->databaseNotificationsPolling("30s")

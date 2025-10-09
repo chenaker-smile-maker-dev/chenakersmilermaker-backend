@@ -26,4 +26,10 @@ class Reservation extends Model implements Eventable
             ->start($this->from)
             ->end($this->to);
     }
+
+    public function scopeBetween($query, $start, $end)
+    {
+        return $query->whereDate('from', '>=', $start)
+            ->whereDate('to', '<=', $end);
+    }
 }

@@ -19,10 +19,10 @@ class DoctorsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
-                SpatieMediaLibraryImageColumn::make('doctor_photo')
-                    ->collection('doctor_photo')
-                    ->conversion('thumb')
+                ImageColumn::make('thumb_image')
+                    ->toggleable()
                     ->circular(),
 
                 TextColumn::make("name")
@@ -32,13 +32,11 @@ class DoctorsTable
                 TextColumn::make("specialty")
                     ->limit(50)
                     ->wrap()
-                    ->sortable()
                     ->toggleable(),
 
                 // diplomas, number of diplomas
                 TextColumn::make("diplomas_count")
                     ->badge()
-                    ->sortable()
                     ->toggleable()
                     ->color("primary")
                     ->alignCenter(),
