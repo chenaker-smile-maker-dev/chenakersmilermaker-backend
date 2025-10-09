@@ -31,18 +31,19 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
 
-            ->colors([
-                'primary' => Color::hex('#8FFDC6'),
-                'success' => Color::hex('#12D18E'),
-                'error' => Color::hex('#F85556'),
-                'warning' => Color::hex('#FF9500'),
-                'info' => Color::hex('#F037A5'),
-                'neutral' => Color::hex('#E5E7EB'),
-            ])
+            // ->colors([
+            //     'primary' => Color::hex('#8FFDC6'),
+            //     'success' => Color::hex('#12D18E'),
+            //     'error' => Color::hex('#F85556'),
+            //     'warning' => Color::hex('#FF9500'),
+            //     'info' => Color::hex('#F037A5'),
+            //     'neutral' => Color::hex('#E5E7EB'),
+            // ])
             ->favicon(fn() => asset('favicon.svg'))
-            ->brandLogo(fn() => view('panels.admin.components.brand'))
-            ->darkModeBrandLogo(fn() => view('panels.admin.components.brand-dark'))
-            ->brandLogoHeight('2rem')
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            // ->brandLogo(fn() => view('panels.admin.components.brand'))
+            // ->darkModeBrandLogo(fn() => view('panels.admin.components.brand-dark'))
+            // ->brandLogoHeight('2rem')
             ->font('Inter')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->spa()

@@ -16,7 +16,9 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DoctorResource extends Resource
@@ -30,12 +32,12 @@ class DoctorResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Doctor';
+        return 'Médecin';
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Doctors';
+        return 'Médecins';
     }
 
     public static function getNavigationBadge(): ?string
@@ -45,7 +47,21 @@ class DoctorResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = AdminNavigation::DOCTORS_RESOURCE['icon'];
     protected static ?int $navigationSort = AdminNavigation::DOCTORS_RESOURCE['sort'];
-    protected static ?string $recordTitleAttribute = 'name';
+    protected static ?string $recordTitleAttribute = 'display_name';
+    public static function getGlobalSearchResultTitle(Model $record): string | Htmlable
+    {
+        return $record->display_name;
+    }
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'specialty'];
+    }
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Specialty' => $record->specialty,
+        ];
+    }
 
     public static function form(Schema $schema): Schema
     {

@@ -69,4 +69,9 @@ class Doctor extends Model implements HasMedia
     {
         return is_array($this->diplomas) ? count($this->diplomas) : 0;
     }
+
+    public function getDisplayNameAttribute()
+    {
+        return 'Dr.' . $this->name;
+    }
 }

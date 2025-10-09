@@ -12,8 +12,8 @@ class PatientCards extends StatsOverviewWidget
 {
     protected function getStats(): array
     {
-        Cache::forget('patient-stats');
-        $stats = Cache::remember('patient-stats', 60 * 30, function () {
+        Cache::forget('patients-stats');
+        $stats = Cache::remember('patients-stats', 60 * 30, function () {
             return [
                 'total' => Patient::count(),
                 'male' => Patient::where('gender', Gender::MALE->value)->count(),
@@ -37,7 +37,7 @@ class PatientCards extends StatsOverviewWidget
                 // ->description('Female patients')
                 ->color('secondary'),
 
-            Stat::make('Trashed Patients', $stats['trashed'])
+            Stat::make('Deleted Patients', $stats['trashed'])
                 // ->description('Soft deleted patients')
                 ->color('danger'),
         ];

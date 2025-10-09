@@ -12,11 +12,14 @@ use App\Filament\Admin\Resources\Patients\Schemas\PatientInfolist;
 use App\Filament\Admin\Resources\Patients\Tables\PatientsTable;
 use App\Models\Patient;
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PatientResource extends Resource
@@ -29,12 +32,12 @@ class PatientResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Patient';
+        return 'Patient(e)';
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Patients';
+        return 'Patientes';
     }
 
     public static function getNavigationBadge(): ?string
@@ -46,6 +49,20 @@ class PatientResource extends Resource
     protected static ?int $navigationSort = AdminNavigation::PATIENTS_RESOURCE['sort'];
     protected static ?string $recordTitleAttribute = 'full_name';
 
+    public static function getGlobalSearchResultTitle(Model $record): string | Htmlable
+    {
+        return $record->full_name;
+    }
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['first_name', 'last_name', 'email', 'phone'];
+    }
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Email' => $record->email,
+        ];
+    }
     public static function form(Schema $schema): Schema
     {
         return PatientForm::configure($schema);
