@@ -20,6 +20,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
+use CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin;
+use Filament\Enums\GlobalSearchPosition;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -52,6 +54,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotificationsPolling("30s")
             ->lazyLoadedDatabaseNotifications(false)
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->globalSearch(position: GlobalSearchPosition::Topbar)
 
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\Filament\Admin\Pages')
@@ -65,7 +68,8 @@ class AdminPanelProvider extends PanelProvider
 
             ->plugins([
                 FilamentDeveloperLoginsPlugin::make()->enabled(config('app.debug'))->users(['ADMINISTRATEUR' => 'admin@admin.dev']),
-                FilamentEditProfilePlugin::make()->setIcon('heroicon-o-user-circle')
+                FilamentEditProfilePlugin::make()->setIcon('heroicon-o-user-circle'),
+                GlobalSearchModalPlugin::make()->highlighter(true)->modal(slideOver: true)
             ])
             ->middleware([
                 EncryptCookies::class,
