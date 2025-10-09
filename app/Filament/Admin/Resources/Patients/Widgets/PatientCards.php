@@ -25,20 +25,20 @@ class PatientCards extends StatsOverviewWidget
 
         return [
             Stat::make('Total Patients', $stats['total'])
-                ->description('All registered patients')
+                // ->description('All registered patients')
                 ->color('success')
                 ->chart($stats['chart']),
 
             Stat::make('Male Patients', $stats['male'])
-                ->description('Male patients')
+                // ->description('Male patients')
                 ->color('primary'),
 
             Stat::make('Female Patients', $stats['female'])
-                ->description('Female patients')
+                // ->description('Female patients')
                 ->color('secondary'),
 
             Stat::make('Trashed Patients', $stats['trashed'])
-                ->description('Soft deleted patients')
+                // ->description('Soft deleted patients')
                 ->color('danger'),
         ];
     }

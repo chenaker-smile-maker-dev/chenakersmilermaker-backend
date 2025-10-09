@@ -8,8 +8,12 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Enums\Alignment;
+use Filament\Support\Enums\FontWeight;
 use Filament\Tables\Columns\ImageColumn;
-use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Columns\Layout\Panel;
+use Filament\Tables\Columns\Layout\Split;
+use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
@@ -21,58 +25,35 @@ class DoctorsTable
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
-                ImageColumn::make('thumb_image')
-                    ->toggleable()
-                    ->circular(),
+                Split::make([
+                    ImageColumn::make('thumb_image')
+                        ->circular()
+                        ->size(80)
+                        ->grow(false),
 
-                TextColumn::make("name")
-                    ->searchable()
-                    ->toggleable(),
+                    Stack::make([
+                        TextColumn::make("name")
+                            ->weight(FontWeight::Bold)
+                            ->searchable()
+                            ->sortable(),
 
-                TextColumn::make("specialty")
-                    ->limit(50)
-                    ->wrap()
-                    ->toggleable(),
+                        TextColumn::make("specialty")
+                            ->color('gray')
+                            ->limit(50)
+                            ->wrap(),
 
-                // diplomas, number of diplomas
-                TextColumn::make("diplomas_count")
-                    ->badge()
-                    ->toggleable()
-                    ->color("primary")
-                    ->alignCenter(),
+                        // TextColumn::make("diplomas_count")
+                        //     ->badge()
+                        //     ->color("primary")
+                        //     ->label('Diplomas'),
+                    ])->space(1),
 
-                TextColumn::make('created_at')
-                    ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : '—')
-                    ->tooltip(fn($record) => $record->created_at?->format('Y-m-d H:i:s'))
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
 
-                TextColumn::make('updated_at')
-                    ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : '—')
-                    ->tooltip(fn($record) => $record->updated_at?->format('Y-m-d H:i:s'))
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                TextColumn::make('deleted_at')
-                    ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : '—')
-                    ->tooltip(fn($record) => $record->deleted_at?->format('Y-m-d H:i:s'))
-                    ->placeholder('Not deleted')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-
-                // TextColumn::make('deleted_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
-                // TextColumn::make('created_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
-                // TextColumn::make('updated_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
+                ])->from(''),
+            ])
+            ->contentGrid([
+                'md' => 2,
+                'xl' => 3,
             ])
             ->filters([
                 TrashedFilter::make(),

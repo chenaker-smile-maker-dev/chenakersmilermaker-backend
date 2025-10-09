@@ -18,10 +18,10 @@ class HealthCheckServiceProvider extends ServiceProvider
     private function configureHealthCheck(): void
     {
         Health::checks([
-            ...$this->configureDbChecks(),
             ...$this->configureAppChecks(),
-            ...$this->configurePerformanceChecks(),
+            ...$this->configureDbChecks(),
             ...$this->configureWorkersCheck(),
+            ...$this->configurePerformanceChecks(),
             ...$this->configureSecurityCheck(),
         ]);
     }
