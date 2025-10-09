@@ -30,27 +30,28 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->spa()
 
-            // ->colors([
-            //     'primary' => Color::hex('#8FFDC6'),
-            //     'success' => Color::hex('#12D18E'),
-            //     'error' => Color::hex('#F85556'),
-            //     'warning' => Color::hex('#FF9500'),
-            //     'info' => Color::hex('#F037A5'),
-            //     'neutral' => Color::hex('#E5E7EB'),
-            // ])
+            ->colors([
+                'primary' => Color::hex('#8FFDC6'),
+                'success' => Color::hex('#12D18E'),
+                'error' => Color::hex('#F85556'),
+                'warning' => Color::hex('#FF9500'),
+                'info' => Color::hex('#F037A5'),
+                'neutral' => Color::hex('#E5E7EB'),
+            ])
             ->favicon(fn() => asset('favicon.svg'))
-            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
-            // ->brandLogo(fn() => view('panels.admin.components.brand'))
-            // ->darkModeBrandLogo(fn() => view('panels.admin.components.brand-dark'))
-            // ->brandLogoHeight('2rem')
+            ->brandLogo(fn() => view('panels.admin.components.brand'))
+            ->darkModeBrandLogo(fn() => view('panels.admin.components.brand-dark'))
+            ->brandLogoHeight('2rem')
             ->font('Inter')
             ->viteTheme('resources/css/filament/admin/theme.css')
-            ->spa()
+
             ->databaseTransactions()
             ->databaseNotifications()
             ->databaseNotificationsPolling("30s")
             ->lazyLoadedDatabaseNotifications(false)
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
 
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\Filament\Admin\Pages')
