@@ -20,4 +20,11 @@ class AdminNavigation
         'sort' => 2,
         'group' => self::MANAGEMENT_GROUP,
     ];
+
+
+    public const HEALTH_PAGE = [
+        'icon' => Heroicon::ShieldCheck,
+        'sort' => 9999,
+        // 'group' => self::MANAGEMENT_GROUP,
+    ];
 }

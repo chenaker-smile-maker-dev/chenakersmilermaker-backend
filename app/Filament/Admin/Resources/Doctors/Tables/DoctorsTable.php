@@ -8,6 +8,7 @@ use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ExportAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreAction;
@@ -25,7 +26,7 @@ use Filament\Tables\Table;
 
 class DoctorsTable
 {
-    private static string $layout = 'grid'; // 'grid' or 'table'
+    private static string $layout = 'table'; // 'grid' or 'table'
 
     public static function configure(Table $table): Table
     {
@@ -58,6 +59,9 @@ class DoctorsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->columnMappingColumns(3)
+                        ->exporter(DoctorExporter::class),
                     DeleteBulkAction::make(),
                     ForceDeleteBulkAction::make(),
                     RestoreBulkAction::make(),
