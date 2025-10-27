@@ -8,7 +8,7 @@ use Spatie\Health\ResultStores\ResultStore;
 
 class HealthCheckResultsWidget extends Widget
 {
-    protected string $view = 'filament.admin.widgets.health-check-results-widget';
+    protected string $view = 'panels.admin.widgets.health-check-results-widget';
 
     protected int | string | array $columnSpan = 'full';
 

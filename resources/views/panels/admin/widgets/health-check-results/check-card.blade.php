@@ -15,7 +15,7 @@
 <div class="relative group border-2 rounded-xl p-6 transition-all duration-200 hover:shadow-xl hover:scale-105 {{ $bgColor }}">
     <!-- Status Icon at the top -->
     <div class="flex justify-center mb-4">
-        @include('filament.admin.widgets.health-check-results.status-icon', ['status' => $result['status']])
+        @include('panels.admin.widgets.health-check-results.status-icon', ['status' => $result['status']])
     </div>
 
     <!-- Card Content -->
@@ -27,7 +27,7 @@
 
         <!-- Status Badge -->
         {{-- <div class="flex justify-center">
-            @include('filament.admin.widgets.health-check-results.status-badge', ['status' => $result['status']])
+            @include('panels.admin.widgets.health-check-results.status-badge', ['status' => $result['status']])
         </div> --}}
 
         <!-- Summary Section -->
@@ -50,7 +50,7 @@
     </div>
 
     <!-- Metadata Tooltip -->
-    @include('filament.admin.widgets.health-check-results.metadata-tooltip', ['meta' => $result['meta']])
+    @include('panels.admin.widgets.health-check-results.metadata-tooltip', ['meta' => $result['meta']])
 
     <!-- Hover indicator for metadata -->
     {{-- @if(!empty($result['meta']))

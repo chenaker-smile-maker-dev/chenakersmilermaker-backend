@@ -29,6 +29,7 @@ class HealthCheckPage extends Page
     {
         return [
             Action::make('refresh')
+                ->visible(false)
                 ->label('Run Fresh Check')
                 ->icon('heroicon-o-arrow-path')
                 ->color('primary')

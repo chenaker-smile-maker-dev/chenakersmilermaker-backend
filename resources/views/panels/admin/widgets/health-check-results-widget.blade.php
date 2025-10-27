@@ -18,11 +18,11 @@ hello world
         </x-slot>
 
         @if($results->isEmpty())
-            @include('filament.admin.widgets.health-check-results.empty-state')
+            @include('panels.admin.widgets.health-check-results.empty-state')
         @else
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 @foreach($results as $result)
-                    @include('filament.admin.widgets.health-check-results.check-card', ['result' => $result])
+                    @include('panels.admin.widgets.health-check-results.check-card', ['result' => $result])
                 @endforeach
             </div>
         @endif
