@@ -92,24 +92,24 @@ class PatientsTable
                     SelectFilter::make('gender')
                         ->options(Gender::class),
                     TrashedFilter::make(),
-                    // QueryBuilder::make()
-                    //     ->columnSpanFull()
-                    //     ->constraints([
-                    //         TextConstraint::make('first_name'),
-                    //         TextConstraint::make('last_name'),
-                    //         TextConstraint::make('phone'),
-                    //         TextConstraint::make('email'),
-                    //         NumberConstraint::make('age'),
-                    //         SelectConstraint::make('gender')
-                    //             ->options(Gender::class),
-                    //         DateConstraint::make('created_at'),
-                    //         DateConstraint::make('updated_at'),
-                    //         DateConstraint::make('deleted_at'),
-                    //     ])
+                    QueryBuilder::make()
+                        ->columnSpanFull()
+                        ->constraints([
+                            TextConstraint::make('first_name'),
+                            TextConstraint::make('last_name'),
+                            TextConstraint::make('phone'),
+                            TextConstraint::make('email'),
+                            NumberConstraint::make('age'),
+                            SelectConstraint::make('gender')
+                                ->options(Gender::class),
+                            DateConstraint::make('created_at'),
+                            DateConstraint::make('updated_at'),
+                            DateConstraint::make('deleted_at'),
+                        ])
                 ],
                 layout: FiltersLayout::Dropdown
             )
-            ->filtersFormColumns(1)
+            ->filtersFormColumns(3)
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),

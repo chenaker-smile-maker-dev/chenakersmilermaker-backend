@@ -54,7 +54,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotificationsPolling("30s")
             ->lazyLoadedDatabaseNotifications(false)
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
-            ->globalSearch(position: GlobalSearchPosition::Topbar)
+            // ->globalSearch(position: GlobalSearchPosition::Topbar)
 
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\Filament\Admin\Pages')

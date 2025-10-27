@@ -4,6 +4,7 @@
 /* local filament customizations */
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
+@source '../../../../resources/views/panels/**/*';
 
 /* filament calendar package */
 @source '../../../../vendor/guava/calendar/resources/**/*';

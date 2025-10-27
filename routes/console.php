@@ -7,9 +7,9 @@ use Spatie\Health\Commands\DispatchQueueCheckJobsCommand;
 use Spatie\Health\Commands\ScheduleCheckHeartbeatCommand;
 use Spatie\Health\Commands\RunHealthChecksCommand;
 
-Schedule::command(RunHealthChecksCommand::class)->everyMinute();
-Schedule::command(DispatchQueueCheckJobsCommand::class)->everyMinute();
-Schedule::command(ScheduleCheckHeartbeatCommand::class)->everyMinute();
+Schedule::command(RunHealthChecksCommand::class)->everyFiveMinutes();
+Schedule::command(DispatchQueueCheckJobsCommand::class)->everyFiveMinutes();
+Schedule::command(ScheduleCheckHeartbeatCommand::class)->everyFiveMinutes();
 
 Schedule::command('auth:clear-resets')->daily();
 Schedule::command('queue:prune-batches')->daily();
