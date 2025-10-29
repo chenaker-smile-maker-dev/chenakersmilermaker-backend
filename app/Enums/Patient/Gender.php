@@ -28,8 +28,8 @@ enum Gender: string implements HasLabel, HasColor
     public function getColor(): string
     {
         return match ($this) {
-            self::MALE => 'primary',
-            self::FEMALE => "secondary",
+            self::MALE => 'success',
+            self::FEMALE => "danger",
         };
     }
 

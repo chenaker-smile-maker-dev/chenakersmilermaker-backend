@@ -21,6 +21,17 @@ class AdminNavigation
         'group' => self::MANAGEMENT_GROUP,
     ];
 
+    public const SERVICES_RESOURCE = [
+        'icon' => Heroicon::Briefcase,
+        'sort' => 3,
+        'group' => self::MANAGEMENT_GROUP,
+    ];
+
+    public const APPOINTEMENT_RESOURCE = [
+        'icon' => Heroicon::CalendarDays,
+        'sort' => 4,
+        'group' => self::MANAGEMENT_GROUP,
+    ];
 
     public const HEALTH_PAGE = [
         'icon' => Heroicon::ShieldCheck,

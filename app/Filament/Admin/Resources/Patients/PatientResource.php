@@ -27,7 +27,7 @@ class PatientResource extends Resource
     protected static ?string $model = Patient::class;
     public static function getNavigationGroup(): ?string
     {
-        return  __(AdminNavigation::MANAGEMENT_GROUP);
+        return  __(AdminNavigation::PATIENTS_RESOURCE['group']);
     }
 
     public static function getModelLabel(): string

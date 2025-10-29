@@ -62,8 +62,8 @@ class AdminPanelProvider extends PanelProvider
 
             ->pages([Dashboard::class])
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class
+                // AccountWidget::class,
+                // FilamentInfoWidget::class
             ])
 
             ->plugins([

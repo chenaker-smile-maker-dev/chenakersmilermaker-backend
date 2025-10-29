@@ -16,7 +16,7 @@ class ReservationsCalendar extends CalendarWidget
 
     protected function getEvents(FetchInfo $info): Collection | array | Builder
     {
-        return \App\Models\Reservation::query()
+        return \App\Models\Appointment::query()
             ->whereDate('from', '>=', $info->start)
             ->whereDate('to', '<=', $info->end);
     }

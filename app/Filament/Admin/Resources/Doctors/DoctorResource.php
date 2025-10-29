@@ -27,7 +27,7 @@ class DoctorResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return  __(AdminNavigation::MANAGEMENT_GROUP);
+        return  __(AdminNavigation::DOCTORS_RESOURCE['group']);
     }
 
     public static function getModelLabel(): string
