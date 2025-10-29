@@ -16,6 +16,7 @@ class ServiceFactory extends Factory
             'name' => [
                 'fr' => $this->faker->word(),
                 'ar' => $this->faker->word(),
+                'en' => $this->faker->word(),
             ],
             'price' => $this->faker->numberBetween(500, 5000),
             'active' => $this->faker->boolean(),

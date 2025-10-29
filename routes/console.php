@@ -17,7 +17,3 @@ Schedule::command('queue:prune-failed')->daily();
 Schedule::command('sanctum:prune-expired')->daily();
 Schedule::command('media-library:clean')->daily();
 Schedule::command('activitylog:clean')->daily();
-
-Artisan::command('testing', function () {
-    $this->comment("testing");
-})->purpose('Display an testing message');

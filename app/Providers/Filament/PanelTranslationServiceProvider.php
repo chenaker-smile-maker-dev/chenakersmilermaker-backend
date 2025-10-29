@@ -25,19 +25,15 @@ class PanelTranslationServiceProvider extends ServiceProvider
     {
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch
-                ->locales(['ar', 'fr']);
+                ->locales(config('default-local.available_locals'));
         });
     }
     private function configureTranslatableTabs(): void
     {
         TranslatableTabs::configureUsing(function (TranslatableTabs $component) {
-            $locals = config('default-local.available_locals');
             $component
-                ->localesLabels([
-                    'ar' => 'العربية',
-                    'fr' => 'Français'
-                ])
-                ->locales($locals);
+                ->locales(config('default-local.available_locals'))
+                ->localesLabels(config('default-local.available_locals_with_labels'));
         });
     }
 }

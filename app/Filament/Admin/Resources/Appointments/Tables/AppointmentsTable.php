@@ -15,12 +15,6 @@ class AppointmentsTable
     {
         return $table
             ->columns([
-                TextColumn::make('from')
-                    ->dateTime()
-                    ->sortable(),
-                TextColumn::make('to')
-                    ->dateTime()
-                    ->sortable(),
                 TextColumn::make('doctor.name')
                     ->searchable(),
                 TextColumn::make('service.name')
@@ -29,6 +23,12 @@ class AppointmentsTable
                     ->searchable(),
                 TextColumn::make('price')
                     ->money()
+                    ->sortable(),
+                TextColumn::make('from')
+                    ->dateTime()
+                    ->sortable(),
+                TextColumn::make('to')
+                    ->dateTime()
                     ->sortable(),
                 TextColumn::make('status')
                     ->badge()

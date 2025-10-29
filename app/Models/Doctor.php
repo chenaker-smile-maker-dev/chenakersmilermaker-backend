@@ -18,7 +18,7 @@ class Doctor extends Model implements HasMedia
     use InteractsWithMedia, HasTranslations;
 
 
-    protected $fillable = ['name', 'specialty', 'diplomas'];
+    protected $fillable = ['name', 'specialty', 'diplomas', 'email', 'phone', 'address', 'metadata'];
     public array $translatable = ['name', 'specialty'];
     protected $hidden = [];
 
@@ -26,10 +26,12 @@ class Doctor extends Model implements HasMedia
     {
         return [
             // 'name' => 'array',
-            'specialty' => 'array',
+            // 'specialty' => 'array',
             'diplomas' => 'array',
+            'metadata' => 'array',
         ];
     }
+
 
     public function registerMediaCollections(): void
     {

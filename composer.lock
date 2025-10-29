@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "90bacf7d118788458b2d0a904f81dbed",
+    "content-hash": "c41b0672d53253dc69e4f067d055402f",
     "packages": [
         {
             "name": "abdulmajeed-jamaan/filament-translatable-tabs",
@@ -3553,6 +3553,70 @@
                 "source": "https://github.com/laravel/tinker/tree/v2.10.1"
             },
             "time": "2025-01-27T14:24:01+00:00"
+        },
+        {
+            "name": "laraveljutsu/zap",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ludoguenet/zap-for-laravel.git",
+                "reference": "fdb8f015d404e637e732e6066779ffe62396069f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ludoguenet/zap-for-laravel/zipball/fdb8f015d404e637e732e6066779ffe62396069f",
+                "reference": "fdb8f015d404e637e732e6066779ffe62396069f",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.2"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.20",
+                "orchestra/testbench": "^9.10",
+                "pestphp/pest": "^3.7"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Zap": "Zap\\Facades\\Zap"
+                    },
+                    "providers": [
+                        "Zap\\ZapServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zap\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Laravel Jutsu",
+                    "email": "ludo@epekta.com",
+                    "homepage": "https://laraveljutsu.net"
+                }
+            ],
+            "description": "A flexible, performant, and developer-friendly schedule management system for Laravel",
+            "keywords": [
+                "booking",
+                "calendar",
+                "laravel",
+                "management",
+                "schedule"
+            ],
+            "support": {
+                "issues": "https://github.com/ludoguenet/zap-for-laravel/issues",
+                "source": "https://github.com/ludoguenet/zap-for-laravel/tree/v1.4.0"
+            },
+            "time": "2025-10-08T07:08:20+00:00"
         },
         {
             "name": "laravolt/avatar",

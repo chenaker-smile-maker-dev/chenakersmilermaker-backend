@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\Patient\Gender;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 use Laravolt\Avatar\Avatar;
@@ -79,5 +81,10 @@ class Patient extends Model implements HasMedia
     public function getFullNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function appointment(): HasMany
+    {
+        return $this->hasMany(Appointment::class);
     }
 }
