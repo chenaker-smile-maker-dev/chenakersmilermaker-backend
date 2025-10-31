@@ -3,10 +3,12 @@
 namespace App\Filament\Admin\Resources\Services;
 
 use App\Filament\Admin\AdminNavigation;
+use App\Filament\Admin\Resources\Patients\RelationManagers\AppointmentsRelationManager;
 use App\Filament\Admin\Resources\Services\Pages\CreateService;
 use App\Filament\Admin\Resources\Services\Pages\EditService;
 use App\Filament\Admin\Resources\Services\Pages\ListServices;
 use App\Filament\Admin\Resources\Services\Pages\ViewService;
+use App\Filament\Admin\Resources\Services\RelationManagers\DoctorsRelationManager;
 use App\Filament\Admin\Resources\Services\Schemas\ServiceForm;
 use App\Filament\Admin\Resources\Services\Schemas\ServiceInfolist;
 use App\Filament\Admin\Resources\Services\Tables\ServicesTable;
@@ -79,7 +81,8 @@ class ServiceResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            DoctorsRelationManager::class,
+            AppointmentsRelationManager::class
         ];
     }
 

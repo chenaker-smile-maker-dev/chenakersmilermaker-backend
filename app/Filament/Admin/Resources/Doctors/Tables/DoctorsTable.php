@@ -26,7 +26,7 @@ use Filament\Tables\Table;
 
 class DoctorsTable
 {
-    private static string $layout = 'table'; // 'grid' or 'table'
+    private static string $layout = 'grid'; // 'grid' or 'table'
 
     public static function configure(Table $table): Table
     {

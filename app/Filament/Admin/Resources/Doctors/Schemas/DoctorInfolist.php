@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources\Doctors\Schemas;
 use App\Models\Doctor;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Support\Enums\FontWeight;
 use Illuminate\View\View;
 use Filament\Schemas\Components\Grid;
@@ -71,6 +72,18 @@ class DoctorInfolist
                             ->state(fn(Doctor $record) => self::renderMetadataTable($record->metadata ?? []))
                             ->html()
                             ->columnSpanFull(),
+                    ]),
+                Section::make('Services')
+                    ->columnSpanFull()
+                    ->schema([
+                        RepeatableEntry::make('services')
+                            ->label('Medical Services')
+                            ->schema([
+                                TextEntry::make('name')
+                                    ->label('Service')
+                                    ->state(fn($record) => $record->name),
+                            ])
+                            ->columns(1),
                     ]),
             ]);
     }

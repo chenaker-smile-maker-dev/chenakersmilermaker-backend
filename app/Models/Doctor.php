@@ -76,4 +76,13 @@ class Doctor extends Model implements HasMedia
     {
         return 'Dr.' . $this->name;
     }
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'doctor_service')->withPivot('metadata')->withTimestamps();
+    }
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
 }

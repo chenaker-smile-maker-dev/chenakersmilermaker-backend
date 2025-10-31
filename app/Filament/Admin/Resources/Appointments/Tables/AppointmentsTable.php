@@ -15,14 +15,14 @@ class AppointmentsTable
     {
         return $table
             ->columns([
-                TextColumn::make('doctor.name')
+                TextColumn::make('doctor.display_name')
                     ->searchable(),
                 TextColumn::make('service.name')
                     ->searchable(),
                 TextColumn::make('patient.full_name')
                     ->searchable(),
                 TextColumn::make('price')
-                    ->money()
+                    ->money('DZD')
                     ->sortable(),
                 TextColumn::make('from')
                     ->dateTime()

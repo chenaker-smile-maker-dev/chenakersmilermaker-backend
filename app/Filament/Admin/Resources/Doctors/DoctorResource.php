@@ -7,6 +7,7 @@ use App\Filament\Admin\Resources\Doctors\Pages\CreateDoctor;
 use App\Filament\Admin\Resources\Doctors\Pages\EditDoctor;
 use App\Filament\Admin\Resources\Doctors\Pages\ListDoctors;
 use App\Filament\Admin\Resources\Doctors\Pages\ViewDoctor;
+use App\Filament\Admin\Resources\Doctors\RelationManagers\AppointmentsRelationManager;
 use App\Filament\Admin\Resources\Doctors\Schemas\DoctorForm;
 use App\Filament\Admin\Resources\Doctors\Schemas\DoctorInfolist;
 use App\Filament\Admin\Resources\Doctors\Tables\DoctorsTable;
@@ -81,7 +82,7 @@ class DoctorResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            AppointmentsRelationManager::class
         ];
     }
 

@@ -83,7 +83,7 @@ class Patient extends Model implements HasMedia
         return $this->first_name . ' ' . $this->last_name;
     }
 
-    public function appointment(): HasMany
+    public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
     }

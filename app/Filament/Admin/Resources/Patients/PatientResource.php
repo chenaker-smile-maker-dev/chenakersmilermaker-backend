@@ -7,7 +7,7 @@ use App\Filament\Admin\Resources\Patients\Pages\CreatePatient;
 use App\Filament\Admin\Resources\Patients\Pages\EditPatient;
 use App\Filament\Admin\Resources\Patients\Pages\ListPatients;
 use App\Filament\Admin\Resources\Patients\Pages\ViewPatient;
-use App\Filament\Admin\Resources\Patients\RelationManagers\AppointmentRelationManager;
+use App\Filament\Admin\Resources\Patients\RelationManagers\AppointmentsRelationManager;
 use App\Filament\Admin\Resources\Patients\Schemas\PatientForm;
 use App\Filament\Admin\Resources\Patients\Schemas\PatientInfolist;
 use App\Filament\Admin\Resources\Patients\Tables\PatientsTable;
@@ -82,7 +82,7 @@ class PatientResource extends Resource
     public static function getRelations(): array
     {
         return [
-            AppointmentRelationManager::class,
+            AppointmentsRelationManager::class,
         ];
     }
 

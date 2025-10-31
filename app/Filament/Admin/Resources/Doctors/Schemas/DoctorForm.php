@@ -8,6 +8,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -39,6 +40,17 @@ class DoctorForm
                                             ->placeholder('Enter specialty (e.g., Cardiology, Dermatology)'),
                                     ]),
                             ]),
+                        Section::make('Services')
+                            ->columnSpanFull()
+                            ->schema([
+                                Select::make('services')
+                                    ->relationship('services', 'name')
+                                    ->multiple()
+                                    ->preload()
+                                    ->label('Medical Services')
+                                    ->placeholder('Select services this doctor provides')
+                                    ->columnSpanFull(),
+                            ]),
                         Section::make('Contact Information')
                             ->columnSpanFull()
                             ->columns(2)
@@ -60,6 +72,7 @@ class DoctorForm
                                     ->rows(3)
                                     ->columnSpanFull(),
                             ]),
+
                         Section::make('Professional Qualifications')
                             ->columnSpanFull()
                             ->schema([
