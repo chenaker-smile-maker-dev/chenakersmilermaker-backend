@@ -11,12 +11,13 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Zap\Models\Concerns\HasSchedules;
 
 class Doctor extends Model implements HasMedia
 {
     use HasFactory, SoftDeletes;
     use InteractsWithMedia, HasTranslations;
-
+    use HasSchedules;
 
     protected $fillable = ['name', 'specialty', 'diplomas', 'email', 'phone', 'address', 'metadata'];
     public array $translatable = ['name', 'specialty'];
@@ -32,6 +33,14 @@ class Doctor extends Model implements HasMedia
         ];
     }
 
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'doctor_service')->withPivot('metadata')->withTimestamps();
+    }
 
     public function registerMediaCollections(): void
     {
@@ -48,6 +57,7 @@ class Doctor extends Model implements HasMedia
                 ->height(100);
         }
     }
+
 
     public function getImageAttribute()
     {
@@ -75,14 +85,5 @@ class Doctor extends Model implements HasMedia
     public function getDisplayNameAttribute()
     {
         return 'Dr.' . $this->name;
-    }
-
-    public function services()
-    {
-        return $this->belongsToMany(Service::class, 'doctor_service')->withPivot('metadata')->withTimestamps();
-    }
-    public function appointments()
-    {
-        return $this->hasMany(Appointment::class);
     }
 }
