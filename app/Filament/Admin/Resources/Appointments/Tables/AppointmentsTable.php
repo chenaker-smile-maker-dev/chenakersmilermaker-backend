@@ -23,6 +23,9 @@ class AppointmentsTable
                     ->searchable(),
                 TextColumn::make('price')
                     ->money('DZD')
+                    ->badge()
+                    ->alignCenter()
+                    ->color("gray")
                     ->sortable(),
                 TextColumn::make('from')
                     ->dateTime()

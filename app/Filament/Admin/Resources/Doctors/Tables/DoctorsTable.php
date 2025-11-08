@@ -2,7 +2,9 @@
 
 namespace App\Filament\Admin\Resources\Doctors\Tables;
 
+use App\Filament\Admin\Resources\Doctors\Pages\ManageDoctorSchedules;
 use App\Filament\Exports\DoctorExporter;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteBulkAction;
@@ -54,6 +56,10 @@ class DoctorsTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                Action::make('manage-schedules')
+                    ->label('Schedules')
+                    ->icon('heroicon-o-calendar-days')
+                    ->url(fn($record) => ManageDoctorSchedules::getUrl(['record' => $record])),
                 // ForceDeleteAction::make(),
                 // RestoreAction::make(),
             ])

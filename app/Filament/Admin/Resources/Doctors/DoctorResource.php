@@ -7,6 +7,7 @@ use App\Filament\Admin\Resources\Doctors\Pages\CreateDoctor;
 use App\Filament\Admin\Resources\Doctors\Pages\EditDoctor;
 use App\Filament\Admin\Resources\Doctors\Pages\ListDoctors;
 use App\Filament\Admin\Resources\Doctors\Pages\ViewDoctor;
+use App\Filament\Admin\Resources\Doctors\Pages\ManageDoctorSchedules;
 use App\Filament\Admin\Resources\Doctors\RelationManagers\AppointmentsRelationManager;
 use App\Filament\Admin\Resources\Doctors\Schemas\DoctorForm;
 use App\Filament\Admin\Resources\Doctors\Schemas\DoctorInfolist;
@@ -93,6 +94,7 @@ class DoctorResource extends Resource
             'create' => CreateDoctor::route('/create'),
             'view' => ViewDoctor::route('/{record}'),
             'edit' => EditDoctor::route('/{record}/edit'),
+            'manage-schedules' => ManageDoctorSchedules::route('/{record}/schedules'),
         ];
     }
 
