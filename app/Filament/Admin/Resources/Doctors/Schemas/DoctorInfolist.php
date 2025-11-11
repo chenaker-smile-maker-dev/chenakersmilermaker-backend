@@ -65,6 +65,7 @@ class DoctorInfolist
                             ]),
                     ]),
                 Section::make('Additional Information')
+                    ->collapsed()
                     ->columnSpanFull()
                     ->schema([
                         TextEntry::make('metadata')
@@ -74,14 +75,23 @@ class DoctorInfolist
                             ->columnSpanFull(),
                     ]),
                 Section::make('Services')
+                    ->collapsed()
                     ->columnSpanFull()
                     ->schema([
                         RepeatableEntry::make('services')
                             ->label('Medical Services')
                             ->schema([
                                 TextEntry::make('name')
-                                    ->label('Service')
+                                    ->hiddenLabel(false)
+                                    ->inlineLabel(true)
                                     ->state(fn($record) => $record->name),
+                                TextEntry::make('price')
+                                    ->hiddenLabel(false)
+                                    ->inlineLabel(true),
+                                TextEntry::make('availability')
+                                    ->hiddenLabel(false)
+                                    ->inlineLabel(true)
+                                    ->badge()
                             ])
                             ->columns(1),
                     ]),

@@ -25,6 +25,8 @@ class ServiceInfolist
                             ->boolean(),
                         TextEntry::make('availability')
                             ->badge(),
+                        TextEntry::make('duration')
+                            ->suffix(' minutes'),
                         TextEntry::make('created_at')
                             ->dateTime()
                             ->placeholder('-'),

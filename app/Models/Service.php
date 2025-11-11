@@ -15,7 +15,7 @@ class Service extends Model implements HasMedia
     use HasFactory;
     use InteractsWithMedia, HasTranslations;
 
-    protected $fillable = ['name', 'price', 'active', 'availability'];
+    protected $fillable = ['name', 'price', 'active', 'availability', 'duration'];
     public array $translatable = ['name'];
 
     protected function casts(): array
@@ -23,6 +23,7 @@ class Service extends Model implements HasMedia
         return [
             // 'name' => 'array',
             'price' => 'integer',
+            'duration' => 'integer',
             'active' => 'boolean',
             'availability' => ServiceAvailability::class,
         ];

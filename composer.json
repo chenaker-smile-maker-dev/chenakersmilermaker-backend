@@ -18,6 +18,7 @@
         "dutchcodingcompany/filament-developer-logins": "^2.0",
         "filament/filament": "^4.0",
         "filament/spatie-laravel-media-library-plugin": "^4.0",
+        "filament/spatie-laravel-settings-plugin": "^4.0",
         "guava/calendar": "^2.0",
         "joaopaulolndev/filament-edit-profile": "^2.0",
         "laravel/framework": "^12.0",
@@ -31,6 +32,7 @@
         "spatie/laravel-health": "^1.34",
         "spatie/laravel-medialibrary": "^11.14",
         "spatie/laravel-permission": "^6.21",
+        "spatie/laravel-settings": "^3.5",
         "spatie/laravel-translatable": "^6.11",
         "spatie/security-advisories-health-check": "^1.3"
     },
