@@ -8,6 +8,7 @@ class AdminNavigation
 {
 
     public const MANAGEMENT_GROUP = 'Management';
+    public const CONFIGURATION_GROUP = 'Configuration Group';
 
     public const DOCTORS_RESOURCE = [
         'icon' => Heroicon::OutlinedUsers,
@@ -33,9 +34,16 @@ class AdminNavigation
         'group' => self::MANAGEMENT_GROUP,
     ];
 
+    public const SETTINGS_PAGE = [
+        'icon' => Heroicon::OutlinedCog6Tooth,
+        'sort' => 99,
+        'group' => self::CONFIGURATION_GROUP,
+    ];
+
     public const HEALTH_PAGE = [
         'icon' => Heroicon::ShieldCheck,
-        'sort' => 9999,
+        'sort' => 100,
+        'group' => self::CONFIGURATION_GROUP,
         // 'group' => self::MANAGEMENT_GROUP,
     ];
 }

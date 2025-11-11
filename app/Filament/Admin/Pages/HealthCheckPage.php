@@ -18,6 +18,11 @@ class HealthCheckPage extends Page
     protected static ?int $navigationSort = AdminNavigation::HEALTH_PAGE['sort'];
     protected string $view = 'panels.admin.pages.health-check-page';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return  __(AdminNavigation::HEALTH_PAGE['group']);
+    }
+
     public function mount(): void
     {
         if (request()->has('fresh')) {

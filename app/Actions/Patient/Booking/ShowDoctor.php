@@ -2,8 +2,9 @@
 
 namespace App\Actions\Patient\Booking;
 
+use App\Http\Resources\DoctorResource;
+use App\Http\Resources\ServiceResource;
 use App\Models\Doctor;
-use App\Utils\GetModelMultilangAttribute;
 
 class ShowDoctor
 {
@@ -12,21 +13,9 @@ class ShowDoctor
         $doctor->load('services');
 
         return [
-            'id' => $doctor->id,
-            'name' => GetModelMultilangAttribute::get($doctor, 'name'),
-            'specialty' => GetModelMultilangAttribute::get($doctor, 'specialty'),
-            // 'email' => $doctor->email ?? null,
-            // 'phone' => $doctor->phone ?? null,
+            'doctor' => DoctorResource::make($doctor),
             'services_count' => $doctor->services->count(),
-            'services' => $doctor->services->map(function ($service) {
-                return [
-                    'id' => $service->id,
-                    'name' => GetModelMultilangAttribute::get($service, 'name'),
-                    'price' => $service->price,
-                    'duration' => $service->duration,
-                    'active' => $service->active
-                ];
-            })->toArray()
+            'services' => ServiceResource::collection($doctor->services),
         ];
     }
 }

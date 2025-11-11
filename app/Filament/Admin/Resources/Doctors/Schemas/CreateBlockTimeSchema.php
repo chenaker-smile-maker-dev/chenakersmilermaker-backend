@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Doctors\Schemas;
 
+use App\Settings\PlatformSettings;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
@@ -33,7 +34,9 @@ class CreateBlockTimeSchema
 
             TimePicker::make('block_start_time')
                 ->label('Block Start Time')
+                ->placeholder(app(PlatformSettings::class)->start_time)
                 ->seconds(false)
+                ->default(app(PlatformSettings::class)->start_time)
                 ->native(true)
                 ->format('H:i')
                 ->visible(fn($get) => $get('block_specific_hours'))
@@ -41,7 +44,9 @@ class CreateBlockTimeSchema
 
             TimePicker::make('block_end_time')
                 ->label('Block End Time')
+                ->placeholder(app(PlatformSettings::class)->end_time)
                 ->seconds(false)
+                ->default(app(PlatformSettings::class)->end_time)
                 ->native(true)
                 ->format('H:i')
                 ->visible(fn($get) => $get('block_specific_hours'))

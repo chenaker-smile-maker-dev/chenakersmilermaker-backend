@@ -2,8 +2,8 @@
 
 namespace App\Actions\Patient\Booking;
 
+use App\Http\Resources\ServiceResource;
 use App\Models\Service;
-use App\Utils\GetModelMultilangAttribute;
 
 class ListServices
 {
@@ -12,24 +12,14 @@ class ListServices
         $query = Service::query();
         $total = $query->count();
 
-        $services = $query->forPage($page, $per_page)
-            ->get()
-            ->map(function ($service) {
-                return [
-                    'id' => $service->id,
-                    'name' => GetModelMultilangAttribute::get($service, 'name'),
-                    'price' => $service->price,
-                    'duration' => $service->duration,
-                    'active' => $service->active,
-                ];
-            });
+        $services = $query->forPage($page, $per_page)->get();
 
         return [
             'total' => $total,
             'per_page' => $per_page,
             'current_page' => $page,
             'last_page' => ceil($total / $per_page),
-            'data' => $services
+            'services' => ServiceResource::collection($services)
         ];
     }
 }

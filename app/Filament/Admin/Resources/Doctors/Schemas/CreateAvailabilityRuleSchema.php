@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Doctors\Schemas;
 
+use App\Settings\PlatformSettings;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
@@ -36,17 +37,17 @@ class CreateAvailabilityRuleSchema
             TimePicker::make('start_hour')
                 ->label('Start Time')
                 ->required()
-                ->placeholder('09:00')
+                ->placeholder(app(PlatformSettings::class)->start_time)
                 ->seconds(false)
-                ->default('09:00')
+                ->default(app(PlatformSettings::class)->start_time)
                 ->native(true)
                 ->format('H:i'),
 
             TimePicker::make('end_hour')
                 ->label('End Time')
                 ->required()
-                ->placeholder('17:00')
-                ->default('17:00')
+                ->placeholder(app(PlatformSettings::class)->end_time)
+                ->default(app(PlatformSettings::class)->end_time)
                 ->seconds(false)
                 ->native(true)
                 ->format('H:i'),

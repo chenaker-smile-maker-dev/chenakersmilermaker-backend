@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Doctors\Schemas;
 
+use App\Settings\PlatformSettings;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
@@ -41,7 +42,8 @@ class EditAvailabilityRuleSchema
                 ->seconds(false)
                 ->native(true)
                 ->format('H:i')
-                ->default($record->frequency_config['start_time'] ?? '09:00'),
+                ->placeholder(app(PlatformSettings::class)->start_time)
+                ->default($record->frequency_config['start_time'] ?? app(PlatformSettings::class)->start_time),
 
             TimePicker::make('end_hour')
                 ->label('End Time')
@@ -49,7 +51,8 @@ class EditAvailabilityRuleSchema
                 ->seconds(false)
                 ->native(true)
                 ->format('H:i')
-                ->default($record->frequency_config['end_time'] ?? '17:00'),
+                ->placeholder(app(PlatformSettings::class)->end_time)
+                ->default($record->frequency_config['end_time'] ?? app(PlatformSettings::class)->end_time),
 
             DatePicker::make('start_date')
                 ->label('Effective From')

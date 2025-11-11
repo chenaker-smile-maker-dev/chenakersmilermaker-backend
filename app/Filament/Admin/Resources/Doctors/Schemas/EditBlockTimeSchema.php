@@ -2,6 +2,7 @@
 
 namespace App\Filament\Admin\Resources\Doctors\Schemas;
 
+use App\Settings\PlatformSettings;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TextArea;
@@ -41,7 +42,8 @@ class EditBlockTimeSchema
                 ->seconds(false)
                 ->native(true)
                 ->format('H:i')
-                ->default($hasTimeRestriction ? $record->frequency_config['start_time'] : null)
+                ->placeholder(app(PlatformSettings::class)->start_time)
+                ->default($hasTimeRestriction ? $record->frequency_config['start_time'] : app(PlatformSettings::class)->start_time)
                 ->visible(fn($get) => $get('has_time_restriction'))
                 ->required(fn($get) => $get('has_time_restriction')),
 
@@ -50,7 +52,8 @@ class EditBlockTimeSchema
                 ->seconds(false)
                 ->native(true)
                 ->format('H:i')
-                ->default($hasTimeRestriction ? $record->frequency_config['end_time'] : null)
+                ->placeholder(app(PlatformSettings::class)->end_time)
+                ->default($hasTimeRestriction ? $record->frequency_config['end_time'] : app(PlatformSettings::class)->end_time)
                 ->visible(fn($get) => $get('has_time_restriction'))
                 ->required(fn($get) => $get('has_time_restriction')),
 
