@@ -9,18 +9,17 @@ use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
+use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 
 class EditDoctor extends EditRecord
 {
+    use HasPageSidebar;
+
     protected static string $resource = DoctorResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
-            ViewAction::make(),
-            Action::make('manage_schedules')
-                ->label("Manage Schedules")
-                ->url(fn(): string => ManageDoctorSchedules::getUrl(['record' => $this->record])),
             DeleteAction::make(),
             ForceDeleteAction::make(),
             RestoreAction::make(),

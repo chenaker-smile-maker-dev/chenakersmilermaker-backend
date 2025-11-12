@@ -5,10 +5,14 @@ namespace App\Filament\Admin\Resources\Doctors;
 use App\Filament\Admin\AdminNavigation;
 use App\Filament\Admin\Resources\Doctors\Pages\CreateDoctor;
 use App\Filament\Admin\Resources\Doctors\Pages\EditDoctor;
+use App\Filament\Admin\Resources\Doctors\Pages\EditDoctorContact;
+use App\Filament\Admin\Resources\Doctors\Pages\EditDoctorPhoto;
 use App\Filament\Admin\Resources\Doctors\Pages\ListDoctors;
+use App\Filament\Admin\Resources\Doctors\Pages\ManageDoctorAppointments;
 use App\Filament\Admin\Resources\Doctors\Pages\ViewDoctor;
 use App\Filament\Admin\Resources\Doctors\Pages\ManageDoctorSchedules;
 use App\Filament\Admin\Resources\Doctors\RelationManagers\AppointmentsRelationManager;
+use App\Filament\Admin\Resources\Doctors\RelationManagers\SchedulesRelationManager;
 use App\Filament\Admin\Resources\Doctors\Schemas\DoctorForm;
 use App\Filament\Admin\Resources\Doctors\Schemas\DoctorInfolist;
 use App\Filament\Admin\Resources\Doctors\Tables\DoctorsTable;
@@ -22,6 +26,8 @@ use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use AymanAlhattami\FilamentPageWithSidebar\FilamentPageSidebar;
+use AymanAlhattami\FilamentPageWithSidebar\PageNavigationItem;
 
 class DoctorResource extends Resource
 {
@@ -83,7 +89,8 @@ class DoctorResource extends Resource
     public static function getRelations(): array
     {
         return [
-            AppointmentsRelationManager::class
+            // AppointmentsRelationManager::class,
+            // SchedulesRelationManager::class,
         ];
     }
 
@@ -94,9 +101,66 @@ class DoctorResource extends Resource
             'create' => CreateDoctor::route('/create'),
             'view' => ViewDoctor::route('/{record}'),
             'edit' => EditDoctor::route('/{record}/edit'),
+            'edit-contact' => EditDoctorContact::route('/{record}/edit-contact'),
+            'edit-photo' => EditDoctorPhoto::route('/{record}/edit-photo'),
             'manage-schedules' => ManageDoctorSchedules::route('/{record}/schedules'),
+            'manage-appointments' => ManageDoctorAppointments::route('/{record}/appointments'),
         ];
     }
+
+    public static function sidebar(Model $record): FilamentPageSidebar
+    {
+        $TITLE = $record->display_name;
+        $DESCRIPTION = '';
+        $DOCTOR_INFOS_GROUP = 'Edit Doctor Informations';
+        $DOCTOR_SCHEDULES_GROUP = 'Manage Doctor Schedules';
+
+        return FilamentPageSidebar::make()
+            ->setTitle($TITLE)
+            ->setDescription($DESCRIPTION)
+            // ->topbarNavigation()
+            ->sidebarNavigation()
+            ->setNavigationItems([
+                PageNavigationItem::make('View Doctor')
+                    ->icon(Heroicon::Eye)
+                    // ->group($DOCTOR_INFOS_GROUP)
+                    ->isActiveWhen(fn() => request()->routeIs(ViewDoctor::getRouteName()))
+                    ->url(fn() => ViewDoctor::getUrl(['record' => $record->id])),
+
+                PageNavigationItem::make('Edit Doctor')
+                    ->icon(Heroicon::Pencil)
+                    ->group($DOCTOR_INFOS_GROUP)
+                    ->isActiveWhen(fn() => request()->routeIs(EditDoctor::getRouteName()))
+                    ->url(fn() => EditDoctor::getUrl(['record' => $record->id])),
+
+                PageNavigationItem::make('Edit Doctor Contact')
+                    ->icon(Heroicon::Pencil)
+                    ->group($DOCTOR_INFOS_GROUP)
+                    ->isActiveWhen(fn() => request()->routeIs(EditDoctorContact::getRouteName()))
+                    ->url(fn() => EditDoctorContact::getUrl(['record' => $record->id])),
+
+                PageNavigationItem::make('Edit Doctor Photo')
+                    ->icon(Heroicon::Pencil)
+                    ->group($DOCTOR_INFOS_GROUP)
+                    ->isActiveWhen(fn() => request()->routeIs(EditDoctorPhoto::getRouteName()))
+                    ->url(fn() => EditDoctorPhoto::getUrl(['record' => $record->id])),
+
+                PageNavigationItem::make('Manage Doctor Schedules')
+                    ->icon(Heroicon::Calendar)
+                    ->group($DOCTOR_SCHEDULES_GROUP)
+                    ->isActiveWhen(fn() => request()->routeIs(ManageDoctorSchedules::getRouteName()))
+                    ->url(fn() => ManageDoctorSchedules::getUrl(['record' => $record->id])),
+
+                PageNavigationItem::make('Manage Doctor Appointments')
+                    ->icon(Heroicon::Calendar)
+                    ->group($DOCTOR_SCHEDULES_GROUP)
+                    ->isActiveWhen(fn() => request()->routeIs(ManageDoctorAppointments::getRouteName()))
+                    ->url(fn() => ManageDoctorAppointments::getUrl(['record' => $record->id])),
+
+
+            ]);
+    }
+
 
     public static function getRecordRouteBindingEloquentQuery(): Builder
     {

@@ -55,7 +55,7 @@ class Appointment extends Model implements Eventable
     {
         return CalendarEvent::make()
             ->action('edit')
-            ->title($this->service->name . $this->doctor->display_name)
+            ->title($this->service->name . ($this->doctor ? $this->doctor->display_name : ""))
             ->backgroundColor(color: '#34D399') // ✅ Tailwind green-400
             ->start($this->from)
             ->end($this->to);

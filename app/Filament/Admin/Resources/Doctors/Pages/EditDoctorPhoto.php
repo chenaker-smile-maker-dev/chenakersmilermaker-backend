@@ -3,15 +3,16 @@
 namespace App\Filament\Admin\Resources\Doctors\Pages;
 
 use App\Filament\Admin\Resources\Doctors\DoctorResource;
-use Filament\Actions\Action;
+use App\Filament\Admin\Resources\Doctors\Schemas\DoctorPhotoForm;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
-use Filament\Resources\Pages\ViewRecord;
+use Filament\Actions\ViewAction;
+use Filament\Resources\Pages\EditRecord;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
+use Filament\Schemas\Schema;
 
-class ViewDoctor extends ViewRecord
+class EditDoctorPhoto extends EditRecord
 {
     use HasPageSidebar;
 
@@ -20,16 +21,14 @@ class ViewDoctor extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            // EditAction::make(),
-            // Action::make('manage_schedules')
-            //     ->label("Manage Schedules")
-            //     ->url(fn(): string => ManageDoctorSchedules::getUrl(['record' => $this->record])),
-            // Action::make('manage_appointments')
-            //     ->label("Manage Appointments")
-            //     ->url(fn(): string => ManageDoctorAppointments::getUrl(['record' => $this->record])),
             DeleteAction::make(),
             ForceDeleteAction::make(),
             RestoreAction::make(),
         ];
+    }
+
+    public  function form(Schema $schema): Schema
+    {
+        return DoctorPhotoForm::configure($schema);
     }
 }

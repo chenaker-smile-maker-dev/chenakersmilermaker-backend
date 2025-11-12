@@ -64,33 +64,38 @@ class DoctorInfolist
                                     ->columnSpanFull(),
                             ]),
                     ]),
-                Section::make('Additional Information')
-                    ->collapsed()
-                    ->columnSpanFull()
-                    ->schema([
-                        TextEntry::make('metadata')
-                            ->label('')
-                            ->state(fn(Doctor $record) => self::renderMetadataTable($record->metadata ?? []))
-                            ->html()
-                            ->columnSpanFull(),
-                    ]),
+                // Section::make('Additional Information')
+                //     ->collapsed()
+                //     ->columnSpanFull()
+                //     ->schema([
+                //         TextEntry::make('metadata')
+                //             ->label('')
+                //             ->state(fn(Doctor $record) => self::renderMetadataTable($record->metadata ?? []))
+                //             ->html()
+                //             ->columnSpanFull(),
+                //     ]),
                 Section::make('Services')
                     ->collapsed()
                     ->columnSpanFull()
                     ->schema([
                         RepeatableEntry::make('services')
                             ->label('Medical Services')
+                            ->columnSpanFull()
+                            ->columns(3)
                             ->schema([
                                 TextEntry::make('name')
+                                    ->columnSpan(1)
                                     ->hiddenLabel(false)
-                                    ->inlineLabel(true)
+                                    ->inlineLabel(false)
                                     ->state(fn($record) => $record->name),
                                 TextEntry::make('price')
+                                    ->columnSpan(1)
                                     ->hiddenLabel(false)
-                                    ->inlineLabel(true),
+                                    ->inlineLabel(false),
                                 TextEntry::make('availability')
+                                    ->columnSpan(1)
                                     ->hiddenLabel(false)
-                                    ->inlineLabel(true)
+                                    ->inlineLabel(false)
                                     ->badge()
                             ])
                             ->columns(1),

@@ -21,7 +21,7 @@ class DoctorForm
             ->columns(5)
             ->components([
                 Grid::make()
-                    ->columnSpan(3)
+                    ->columnSpan(5)
                     ->schema([
                         Section::make('Basic Information')
                             ->columnSpanFull()
@@ -41,6 +41,7 @@ class DoctorForm
                                     ]),
                             ]),
                         Section::make('Services')
+                            ->collapsed()
                             ->columnSpanFull()
                             ->schema([
                                 Select::make('services')
@@ -51,29 +52,9 @@ class DoctorForm
                                     ->placeholder('Select services this doctor provides')
                                     ->columnSpanFull(),
                             ]),
-                        Section::make('Contact Information')
-                            ->columnSpanFull()
-                            ->columns(2)
-                            ->description('Professional contact details')
-                            ->schema([
-                                TextInput::make('email')
-                                    ->email()
-                                    ->required()
-                                    ->label('Email Address')
-                                    ->placeholder('doctor@example.com'),
-                                TextInput::make('phone')
-                                    ->tel()
-                                    ->required()
-                                    ->label('Phone Number')
-                                    ->placeholder('+213 665 65 65 65'),
-                                Textarea::make('address')
-                                    ->label('Address')
-                                    ->placeholder('Enter clinic/office address')
-                                    ->rows(3)
-                                    ->columnSpanFull(),
-                            ]),
 
                         Section::make('Professional Qualifications')
+                            ->collapsed()
                             ->columnSpanFull()
                             ->schema([
                                 Repeater::make('diplomas')
@@ -92,27 +73,16 @@ class DoctorForm
                 Grid::make()
                     ->columnSpan(2)
                     ->schema([
-                        Section::make('Professional Photo')
-                            ->columnSpanFull()
-                            ->description('Doctor profile picture')
-                            ->schema([
-                                SpatieMediaLibraryFileUpload::make('doctor_photo')
-                                    ->collection('doctor_photo')
-                                    ->image()
-                                    ->imageEditor()
-                                    ->columnSpanFull()
-                                    ->label('Upload Photo')
-                                    ->helperText('Recommended: Square format, PNG or JPG')
-                            ]),
-                        Section::make('Additional Information')
-                            ->columnSpanFull()
-                            ->description('Professional metadata (key-value pairs)')
-                            ->schema([
-                                KeyValue::make('metadata')
-                                    ->keyLabel('Key')
-                                    ->valueLabel('Value')
-                                    ->columnSpanFull(),
-                            ]),
+
+                        // Section::make('Additional Information')
+                        //     ->columnSpanFull()
+                        //     ->description('Professional metadata (key-value pairs)')
+                        //     ->schema([
+                        //         KeyValue::make('metadata')
+                        //             ->keyLabel('Key')
+                        //             ->valueLabel('Value')
+                        //             ->columnSpanFull(),
+                        //     ]),
                     ]),
             ]);
     }

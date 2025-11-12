@@ -11,6 +11,7 @@
     "require": {
         "php": "^8.2",
         "abdulmajeed-jamaan/filament-translatable-tabs": "^4.0",
+        "aymanalhattami/filament-page-with-sidebar": "^3.0",
         "bezhansalleh/filament-language-switch": "^4.0",
         "charrafimed/global-search-modal": "^4.2",
         "dedoc/scramble": "^0.12.34",
