@@ -62,13 +62,17 @@ class SchedulesTable
                     ->toggleable()
                     ->label('Time Range')
                     ->state(function ($record) {
-                        if (!$record->frequency_config || !is_array($record->frequency_config)) {
+                        // Get times from periods (Zap stores times in schedule_periods table)
+                        $periods = $record->periods()->get();
+
+                        if ($periods->isEmpty()) {
                             return '—';
                         }
 
-                        $config = $record->frequency_config;
-                        $startTime = $config['start_time'] ?? null;
-                        $endTime = $config['end_time'] ?? null;
+                        // Get start and end times from the first period
+                        $period = $periods->first();
+                        $startTime = $period->start_time ?? null;
+                        $endTime = $period->end_time ?? null;
 
                         if ($startTime && $endTime) {
                             return "{$startTime} → {$endTime}";

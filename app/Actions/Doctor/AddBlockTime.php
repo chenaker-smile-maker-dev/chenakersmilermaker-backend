@@ -3,6 +3,7 @@
 namespace App\Actions\Doctor;
 
 use App\Models\Doctor;
+use Zap\Facades\Zap;
 
 class AddBlockTime
 {
@@ -30,30 +31,27 @@ class AddBlockTime
         ?string $blockEndTime = null,
         array $metadata = []
     ) {
-        // Create a non-recurring schedule for the block time
-        $frequencyConfig = null;
+        // Use Zap Facade to create blocked schedule with proper configuration
+        $schedule = Zap::for($doctor)
+            ->named($reason);
 
-        // If specific hours are blocked, store start_time and end_time only
-        if ($blockStartTime && $blockEndTime) {
-            $frequencyConfig = [
-                'start_time' => $blockStartTime,
-                'end_time' => $blockEndTime,
-            ];
+        if ($description) {
+            $schedule->description($description);
         }
 
-        $schedule = $doctor->schedules()->create([
-            'name' => $reason,
-            'description' => $description,
-            'schedule_type' => 'blocked',
-            'start_date' => $fromDate,
-            'end_date' => $toDate,
-            'is_recurring' => false,
-            'frequency' => null,
-            'frequency_config' => $frequencyConfig,
-            'metadata' => [],
-            'is_active' => $metadata['is_active'] ?? true,
-        ]);
+        $schedule
+            ->blocked()
+            ->from($fromDate)
+            ->to($toDate);
 
-        return $schedule;
+        // If specific hours are blocked, add periods for those hours
+        if ($blockStartTime && $blockEndTime) {
+            $schedule->addPeriod($blockStartTime, $blockEndTime);
+        } else {
+            // Block the entire day (00:00 to 23:59 by default)
+            $schedule->addPeriod('00:00', '23:59');
+        }
+
+        return $schedule->save();
     }
 }

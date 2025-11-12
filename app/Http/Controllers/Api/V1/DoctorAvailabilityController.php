@@ -11,6 +11,7 @@ use App\Models\Doctor;
 use App\Models\Service;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Request;
+use Zap\Facades\Zap;
 
 #[Group('Booking Controller', weight: 3)]
 class DoctorAvailabilityController extends BaseController
@@ -30,15 +31,33 @@ class DoctorAvailabilityController extends BaseController
             return $this->sendError('Doctor does not provide this service', 422);
         }
 
+        // Check if doctor has any active availability schedules
+        $hasAvailability = $doctor->availabilitySchedules()
+            ->active()
+            ->exists();
+
+        if (!$hasAvailability) {
+            return $this->sendResponse([
+                'id' => $doctor->id,
+                'doctor_name' => $doctor->name,
+                'service_id' => $service->id,
+                'service_name' => $service->name,
+                'service_duration_minutes' => $service->duration ?? 30,
+                'is_service_active' => $service->active,
+                'next_available_slot' => null,
+                'message' => 'Doctor has no availability scheduled',
+            ]);
+        }
+
         // Get the service duration in minutes
         $serviceDuration = $service->duration ?? 30;
 
-        // Find the next available slot for the service duration
+        // Find the next available slot using Zap's fluent API
         $nextAvailableSlot = $doctor->getNextAvailableSlot(
-            now()->format('Y-m-d'),
-            $serviceDuration,
-            '09:00',
-            '17:00'
+            afterDate: now()->format('Y-m-d'),
+            duration: $serviceDuration,
+            dayStart: '09:00',
+            dayEnd: '17:01'
         );
 
         return $this->sendResponse([

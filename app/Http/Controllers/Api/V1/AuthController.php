@@ -18,6 +18,9 @@ use Illuminate\Http\Request;
 #[Group('Patient Auth Controller', weight: 1)]
 class AuthController extends BaseController
 {
+    /**
+     * Register a new patient
+     */
     public function register(RegisterPatientRequest $request, RegisterPatient $registerPatient, GenerateTokensForPatient $generateTokensForPatient)
     {
         $data = $request->validated();
@@ -32,6 +35,9 @@ class AuthController extends BaseController
         ], 'Patient registered successfully.');
     }
 
+    /**
+     * Login a patient
+     */
     public function login(LoginPatientRequest $request, LoginPatient $loginPatient, GenerateTokensForPatient $generateTokensForPatient)
     {
         $data = $request->validated();
@@ -48,6 +54,9 @@ class AuthController extends BaseController
         ], 'Patient logged in successfully.');
     }
 
+    /**
+     * Logout a patient
+     */
     public function logout(Request $request)
     {
         $patient = $request->user();
@@ -56,6 +65,9 @@ class AuthController extends BaseController
         return $this->sendResponse(message: 'Patient logged out successfully.');
     }
 
+    /**
+     * Refresh access token
+     */
     public function refreshToken(Request $request)
     {
         $request->user()->tokens()->where('name', 'access_token')->delete();

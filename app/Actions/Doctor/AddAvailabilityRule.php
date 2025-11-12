@@ -3,7 +3,7 @@
 namespace App\Actions\Doctor;
 
 use App\Models\Doctor;
-use Illuminate\Support\Collection;
+use Zap\Facades\Zap;
 
 class AddAvailabilityRule
 {
@@ -32,28 +32,44 @@ class AddAvailabilityRule
         // Validate days of week (convert names to numbers if needed)
         $normalizedDays = $this->normalizeDaysOfWeek($daysOfWeek);
 
-        // Create the frequency config with days and times only
-        $frequencyConfig = [
-            'days_of_week' => $normalizedDays,
-            'start_time' => $startHour,
-            'end_time' => $endHour,
-        ];
+        // Use Zap Facade to create availability schedule
+        $schedule = Zap::for($doctor)
+            ->named($metadata['name'] ?? 'Availability Rule');
 
-        // Create the schedule
-        $schedule = $doctor->schedules()->create([
-            'name' => $metadata['name'] ?? 'Availability Rule',
-            'description' => 'Regular availability schedule',
-            'schedule_type' => 'availability',
-            'start_date' => $effectiveFrom,
-            'end_date' => $effectiveTo,
-            'is_recurring' => true,
-            'frequency' => 'weekly',
-            'frequency_config' => $frequencyConfig,
-            'metadata' => [],
-            'is_active' => $metadata['is_active'] ?? true,
-        ]);
+        // Add description if provided
+        if (!empty($metadata['description'])) {
+            $schedule->description($metadata['description']);
+        }
 
-        return $schedule;
+        $schedule
+            ->availability()
+            ->from($effectiveFrom);
+
+        if ($effectiveTo) {
+            $schedule->to($effectiveTo);
+        }
+
+        // Add a single period for the working hours (Zap will apply it for the weekly recurrence)
+        $schedule->addPeriod($startHour, $endHour);
+
+        // Set weekly recurrence with specific days
+        $dayNames = array_map(function ($day) {
+            $dayMap = [0 => 'sunday', 1 => 'monday', 2 => 'tuesday', 3 => 'wednesday', 4 => 'thursday', 5 => 'friday', 6 => 'saturday'];
+            return $dayMap[$day] ?? 'monday';
+        }, $normalizedDays);
+
+        $schedule->weekly($dayNames);
+
+        // Set active status if provided
+        if (isset($metadata['is_active'])) {
+            if ($metadata['is_active']) {
+                $schedule->active();
+            }
+        } else {
+            $schedule->active(); // Default to active
+        }
+
+        return $schedule->save();
     }
 
     /**

@@ -13,10 +13,26 @@ class EditBlockTimeSchema
 {
     public static function get($record): array
     {
-        $hasTimeRestriction = isset($record->frequency_config['start_time']) && isset($record->frequency_config['end_time']);
+        // Get periods from the schedule (Zap stores times in schedule_periods table)
+        $periods = $record->periods()->get();
+        $firstPeriod = $periods->first();
+
+        // Check if this block has time restriction (if period exists and doesn't block entire day)
+        $hasTimeRestriction = false;
+        $blockStartTime = null;
+        $blockEndTime = null;
+
+        if ($firstPeriod) {
+            // If period is not 00:00-23:59, it has time restriction
+            if (!($firstPeriod->start_time === '00:00' && $firstPeriod->end_time === '23:59')) {
+                $hasTimeRestriction = true;
+                $blockStartTime = $firstPeriod->start_time;
+                $blockEndTime = $firstPeriod->end_time;
+            }
+        }
 
         return [
-            TextInput::make('name')
+            TextInput::make('reason')
                 ->label('Reason')
                 ->required()
                 ->placeholder('e.g., Holiday, Meeting, Personal')
@@ -25,11 +41,13 @@ class EditBlockTimeSchema
             DatePicker::make('start_date')
                 ->label('From Date')
                 ->required()
+                ->minDate(today())
                 ->default($record->start_date),
 
             DatePicker::make('end_date')
                 ->label('To Date')
                 ->required()
+                ->minDate(today())
                 ->default($record->end_date),
 
             Toggle::make('has_time_restriction')
@@ -43,7 +61,7 @@ class EditBlockTimeSchema
                 ->native(true)
                 ->format('H:i')
                 ->placeholder(app(PlatformSettings::class)->start_time)
-                ->default($hasTimeRestriction ? $record->frequency_config['start_time'] : app(PlatformSettings::class)->start_time)
+                ->default($blockStartTime ?? app(PlatformSettings::class)->start_time)
                 ->visible(fn($get) => $get('has_time_restriction'))
                 ->required(fn($get) => $get('has_time_restriction')),
 
@@ -53,7 +71,7 @@ class EditBlockTimeSchema
                 ->native(true)
                 ->format('H:i')
                 ->placeholder(app(PlatformSettings::class)->end_time)
-                ->default($hasTimeRestriction ? $record->frequency_config['end_time'] : app(PlatformSettings::class)->end_time)
+                ->default($blockEndTime ?? app(PlatformSettings::class)->end_time)
                 ->visible(fn($get) => $get('has_time_restriction'))
                 ->required(fn($get) => $get('has_time_restriction')),
 

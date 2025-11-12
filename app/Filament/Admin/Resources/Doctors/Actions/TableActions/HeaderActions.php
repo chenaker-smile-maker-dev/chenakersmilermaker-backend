@@ -59,7 +59,7 @@ class HeaderActions
                         throw new \Exception('Doctor not found');
                     }
 
-                    (new AddBlockTime())($doctor, $data['reason'], $data['from_date'], $data['to_date'], $data['description'] ?? null, $data['block_specific_hours'] ? $data['block_start_time'] : null, $data['block_specific_hours'] ? $data['block_end_time'] : null, $data);
+                    (new AddBlockTime())($doctor, $data['reason'], $data['start_date'], $data['end_date'], $data['description'] ?? null, $data['has_time_restriction'] ? $data['block_start_time'] : null, $data['has_time_restriction'] ? $data['block_end_time'] : null, $data);
 
                     Notification::make()
                         ->success()

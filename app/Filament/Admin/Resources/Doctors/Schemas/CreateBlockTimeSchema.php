@@ -19,15 +19,17 @@ class CreateBlockTimeSchema
                 ->placeholder('e.g., Holiday, Meeting, Personal')
                 ->required(),
 
-            DatePicker::make('from_date')
+            DatePicker::make('start_date')
                 ->label('From Date')
-                ->required(),
+                ->required()
+                ->minDate(today()),
 
-            DatePicker::make('to_date')
+            DatePicker::make('end_date')
                 ->label('To Date')
-                ->required(),
+                ->required()
+                ->minDate(today()),
 
-            Toggle::make('block_specific_hours')
+            Toggle::make('has_time_restriction')
                 ->label('Block specific hours only?')
                 ->reactive()
                 ->default(false),
@@ -39,8 +41,8 @@ class CreateBlockTimeSchema
                 ->default(app(PlatformSettings::class)->start_time)
                 ->native(true)
                 ->format('H:i')
-                ->visible(fn($get) => $get('block_specific_hours'))
-                ->required(fn($get) => $get('block_specific_hours')),
+                ->visible(fn($get) => $get('has_time_restriction'))
+                ->required(fn($get) => $get('has_time_restriction')),
 
             TimePicker::make('block_end_time')
                 ->label('Block End Time')
@@ -49,8 +51,8 @@ class CreateBlockTimeSchema
                 ->default(app(PlatformSettings::class)->end_time)
                 ->native(true)
                 ->format('H:i')
-                ->visible(fn($get) => $get('block_specific_hours'))
-                ->required(fn($get) => $get('block_specific_hours')),
+                ->visible(fn($get) => $get('has_time_restriction'))
+                ->required(fn($get) => $get('has_time_restriction')),
 
             TextArea::make('description')
                 ->label('Description')
