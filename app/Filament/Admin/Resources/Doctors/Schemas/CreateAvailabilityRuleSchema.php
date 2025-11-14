@@ -53,14 +53,19 @@ class CreateAvailabilityRuleSchema
                 ->format('H:i'),
 
             DatePicker::make('effective_from')
+                ->native(false)
                 ->label('Effective From')
-                ->required()
-                ->minDate(today()),
+                ->minDate(today())
+                ->required(),
 
             DatePicker::make('effective_to')
                 ->label('Effective To')
                 ->nullable()
-                ->minDate(today())
+                ->native(false)
+                ->minDate(function ($get) {
+                    $effectiveFrom = $get('effective_from');
+                    return $effectiveFrom ? $effectiveFrom : today();
+                })
                 ->helperText('Leave empty for ongoing availability'),
 
             Textarea::make('description')

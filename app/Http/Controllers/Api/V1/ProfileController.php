@@ -12,7 +12,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-#[Group('Patient Profile Controller', weight: 2)]
+#[Group('Patient Profile', weight: 2)]
 class ProfileController extends BaseController
 {
     public function show(Request $request)

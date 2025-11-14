@@ -24,7 +24,7 @@ class ScrambleServiceProvider extends ServiceProvider
             'export_path' => 'public/v1.json',
             "ui" => [
                 "title" => config('app.name') . " API v1",
-                "theme" => "dark",
+                "theme" => "light",
                 'hide_schemas' => true,
                 'logo' => asset('favicon.svg'),
                 'layout' => 'responsive',

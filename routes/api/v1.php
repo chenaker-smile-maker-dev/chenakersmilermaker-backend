@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DoctorAvailabilityController;
 use App\Http\Controllers\Api\V1\ProfileController;
+use App\Http\Controllers\Api\V1\BookingController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')
@@ -29,4 +30,11 @@ Route::prefix('v1')
             Route::get('service/{service}', [DoctorAvailabilityController::class, 'showService']);
             Route::get('/{doctor}/{service}/availability', [DoctorAvailabilityController::class, 'doctorAvailability']);
         });
+
+        Route::prefix('booking')
+            // ->middleware(['auth:sanctum', 'access'])
+            ->group(function () {
+                Route::post('/{doctor}/{service}/check-availability', [BookingController::class, 'checkAvailability']);
+                Route::post('/{doctor}/{service}/book', [BookingController::class, 'bookAppointment']);
+            });
     });

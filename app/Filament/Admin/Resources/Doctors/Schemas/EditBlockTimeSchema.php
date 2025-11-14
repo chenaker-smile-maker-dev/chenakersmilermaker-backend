@@ -41,13 +41,15 @@ class EditBlockTimeSchema
             DatePicker::make('start_date')
                 ->label('From Date')
                 ->required()
+                ->native(false)
                 ->minDate(today())
                 ->default($record->start_date),
 
             DatePicker::make('end_date')
                 ->label('To Date')
                 ->required()
-                ->minDate(today())
+                ->minDate(fn($get) => $get('start_date') ? $get('start_date') : today())
+                ->native(false)
                 ->default($record->end_date),
 
             Toggle::make('has_time_restriction')

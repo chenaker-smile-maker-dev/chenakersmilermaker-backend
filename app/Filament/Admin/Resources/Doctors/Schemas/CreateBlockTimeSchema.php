@@ -21,13 +21,15 @@ class CreateBlockTimeSchema
 
             DatePicker::make('start_date')
                 ->label('From Date')
+                ->native(false)
                 ->required()
                 ->minDate(today()),
 
             DatePicker::make('end_date')
                 ->label('To Date')
+                ->native(false)
                 ->required()
-                ->minDate(today()),
+                ->minDate(fn($get) => $get('start_date') ? $get('start_date') : today()),
 
             Toggle::make('has_time_restriction')
                 ->label('Block specific hours only?')

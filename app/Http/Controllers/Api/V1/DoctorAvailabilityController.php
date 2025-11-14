@@ -12,30 +12,16 @@ use App\Models\Doctor;
 use App\Models\Service;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-#[Group('Booking Controller', weight: 3)]
+#[Group('Doctor Availability', weight: 3)]
 class DoctorAvailabilityController extends BaseController
 {
     /**
      * Get doctor's availability for a specific service
      */
-    public function doctorAvailability(Request $request, GetDoctorAvailability $getDoctorAvailability)
+    public function doctorAvailability(Doctor $doctor, Service $service, GetDoctorAvailability $getDoctorAvailability)
     {
         try {
-            $doctorId = $request->route('doctor');
-            $serviceId = $request->route('service');
-
-            $doctor = Doctor::find($doctorId);
-            if (!$doctor) {
-                return $this->sendError('Doctor not found', 404);
-            }
-
-            $service = Service::find($serviceId);
-            if (!$service) {
-                return $this->sendError('Service not found', 404);
-            }
-
             $data = $getDoctorAvailability->handle($doctor, $service);
             return $this->sendResponse($data);
         } catch (\Exception $e) {
@@ -57,16 +43,9 @@ class DoctorAvailabilityController extends BaseController
     /**
      * Get single doctor with their services
      */
-    public function showDoctor(Request $request, ShowDoctor $showDoctor)
+    public function showDoctor(Doctor $doctor, ShowDoctor $showDoctor)
     {
         try {
-            $doctorId = $request->route('doctor');
-            $doctor = Doctor::find($doctorId);
-
-            if (!$doctor) {
-                return $this->sendError('Doctor not found', 404);
-            }
-
             $data = $showDoctor->handle($doctor);
             return $this->sendResponse($data);
         } catch (\Exception $e) {
@@ -88,16 +67,9 @@ class DoctorAvailabilityController extends BaseController
     /**
      * Get single service
      */
-    public function showService(Request $request, ShowService $showService)
+    public function showService(Service $service, ShowService $showService)
     {
         try {
-            $serviceId = $request->route('service');
-            $service = Service::find($serviceId);
-
-            if (!$service) {
-                return $this->sendError('Service not found', 404);
-            }
-
             $data = $showService->handle($service);
             return $this->sendResponse($data);
         } catch (\Exception $e) {

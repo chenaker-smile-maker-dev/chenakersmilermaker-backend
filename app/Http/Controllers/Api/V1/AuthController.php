@@ -15,7 +15,7 @@ use Carbon\Carbon;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Request;
 
-#[Group('Patient Auth Controller', weight: 1)]
+#[Group('Patient Auth', weight: 1)]
 class AuthController extends BaseController
 {
     /**

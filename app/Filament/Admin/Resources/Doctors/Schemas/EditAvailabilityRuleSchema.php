@@ -86,13 +86,15 @@ class EditAvailabilityRuleSchema
             DatePicker::make('effective_from')
                 ->label('Effective From')
                 ->required()
+                ->native(false)
                 ->minDate(today())
                 ->default($record->start_date),
 
             DatePicker::make('effective_to')
+                ->native(false)
                 ->label('Effective To')
                 ->nullable()
-                ->minDate(today())
+                ->minDate(fn($get) => $get('effective_from') ? $get('effective_from') : today())
                 ->helperText('Leave empty for ongoing')
                 ->default($record->end_date),
 
