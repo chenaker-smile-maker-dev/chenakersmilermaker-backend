@@ -54,12 +54,12 @@ class DoctorsTable
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
-                Action::make('manage-schedules')
-                    ->label('Schedules')
-                    ->icon('heroicon-o-calendar-days')
-                    ->url(fn($record) => ManageDoctorSchedules::getUrl(['record' => $record])),
+                // ViewAction::make(),
+                // EditAction::make(),
+                // Action::make('manage-schedules')
+                //     ->label('Schedules')
+                //     ->icon('heroicon-o-calendar-days')
+                //     ->url(fn($record) => ManageDoctorSchedules::getUrl(['record' => $record])),
                 // ForceDeleteAction::make(),
                 // RestoreAction::make(),
             ])
@@ -108,6 +108,12 @@ class DoctorsTable
                         ->color('gray')
                         ->limit(50)
                         ->wrap(),
+                    TextColumn::make("email")
+                        ->weight(FontWeight::Bold)
+                        ->searchable(),
+                    TextColumn::make("phone")
+                        ->weight(FontWeight::Bold)
+                        ->searchable(),
                 ])->space(1),
             ])->from(''),
         ];

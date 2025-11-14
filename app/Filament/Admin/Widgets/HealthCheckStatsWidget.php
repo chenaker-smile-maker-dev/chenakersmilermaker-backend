@@ -9,6 +9,7 @@ use Spatie\Health\ResultStores\ResultStore;
 
 class HealthCheckStatsWidget extends BaseWidget
 {
+    protected string $view = 'panels.admin.widgets.health-check-stats-widget';
     protected function getStats(): array
     {
         $resultStore = app(ResultStore::class);

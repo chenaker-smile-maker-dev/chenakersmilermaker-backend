@@ -12,3 +12,19 @@
 
 /* filament language switch package */
 @source '../../../../vendor/bezhansalleh/filament-language-switch/resources/views/**/*.blade.php';
+
+body
+    > div.fi-layout
+    > div.fi-main-ctn
+    > main
+    > div
+    > div
+    > div
+    > div.col-\(--col-span-default\).sm\:col-\(--col-span-sm\).md\:col-\(--col-span-md\).lg\:col-\(--col-span-lg\).xl\:col-\(--col-span-xl\).\32
+    xl\:col-\(--col-span-2xl\).rounded
+    > div
+    > div
+    > div
+    > h3 {
+    @apply text-black dark:text-white;
+}

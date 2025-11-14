@@ -111,7 +111,7 @@ class DoctorResource extends Resource
     public static function sidebar(Model $record): FilamentPageSidebar
     {
         $TITLE = $record->display_name;
-        $DESCRIPTION = '';
+        $DESCRIPTION = $record->specialty ?? 'Doctor Details';
         $DOCTOR_INFOS_GROUP = 'Edit Doctor Informations';
         $DOCTOR_SCHEDULES_GROUP = 'Manage Doctor Schedules';
 

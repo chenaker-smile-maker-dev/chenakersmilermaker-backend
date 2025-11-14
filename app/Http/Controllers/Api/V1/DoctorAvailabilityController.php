@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\Patient\Booking\GetDoctorAvailability;
 use App\Actions\Patient\Booking\ListDoctors;
 use App\Actions\Patient\Booking\ListServices;
 use App\Actions\Patient\Booking\ShowDoctor;
@@ -11,7 +12,7 @@ use App\Models\Doctor;
 use App\Models\Service;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Request;
-use Zap\Facades\Zap;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 #[Group('Booking Controller', weight: 3)]
 class DoctorAvailabilityController extends BaseController
@@ -19,56 +20,27 @@ class DoctorAvailabilityController extends BaseController
     /**
      * Get doctor's availability for a specific service
      */
-    public function doctorAvailability(Doctor $doctor, Service $service)
+    public function doctorAvailability(Request $request, GetDoctorAvailability $getDoctorAvailability)
     {
-        // Check if service is active
-        if (!$service->active) {
-            return $this->sendError('Service is not active', 422);
+        try {
+            $doctorId = $request->route('doctor');
+            $serviceId = $request->route('service');
+
+            $doctor = Doctor::find($doctorId);
+            if (!$doctor) {
+                return $this->sendError('Doctor not found', 404);
+            }
+
+            $service = Service::find($serviceId);
+            if (!$service) {
+                return $this->sendError('Service not found', 404);
+            }
+
+            $data = $getDoctorAvailability->handle($doctor, $service);
+            return $this->sendResponse($data);
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 422);
         }
-
-        // Check if doctor provides this service
-        if (!$doctor->services()->where('service_id', $service->id)->exists()) {
-            return $this->sendError('Doctor does not provide this service', 422);
-        }
-
-        // Check if doctor has any active availability schedules
-        $hasAvailability = $doctor->availabilitySchedules()
-            ->active()
-            ->exists();
-
-        if (!$hasAvailability) {
-            return $this->sendResponse([
-                'id' => $doctor->id,
-                'doctor_name' => $doctor->name,
-                'service_id' => $service->id,
-                'service_name' => $service->name,
-                'service_duration_minutes' => $service->duration ?? 30,
-                'is_service_active' => $service->active,
-                'next_available_slot' => null,
-                'message' => 'Doctor has no availability scheduled',
-            ]);
-        }
-
-        // Get the service duration in minutes
-        $serviceDuration = $service->duration ?? 30;
-
-        // Find the next available slot using Zap's fluent API
-        $nextAvailableSlot = $doctor->getNextAvailableSlot(
-            afterDate: now()->format('Y-m-d'),
-            duration: $serviceDuration,
-            dayStart: '09:00',
-            dayEnd: '17:01'
-        );
-
-        return $this->sendResponse([
-            'id' => $doctor->id,
-            'doctor_name' => $doctor->name,
-            'service_id' => $service->id,
-            'service_name' => $service->name,
-            'service_duration_minutes' => $serviceDuration,
-            'is_service_active' => $service->active,
-            'next_available_slot' => $nextAvailableSlot,
-        ]);
     }
 
     /**
@@ -85,10 +57,21 @@ class DoctorAvailabilityController extends BaseController
     /**
      * Get single doctor with their services
      */
-    public function showDoctor(Doctor $doctor, ShowDoctor $showDoctor)
+    public function showDoctor(Request $request, ShowDoctor $showDoctor)
     {
-        $data = $showDoctor->handle($doctor);
-        return $this->sendResponse($data);
+        try {
+            $doctorId = $request->route('doctor');
+            $doctor = Doctor::find($doctorId);
+
+            if (!$doctor) {
+                return $this->sendError('Doctor not found', 404);
+            }
+
+            $data = $showDoctor->handle($doctor);
+            return $this->sendResponse($data);
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 422);
+        }
     }
 
     /**
@@ -105,9 +88,20 @@ class DoctorAvailabilityController extends BaseController
     /**
      * Get single service
      */
-    public function showService(Service $service, ShowService $showService)
+    public function showService(Request $request, ShowService $showService)
     {
-        $data = $showService->handle($service);
-        return $this->sendResponse($data);
+        try {
+            $serviceId = $request->route('service');
+            $service = Service::find($serviceId);
+
+            if (!$service) {
+                return $this->sendError('Service not found', 404);
+            }
+
+            $data = $showService->handle($service);
+            return $this->sendResponse($data);
+        } catch (\Exception $e) {
+            return $this->sendError($e->getMessage(), 422);
+        }
     }
 }
