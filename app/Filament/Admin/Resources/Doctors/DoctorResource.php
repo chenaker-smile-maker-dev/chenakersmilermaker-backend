@@ -122,41 +122,40 @@ class DoctorResource extends Resource
             ->sidebarNavigation()
             ->setNavigationItems([
                 PageNavigationItem::make('View Doctor')
-                    ->icon(Heroicon::Eye)
+                    ->icon('heroicon-o-eye')
                     // ->group($DOCTOR_INFOS_GROUP)
                     ->isActiveWhen(fn() => request()->routeIs(ViewDoctor::getRouteName()))
                     ->url(fn() => ViewDoctor::getUrl(['record' => $record->id])),
 
                 PageNavigationItem::make('Edit Doctor')
-                    ->icon(Heroicon::Pencil)
+                    ->icon('heroicon-o-pencil')
                     ->group($DOCTOR_INFOS_GROUP)
                     ->isActiveWhen(fn() => request()->routeIs(EditDoctor::getRouteName()))
                     ->url(fn() => EditDoctor::getUrl(['record' => $record->id])),
 
                 PageNavigationItem::make('Edit Doctor Contact')
-                    ->icon(Heroicon::Pencil)
+                    ->icon('heroicon-o-pencil')
                     ->group($DOCTOR_INFOS_GROUP)
                     ->isActiveWhen(fn() => request()->routeIs(EditDoctorContact::getRouteName()))
                     ->url(fn() => EditDoctorContact::getUrl(['record' => $record->id])),
 
                 PageNavigationItem::make('Edit Doctor Photo')
-                    ->icon(Heroicon::Pencil)
+                    ->icon('heroicon-o-pencil')
                     ->group($DOCTOR_INFOS_GROUP)
                     ->isActiveWhen(fn() => request()->routeIs(EditDoctorPhoto::getRouteName()))
                     ->url(fn() => EditDoctorPhoto::getUrl(['record' => $record->id])),
 
                 PageNavigationItem::make('Manage Doctor Schedules')
-                    ->icon(Heroicon::Calendar)
+                    ->icon('heroicon-o-calendar')
                     ->group($DOCTOR_SCHEDULES_GROUP)
                     ->isActiveWhen(fn() => request()->routeIs(ManageDoctorSchedules::getRouteName()))
                     ->url(fn() => ManageDoctorSchedules::getUrl(['record' => $record->id])),
 
                 PageNavigationItem::make('Manage Doctor Appointments')
-                    ->icon(Heroicon::Calendar)
+                    ->icon('heroicon-o-calendar')
                     ->group($DOCTOR_SCHEDULES_GROUP)
                     ->isActiveWhen(fn() => request()->routeIs(ManageDoctorAppointments::getRouteName()))
                     ->url(fn() => ManageDoctorAppointments::getUrl(['record' => $record->id])),
-
 
             ]);
     }
