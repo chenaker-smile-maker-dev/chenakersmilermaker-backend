@@ -9,6 +9,7 @@ use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Service;
 use Dedoc\Scramble\Attributes\Group;
+use Dedoc\Scramble\Attributes\BodyParameter;
 use Illuminate\Http\Request;
 
 #[Group('Booking', weight: 4)]
@@ -16,20 +17,29 @@ class BookingController extends BaseController
 {
     /**
      * Check if a specific time slot is available for booking
+     *
+     * Takes a date and start time, checks if the doctor has an available slot for the service duration at that time.
+     * Respects doctor's availability schedule (days of week and hours).
      */
+    #[BodyParameter('date', description: 'Date for the appointment in d/m/Y format', type: 'string', format: 'date', example: '15/12/2025', required: true)]
+    #[BodyParameter('start_time', description: 'Start time for the appointment in H:i format (24-hour)', type: 'string', format: 'time', example: '14:30', required: true)]
     public function checkAvailability(Doctor $doctor, Service $service, Request $request, CheckAvailabilitySlot $checkAvailabilitySlot)
     {
         try {
             // Validate request body
             $validated = $request->validate([
-                'date' => 'required|date_format:Y-m-d',
+                'date' => 'required|date_format:d/m/Y',
                 'start_time' => 'required|date_format:H:i',
             ]);
+
+            // Convert date from d/m/Y to Y-m-d format for the action
+            $dateObj = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['date']);
+            $formattedDate = $dateObj->format('Y-m-d');
 
             $data = $checkAvailabilitySlot->handle(
                 $doctor,
                 $service,
-                $validated['date'],
+                $formattedDate,
                 $validated['start_time']
             );
 
@@ -41,15 +51,25 @@ class BookingController extends BaseController
 
     /**
      * Book an appointment
+     *
+     * Creates an appointment for the authenticated patient with the specified doctor and service.
+     * The time slot must be available and within the doctor's availability schedule.
+     * Also creates a block in Zap to prevent double-booking.
      */
+    #[BodyParameter('date', description: 'Date for the appointment in d/m/Y format', type: 'string', format: 'date', example: '15/12/2025', required: true)]
+    #[BodyParameter('start_time', description: 'Start time for the appointment in H:i format (24-hour)', type: 'string', format: 'time', example: '14:30', required: true)]
     public function bookAppointment(Doctor $doctor, Service $service, Request $request, CreateAppointment $createAppointment)
     {
         try {
             // Validate request body
             $validated = $request->validate([
-                'date' => 'required|date_format:Y-m-d',
+                'date' => 'required|date_format:d/m/Y',
                 'start_time' => 'required|date_format:H:i',
             ]);
+
+            // Convert date from d/m/Y to Y-m-d format for the action
+            $dateObj = \Carbon\Carbon::createFromFormat('d/m/Y', $validated['date']);
+            $formattedDate = $dateObj->format('Y-m-d');
 
             // Get authenticated patient
             $user = $request->user();
@@ -63,7 +83,7 @@ class BookingController extends BaseController
                 $doctor,
                 $service,
                 $patient,
-                $validated['date'],
+                $formattedDate,
                 $validated['start_time']
             );
 
