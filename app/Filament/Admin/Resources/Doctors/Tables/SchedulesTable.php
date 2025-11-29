@@ -52,8 +52,8 @@ class SchedulesTable
                     ->toggleable()
                     ->label('Date Range')
                     ->formatStateUsing(function ($state, $record) {
-                        $from = $record->start_date->format('d/m/Y');
-                        $to = $record->end_date ? $record->end_date->format('d/m/Y') : '—';
+                        $from = $record->start_date->format('d-m-Y');
+                        $to = $record->end_date ? $record->end_date->format('d-m-Y') : '—';
                         return "{$from} → {$to}";
                     })
                     ->sortable(),

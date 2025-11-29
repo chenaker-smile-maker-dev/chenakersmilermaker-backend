@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DefaultSeeder extends Seeder
@@ -15,7 +14,7 @@ class DefaultSeeder extends Seeder
         $patients = \App\Models\Patient::factory()->count(10)->create();
         $doctors = \App\Models\Doctor::factory()->count(10)->create();
         $services = \App\Models\Service::factory()->count(10)->create();
-        $appointments = \App\Models\Appointment::factory()->count(50)->create();
+        // $appointments = \App\Models\Appointment::factory()->count(50)->create();
 
         $admin = \App\Models\User::factory()->create([
             'name' => 'admin',
@@ -27,6 +26,8 @@ class DefaultSeeder extends Seeder
 
     protected function AssignServicesToDoctors($doctors, $services)
     {
-        foreach ($doctors as $doctor) $doctor->services()->attach($services->random(rand(2, 5))->pluck('id')->toArray());
+        foreach ($doctors as $doctor) {
+            $doctor->services()->attach($services->random(rand(2, 5))->pluck('id')->toArray());
+        }
     }
 }

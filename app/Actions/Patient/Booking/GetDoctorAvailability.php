@@ -4,16 +4,12 @@ namespace App\Actions\Patient\Booking;
 
 use App\Models\Doctor;
 use App\Models\Service;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class GetDoctorAvailability
 {
     /**
      * Handle getting doctor's next available slot for a service
-     *
-     * @param Doctor $doctor
-     * @param Service $service
-     * @return array
      */
     public function handle(Doctor $doctor, Service $service): array
     {
@@ -26,7 +22,7 @@ class GetDoctorAvailability
         // Extract availability hours and days from doctor's schedule
         $availabilityInfo = $this->getAvailabilityInfo($doctor);
 
-        if (!$availabilityInfo) {
+        if (! $availabilityInfo) {
             return $this->noAvailabilityResponse($doctor, $service);
         }
 
@@ -49,11 +45,11 @@ class GetDoctorAvailability
      */
     private function validateInputs(Doctor $doctor, Service $service): void
     {
-        if (!$service->active) {
+        if (! $service->active) {
             throw new \Exception('Service is not active');
         }
 
-        if (!$doctor->services()->where('service_id', $service->id)->exists()) {
+        if (! $doctor->services()->where('service_id', $service->id)->exists()) {
             throw new \Exception('Doctor does not provide this service');
         }
     }
@@ -128,8 +124,9 @@ class GetDoctorAvailability
             $dayOfWeek = $checkDate->dayOfWeek; // 0=Sunday, 1=Monday, etc.
 
             // Only check if this day is in the allowed days
-            if (!in_array($dayOfWeek, $allowedDays)) {
+            if (! in_array($dayOfWeek, $allowedDays)) {
                 $checkDate = $checkDate->addDay();
+
                 continue;
             }
 
@@ -139,10 +136,11 @@ class GetDoctorAvailability
                 // If current time is already past or equal to day end, skip to next day
                 if ($this->timeToMinutes($currentTime) >= $this->timeToMinutes($dayEnd)) {
                     $checkDate = $checkDate->addDay();
+
                     continue;
                 }
                 // Also adjust dayStart to current time if it's later than dayStart
-                $adjustedDayStart = max($currentTime, $dayStart, [$currentTime, $dayStart]);
+                $adjustedDayStart = max($currentTime, $dayStart);
                 if ($this->timeToMinutes($adjustedDayStart) > $this->timeToMinutes($dayStart)) {
                     $dayStart = $adjustedDayStart;
                 }
@@ -209,7 +207,9 @@ class GetDoctorAvailability
      */
     private function timeToMinutes(string $time): int
     {
+        Log::info("Converting time to minutes: $time");
         [$hours, $minutes] = explode(':', $time);
+
         return ((int) $hours * 60) + (int) $minutes;
     }
 
