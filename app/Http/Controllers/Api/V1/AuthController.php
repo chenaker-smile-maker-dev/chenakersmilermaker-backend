@@ -33,11 +33,20 @@ class AuthController extends BaseController
     #[BodyParameter('gender', description: 'Patient gender (male or female)', type: 'string', example: 'male', required: true)]
     #[BodyParameter('password', description: 'Patient password (minimum 6 characters)', type: 'string', format: 'password', example: 'secure_password', required: true)]
     #[BodyParameter('password_confirmation', description: 'Password confirmation (must match password)', type: 'string', format: 'password', example: 'secure_password', required: true)]
+    #[BodyParameter('image', description: 'Optional profile image (jpeg, png, jpg, max 2MB)', type: 'string', format: 'binary', required: false, example: 'use form-data to upload a file')]
     public function register(RegisterPatientRequest $request, RegisterPatient $registerPatient, GenerateTokensForPatient $generateTokensForPatient)
     {
         $data = $request->validated();
 
+        // Remove image from data if present, handle separately
         $patient = $registerPatient->handle($data);
+
+        // Attach image if uploaded
+        $image = $request->file('image');
+        if ($image) {
+            $patient->addMedia($image)->toMediaCollection('profile_photo');
+        }
+
         [$accessToken, $refreshToken] = $generateTokensForPatient->handle($patient);
 
         return $this->sendResponse([

@@ -22,7 +22,8 @@ class RegisterPatientRequest extends FormRequest
             'email' => 'required|string|email|max:100|unique:patients,email',
             'age' => 'required|integer|min:0|max:120',
             'gender' => 'required|in:' . implode(',', $genders),
-            'password' => 'required|string|min:6|confirmed'
+            'password' => 'required|string|min:6|confirmed',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ];
     }
 }
