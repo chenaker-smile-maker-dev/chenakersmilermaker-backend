@@ -22,20 +22,31 @@ else
     echo "✓ Vendor folder exists"
 fi
 
-# Check if public/build exists
-if [ ! -d "public/build" ]; then
-    echo "🔨 Building assets..."
+# Check if public/build exists, always try to build
+echo "🔨 Ensuring assets are built..."
 
-    # Ensure node_modules exists
-    if [ ! -d "node_modules" ]; then
-        echo "📦 Installing npm dependencies..."
-        npm ci 2>&1 || npm install 2>&1 || true
-    fi
-
-    npm run build 2>&1 || {
-        echo "⚠️  npm build failed, attempting retry..."
-        npm run build 2>&1 || echo "⚠️  npm build skipped"
+# Ensure node_modules exists
+if [ ! -d "node_modules" ]; then
+    echo "📦 Installing npm dependencies..."
+    npm ci 2>&1 || npm install 2>&1 || {
+        echo "⚠️  npm install failed"
     }
+fi
+
+# Always build assets (don't skip)
+npm run build 2>&1 || {
+    echo "⚠️  npm build failed, attempting retry..."
+    sleep 5
+    npm run build 2>&1 || echo "⚠️  npm build skipped"
+}
+
+# Verify build output
+if [ -d "public/build/assets" ]; then
+    echo "✓ Assets built successfully"
+    ls -la public/build/assets | head -5
+else
+    echo "⚠️  public/build/assets directory not found"
+    mkdir -p public/build/assets
 fi
 
 # Clear Laravel cache to prevent stale config
