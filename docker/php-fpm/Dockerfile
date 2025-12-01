@@ -2,7 +2,7 @@ FROM php:8.2-fpm
 
 # Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
-    libzip-dev zip unzip git libpng-dev libonig-dev libxml2-dev libjpeg-dev libfreetype6-dev \
+    libzip-dev zip unzip git curl libpng-dev libonig-dev libxml2-dev libjpeg-dev libfreetype6-dev \
  && docker-php-ext-configure gd --with-freetype --with-jpeg \
  && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd sockets \
  && pecl install redis && docker-php-ext-enable redis \
@@ -13,16 +13,15 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy composer files first to leverage Docker cache
-COPY composer.json composer.lock* ./
-
-RUN composer install --no-dev --no-interaction --optimize-autoloader || true
-
-# Copy application source
+# Copy entire application
 COPY . .
 
+# Install dependencies
+RUN composer install --no-dev --no-interaction --optimize-autoloader 2>&1 || echo "Composer install may fail if vendor exists"
+
 # Ensure correct permissions
-RUN chown -R www-data:www-data /var/www/html && chmod -R 755 storage bootstrap/cache || true
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache && \
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache || true
 
 EXPOSE 9000
 
