@@ -34,8 +34,8 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
 # Install Redis extension
 RUN pecl install redis && docker-php-ext-enable redis
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Install Composer inline
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Copy application
 COPY . .
@@ -44,9 +44,6 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader --no-interaction || true && \
     npm install || true && \
     npm run build || true
-
-# Remove node_modules to reduce image size
-RUN rm -rf node_modules
 
 # Create necessary directories
 RUN mkdir -p storage/logs bootstrap/cache && \
