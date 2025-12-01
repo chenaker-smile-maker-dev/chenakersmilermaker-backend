@@ -14,7 +14,10 @@ RUN apk add --no-cache \
     zip \
     unzip \
     nodejs \
-    npm
+    npm \
+    autoconf \
+    make \
+    g++
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
