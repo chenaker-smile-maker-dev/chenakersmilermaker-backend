@@ -14,6 +14,7 @@ class DefaultSeeder extends Seeder
         $patients = \App\Models\Patient::factory()->count(10)->create();
         $doctors = \App\Models\Doctor::factory()->count(10)->create();
         $services = \App\Models\Service::factory()->count(10)->create();
+        $events = \App\Models\Event::factory()->count(10)->create();
         // $appointments = \App\Models\Appointment::factory()->count(50)->create();
 
         $admin = \App\Models\User::factory()->create([
