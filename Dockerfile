@@ -17,7 +17,8 @@ RUN apk add --no-cache \
     npm \
     autoconf \
     make \
-    g++
+    g++ \
+    netcat-openbsd
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
@@ -45,13 +46,20 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-script
 
 # Install Node dependencies and build assets
 RUN npm install 2>&1 && npm run build 2>&1
+
+# Cache config (will use environment variables at runtime)
 RUN mkdir -p storage/logs bootstrap/cache && \
-    chown -R www-data:www-data storage bootstrap/cache
+    chown -R www-data:www-data storage bootstrap/cache && \
+    chmod -R 775 storage bootstrap/cache
 
 # Set PHP-FPM user
 RUN sed -i 's/user = www-data/user = www-data/' /usr/local/etc/php-fpm.conf && \
     sed -i 's/group = www-data/group = www-data/' /usr/local/etc/php-fpm.conf
 
+# Copy and setup entrypoint
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 EXPOSE 9000
 
-CMD ["php-fpm"]
+ENTRYPOINT ["docker-entrypoint.sh"]
