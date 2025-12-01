@@ -40,9 +40,11 @@ RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache && \
     chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache || true && \
     chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache || true
 
-# Copy entrypoint script
+# Copy entrypoint scripts
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY docker/horizon-entrypoint.sh /usr/local/bin/horizon-entrypoint.sh
+COPY docker/scheduler-entrypoint.sh /usr/local/bin/scheduler-entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/horizon-entrypoint.sh /usr/local/bin/scheduler-entrypoint.sh
 
 EXPOSE 9000
 

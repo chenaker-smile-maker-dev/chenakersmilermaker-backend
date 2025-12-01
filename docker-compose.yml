@@ -42,7 +42,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: app_php:latest
-    command: ["php", "artisan", "horizon"]
+    entrypoint: /usr/local/bin/horizon-entrypoint.sh
     restart: unless-stopped
     working_dir: /var/www/html
     depends_on:
@@ -65,7 +65,7 @@ services:
       context: .
       dockerfile: Dockerfile
     image: app_php:latest
-    command: ["php", "artisan", "schedule:work"]
+    entrypoint: /usr/local/bin/scheduler-entrypoint.sh
     restart: unless-stopped
     working_dir: /var/www/html
     depends_on:
