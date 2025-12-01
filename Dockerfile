@@ -28,7 +28,8 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
     zip \
     bcmath \
     intl \
-    pcntl
+    pcntl \
+    exif
 
 # Install Redis extension
 RUN pecl install redis && docker-php-ext-enable redis
