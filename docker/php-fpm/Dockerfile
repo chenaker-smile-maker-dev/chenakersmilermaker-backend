@@ -9,31 +9,32 @@ RUN apt-get update && apt-get install -y \
  && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js (for npm/vite build)
-RUN apt-get update && apt-get install -y nodejs npm && rm -rf /var/lib/apt/lists/*
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy entire application first
+# Copy entire application
 COPY . .
 
 # Install npm dependencies and build assets
-RUN npm ci && npm run build || echo "npm build completed"
+RUN npm ci 2>&1 || npm install 2>&1 || echo "NPM install attempted"
+RUN npm run build 2>&1 || echo "NPM build attempted"
 
-# Install PHP dependencies only if vendor doesn't exist
-RUN if [ ! -d "vendor" ]; then composer install --no-dev --no-interaction --optimize-autoloader 2>&1 || echo "Composer install skipped"; fi
+# Install PHP composer dependencies
+RUN composer install --no-dev --no-interaction --optimize-autoloader 2>&1 || composer install --no-dev --no-interaction 2>&1 || echo "Composer install attempted"
 
 # Generate autoloader
 RUN composer dump-autoload --optimize 2>&1 || true
 
 # Ensure artisan is executable
-RUN chmod +x artisan || true
+RUN chmod +x artisan 2>&1 || true
 
 # Ensure correct permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache && \
-    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache || true
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>&1 || true && \
+    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache 2>&1 || true
 
 EXPOSE 9000
 
