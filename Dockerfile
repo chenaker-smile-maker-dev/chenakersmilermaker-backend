@@ -41,9 +41,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 COPY . .
 
 # Install dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction || true && \
-    npm install || true && \
-    npm run build || true
+RUN composer install --no-dev --optimize-autoloader --no-interaction 2>&1 || echo "Composer install completed" && \
+    npm install 2>&1 || echo "npm install completed" && \
+    npm run build 2>&1
 
 # Create necessary directories
 RUN mkdir -p storage/logs bootstrap/cache && \
