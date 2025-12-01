@@ -27,7 +27,8 @@ RUN composer install --no-dev --no-interaction --optimize-autoloader --no-script
 
 # Install npm dependencies and build assets
 RUN npm ci 2>&1 || npm install 2>&1 || true
-RUN npm run build 2>&1 || true
+RUN npm run build 2>&1 || echo "⚠️  npm build attempted"
+RUN ls -la public/build 2>&1 || echo "⚠️  public/build may not exist"
 
 # Generate optimized autoloader
 RUN composer dump-autoload --optimize 2>&1 || true

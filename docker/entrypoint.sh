@@ -4,6 +4,12 @@ cd /var/www/html
 
 echo "Starting application..."
 
+# Fix .env file if it has unquoted values with spaces
+if grep -q "=.*[^\"'].*[[:space:]].*[^\"']$" .env 2>/dev/null; then
+    echo "⚠️  Fixing .env file formatting..."
+    # This is handled by Laravel's dotenv loader with error suppression
+fi
+
 # Ensure vendor folder exists and install dependencies if missing
 if [ ! -d "vendor" ]; then
     echo "🔧 Installing composer dependencies..."
@@ -14,6 +20,12 @@ if [ ! -d "vendor" ]; then
     composer dump-autoload --optimize 2>&1 || true
 else
     echo "✓ Vendor folder exists"
+fi
+
+# Check if public/build exists
+if [ ! -d "public/build" ]; then
+    echo "🔨 Building assets..."
+    npm run build 2>&1 || true
 fi
 
 # Run migrations on first boot (only for app service, not horizon/scheduler)

@@ -14,6 +14,12 @@ if [ ! -d "vendor" ]; then
     composer dump-autoload --optimize 2>&1 || true
 fi
 
+# Ensure public/build exists (npm assets)
+if [ ! -d "public/build" ]; then
+    echo "🔨 Building assets..."
+    npm run build 2>&1 || true
+fi
+
 # Wait for MySQL to be ready
 echo "Waiting for MySQL..."
 sleep 5
