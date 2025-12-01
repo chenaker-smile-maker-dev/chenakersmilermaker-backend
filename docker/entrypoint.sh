@@ -28,10 +28,22 @@ if [ ! -d "public/build" ]; then
     npm run build 2>&1 || true
 fi
 
-# Run migrations on first boot (only for app service, not horizon/scheduler)
+# Clear Laravel cache to prevent stale config
+php artisan config:clear 2>&1 || true
+php artisan cache:clear 2>&1 || true
+
+# Run migrations on first boot
 if [ ! -f ".migrated" ] && [ -f "artisan" ]; then
     echo "🗄️  Running migrations..."
-    php artisan migrate --force 2>&1 || echo "⚠️  Migrations failed or already run"
+
+    # Wait for MySQL to be ready
+    sleep 10
+
+    php artisan migrate --force 2>&1 || {
+        echo "⚠️  Migrations failed"
+        sleep 5
+        php artisan migrate --force 2>&1 || echo "⚠️  Migrations skipped"
+    }
 
     echo "🌱 Seeding database..."
     php artisan db:seed --force 2>&1 || echo "⚠️  Seeding skipped"
