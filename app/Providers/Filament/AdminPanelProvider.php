@@ -2,7 +2,7 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Admin\Widgets\ReservationsCalendar;
+use App\Filament\Admin\Widgets\AppointmentCalendarWidget;
 use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -65,7 +65,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 // AccountWidget::class,
                 // FilamentInfoWidget::class,
-                ReservationsCalendar::class,
+                AppointmentCalendarWidget::class,
             ])
 
             ->plugins([
