@@ -16,27 +16,19 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy composer files first for better caching
-COPY composer.json composer.lock* ./
-
-# Install PHP composer dependencies BEFORE copying app
-RUN composer install --no-dev --no-interaction --optimize-autoloader || composer install --no-dev --no-interaction
-
 # Copy entire application
 COPY . .
 
-# Install npm dependencies and build assets
-RUN npm ci || npm install || true
-RUN npm run build || true
-
-# Generate autoloader
-RUN composer dump-autoload --optimize || true
+# Try npm build but don't fail if it errors
+RUN npm ci 2>/dev/null || npm install 2>/dev/null || true
+RUN npm run build 2>/dev/null || true
 
 # Ensure artisan is executable
 RUN chmod +x artisan || true
 
 # Ensure correct permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache || true && \
+RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache && \
+    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache || true && \
     chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache || true
 
 # Copy entrypoint script
