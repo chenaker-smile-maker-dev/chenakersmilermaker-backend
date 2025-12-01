@@ -31,6 +31,10 @@ RUN composer install --no-dev --no-interaction --optimize-autoloader --no-script
 RUN npm ci 2>&1 || npm install 2>&1 || true
 RUN npm run build 2>&1 || echo "⚠️  npm build attempted"
 
+# Remove node_modules after build to reduce image size (not needed in production)
+RUN rm -rf node_modules node_modules/.cache package-lock.json && \
+    echo "✓ Cleaned up npm dependencies"
+
 # Generate optimized autoloader
 RUN composer dump-autoload --optimize 2>&1 || true
 
