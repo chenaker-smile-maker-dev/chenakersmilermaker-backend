@@ -8,41 +8,34 @@ use Illuminate\Support\Facades\Log;
 
 class GetDoctorAvailability
 {
+    private int $slotLimit = 5;
+
     /**
-     * Handle getting doctor's next available slot for a service
+     * Handle getting doctor's next available slots for a service
      */
     public function handle(Doctor $doctor, Service $service): array
     {
-        // Validate inputs
         $this->validateInputs($doctor, $service);
 
-        // Get service duration
         $serviceDuration = $service->duration ?? 30;
-
-        // Extract availability hours and days from doctor's schedule
         $availabilityInfo = $this->getAvailabilityInfo($doctor);
 
         if (! $availabilityInfo) {
             return $this->noAvailabilityResponse($doctor, $service);
         }
 
-        // Find the next available slot within the availability window and days
-        $nextSlot = $this->findNextAvailableSlot(
+        $slots = $this->findNextAvailableSlots(
             $doctor,
             $serviceDuration,
             $availabilityInfo['dayStart'],
             $availabilityInfo['dayEnd'],
-            $availabilityInfo['days']
+            $availabilityInfo['days'],
+            $this->slotLimit
         );
 
-        return $this->successResponse($doctor, $service, $serviceDuration, $nextSlot);
+        return $this->successResponse($doctor, $service, $serviceDuration, $slots);
     }
 
-    /**
-     * Validate doctor and service
-     *
-     * @throws \Exception
-     */
     private function validateInputs(Doctor $doctor, Service $service): void
     {
         if (! $service->active) {
@@ -54,10 +47,6 @@ class GetDoctorAvailability
         }
     }
 
-    /**
-     * Get doctor's availability info (start/end times and days of week)
-     * Returns null if no availability found
-     */
     private function getAvailabilityInfo(Doctor $doctor): ?array
     {
         $availabilitySchedules = $doctor->availabilitySchedules()
@@ -68,7 +57,6 @@ class GetDoctorAvailability
             return null;
         }
 
-        // Extract times from the first availability schedule's first period
         $firstSchedule = $availabilitySchedules->first();
         $periods = $firstSchedule->periods()->get();
 
@@ -77,12 +65,9 @@ class GetDoctorAvailability
         }
 
         $firstPeriod = $periods->first();
-
-        // Get days of week from frequency_config
         $frequencyConfig = $firstSchedule->frequency_config ?? [];
         $days = $frequencyConfig['days'] ?? [];
 
-        // Convert day names to numeric values (0=Sunday, 1=Monday, ..., 6=Saturday)
         $dayMap = [
             'sunday' => 0,
             'monday' => 1,
@@ -103,80 +88,74 @@ class GetDoctorAvailability
         return [
             'dayStart' => $firstPeriod->start_time ?? '09:00',
             'dayEnd' => $firstPeriod->end_time ?? '17:00',
-            'days' => $numericDays, // Array of numeric day values
+            'days' => $numericDays,
         ];
     }
 
-    /**
-     * Find the next available slot within availability window and days
-     */
-    private function findNextAvailableSlot(
+    private function findNextAvailableSlots(
         Doctor $doctor,
         int $duration,
         string $dayStart,
         string $dayEnd,
-        array $allowedDays
-    ): ?array {
-        $checkDate = now();
+        array $allowedDays,
+        int $limit
+    ): array {
+        if (empty($allowedDays)) {
+            return [];
+        }
 
-        // Check up to 30 days in the future
-        for ($i = 0; $i < 30; $i++) {
-            $dayOfWeek = $checkDate->dayOfWeek; // 0=Sunday, 1=Monday, etc.
+        $slots = [];
+        $checkDate = now()->copy();
+        $baseDayStart = $dayStart;
 
-            // Only check if this day is in the allowed days
+        for ($dayIndex = 0; $dayIndex < 30 && count($slots) < $limit; $dayIndex++) {
+            $dayOfWeek = $checkDate->dayOfWeek;
+
             if (! in_array($dayOfWeek, $allowedDays)) {
-                $checkDate = $checkDate->addDay();
-
+                $checkDate->addDay();
                 continue;
             }
 
-            // Skip if this is today and we're already past the availability window
+            $dailyStart = $baseDayStart;
+            $dateString = $checkDate->format('Y-m-d');
+
             if ($checkDate->isToday()) {
                 $currentTime = now()->format('H:i');
-                // If current time is already past or equal to day end, skip to next day
                 if ($this->timeToMinutes($currentTime) >= $this->timeToMinutes($dayEnd)) {
-                    $checkDate = $checkDate->addDay();
-
+                    $checkDate->addDay();
                     continue;
                 }
-                // Also adjust dayStart to current time if it's later than dayStart
-                $adjustedDayStart = max($currentTime, $dayStart);
-                if ($this->timeToMinutes($adjustedDayStart) > $this->timeToMinutes($dayStart)) {
-                    $dayStart = $adjustedDayStart;
+
+                if ($this->timeToMinutes($currentTime) > $this->timeToMinutes($dailyStart)) {
+                    $dailyStart = $currentTime;
                 }
             }
 
-            $dateString = $checkDate->format('Y-m-d');
-
-            // Get all slots for this day within the doctor's availability window
-            $slots = $doctor->getAvailableSlots(
+            $dailySlots = $doctor->getAvailableSlots(
                 date: $dateString,
-                dayStart: $dayStart,
+                dayStart: $dailyStart,
                 dayEnd: $dayEnd,
                 slotDuration: $duration
             );
 
-            // Find the first truly available slot
-            foreach ($slots as $slot) {
-                if ($slot['is_available']) {
-                    return array_merge($slot, ['date' => $dateString]);
+            foreach ($dailySlots as $slot) {
+                if (! $slot['is_available']) {
+                    continue;
+                }
+
+                $slots[] = array_merge($slot, ['date' => $dateString]);
+
+                if (count($slots) >= $limit) {
+                    break 2;
                 }
             }
 
-            // Reset dayStart for next iterations (was potentially modified for today)
-            if ($checkDate->isToday()) {
-                $dayStart = $this->getAvailabilityWindow($doctor)['dayStart'] ?? '09:00';
-            }
-
-            $checkDate = $checkDate->addDay();
+            $checkDate->addDay();
         }
 
-        return null;
+        return $slots;
     }
 
-    /**
-     * Get basic availability window (for resetting dayStart)
-     */
     private function getAvailabilityWindow(Doctor $doctor): ?array
     {
         $availabilitySchedules = $doctor->availabilitySchedules()
@@ -202,9 +181,6 @@ class GetDoctorAvailability
         ];
     }
 
-    /**
-     * Convert time string to minutes for comparison
-     */
     private function timeToMinutes(string $time): int
     {
         Log::info("Converting time to minutes: $time");
@@ -213,9 +189,6 @@ class GetDoctorAvailability
         return ((int) $hours * 60) + (int) $minutes;
     }
 
-    /**
-     * Response when no availability is found
-     */
     private function noAvailabilityResponse(Doctor $doctor, Service $service): array
     {
         return [
@@ -226,18 +199,16 @@ class GetDoctorAvailability
             'service_duration_minutes' => $service->duration ?? 30,
             'is_service_active' => $service->active,
             'next_available_slot' => null,
+            'next_available_slots' => [],
             'message' => 'Doctor has no availability scheduled',
         ];
     }
 
-    /**
-     * Success response with availability slot
-     */
     private function successResponse(
         Doctor $doctor,
         Service $service,
         int $serviceDuration,
-        ?array $nextSlot
+        array $slots
     ): array {
         return [
             'id' => $doctor->id,
@@ -246,7 +217,8 @@ class GetDoctorAvailability
             'service_name' => $service->name,
             'service_duration_minutes' => $serviceDuration,
             'is_service_active' => $service->active,
-            'next_available_slot' => $nextSlot,
+            'next_available_slot' => $slots[0] ?? null,
+            'next_available_slots' => $slots,
         ];
     }
 }
