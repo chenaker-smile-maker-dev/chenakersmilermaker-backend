@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install -y \
  && pecl install redis && docker-php-ext-enable redis \
  && rm -rf /var/lib/apt/lists/*
 
+# Install Node.js (for npm/vite build)
+RUN apt-get update && apt-get install -y nodejs npm && rm -rf /var/lib/apt/lists/*
+
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -18,6 +21,12 @@ COPY composer.json composer.lock* ./
 
 # Install composer dependencies
 RUN composer install --no-dev --no-interaction --optimize-autoloader --no-scripts
+
+# Copy package files for npm
+COPY package.json package-lock.json* ./
+
+# Install npm dependencies and build assets
+RUN npm ci && npm run build
 
 # Copy entire application
 COPY . .

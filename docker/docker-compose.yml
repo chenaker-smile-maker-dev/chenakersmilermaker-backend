@@ -100,6 +100,38 @@ services:
     volumes:
       - redis_data:/data
 
+  init:
+    build:
+      context: ..
+      dockerfile: docker/php-fpm/Dockerfile
+    image: app_php:latest
+    working_dir: /var/www/html
+    depends_on:
+      - mysql
+    environment:
+      - APP_ENV=production
+      - APP_KEY=${APP_KEY:-base64:}
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-laravel}
+      - DB_USERNAME=${DB_USERNAME:-laravel}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+    volumes:
+      - ./:/var/www/html
+    command: >
+      sh -c "
+        echo 'Waiting for MySQL...' &&
+        sleep 10 &&
+        echo 'Running migrations...' &&
+        php artisan migrate --force &&
+        echo 'Seeding database...' &&
+        php artisan db:seed --force &&
+        echo 'Done!'
+      "
+    profiles:
+      - init
+
 volumes:
   mysql_data:
   redis_data:
