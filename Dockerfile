@@ -1,10 +1,11 @@
-FROM php:8.2-fpm
+FROM php:8.3-fpm
 
 # Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
-    libzip-dev zip unzip git curl libpng-dev libonig-dev libxml2-dev libjpeg-dev libfreetype6-dev \
+    libzip-dev zip unzip git curl libpng-dev libonig-dev libxml2-dev libjpeg-dev libfreetype6-dev libicu-dev \
  && docker-php-ext-configure gd --with-freetype --with-jpeg \
- && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd sockets \
+ && docker-php-ext-configure intl \
+ && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd sockets intl \
  && pecl install redis && docker-php-ext-enable redis \
  && rm -rf /var/lib/apt/lists/*
 
