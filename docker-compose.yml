@@ -25,7 +25,7 @@ services:
       - mysql
       - redis
 
-  smile_nginx:
+  nginx:
     image: nginx:alpine
     restart: unless-stopped
     ports:
