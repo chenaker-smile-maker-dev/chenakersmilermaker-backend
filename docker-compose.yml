@@ -1,11 +1,17 @@
 version: '3.8'
 
+networks:
+  smile_network:
+    driver: bridge
+
 services:
   smile_app:
     build: .
     image: smile_php:latest
     restart: unless-stopped
     working_dir: /var/www/html
+    networks:
+      - smile_network
     volumes:
       - ./:/var/www/html
     environment:
@@ -28,6 +34,8 @@ services:
   nginx:
     image: nginx:alpine
     restart: unless-stopped
+    networks:
+      - smile_network
     ports:
       - "81:80"
     volumes:
@@ -39,6 +47,8 @@ services:
   mysql:
     image: mysql:5.7
     restart: unless-stopped
+    networks:
+      - smile_network
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
@@ -55,6 +65,8 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+    networks:
+      - smile_network
     volumes:
       - redis_data:/data
     healthcheck:
@@ -68,6 +80,8 @@ services:
     image: smile_php:latest
     restart: unless-stopped
     working_dir: /var/www/html
+    networks:
+      - smile_network
     entrypoint: /bin/sh -c "composer install --no-dev --optimize-autoloader && php artisan horizon"
     depends_on:
       - mysql
@@ -92,6 +106,8 @@ services:
     image: smile_php:latest
     restart: unless-stopped
     working_dir: /var/www/html
+    networks:
+      - smile_network
     entrypoint: /bin/sh -c "composer install --no-dev --optimize-autoloader && php artisan schedule:work"
     depends_on:
       - mysql
