@@ -13,17 +13,20 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
-# Copy entire application (including vendor if it exists)
+# Copy composer files first
+COPY composer.json composer.lock* ./
+
+# Install composer dependencies
+RUN composer install --no-dev --no-interaction --optimize-autoloader --no-scripts
+
+# Copy entire application
 COPY . .
 
-# If vendor doesn't exist, install composer dependencies
-RUN if [ ! -d "vendor" ]; then composer install --no-dev --no-interaction --optimize-autoloader 2>&1; fi
-
-# Generate autoloader if needed
-RUN composer dump-autoload --optimize 2>&1 || true
+# Generate autoloader
+RUN composer dump-autoload --optimize
 
 # Ensure artisan is executable
-RUN chmod +x artisan 2>/dev/null || true
+RUN chmod +x artisan || true
 
 # Ensure correct permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache && \
