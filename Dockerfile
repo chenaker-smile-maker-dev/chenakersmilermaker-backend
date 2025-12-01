@@ -19,9 +19,17 @@ WORKDIR /var/www/html
 # Copy entire application
 COPY . .
 
-# Try npm build but don't fail if it errors
-RUN npm ci 2>/dev/null || npm install 2>/dev/null || true
-RUN npm run build 2>/dev/null || true
+# Install PHP dependencies first
+RUN composer install --no-dev --no-interaction --optimize-autoloader --no-scripts 2>&1 || \
+    composer install --no-dev --no-interaction 2>&1 || \
+    echo "⚠️  Composer install attempted"
+
+# Install npm dependencies and build assets
+RUN npm ci 2>&1 || npm install 2>&1 || true
+RUN npm run build 2>&1 || true
+
+# Generate optimized autoloader
+RUN composer dump-autoload --optimize 2>&1 || true
 
 # Ensure artisan is executable
 RUN chmod +x artisan || true
