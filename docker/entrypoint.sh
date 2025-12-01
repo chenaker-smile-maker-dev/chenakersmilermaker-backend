@@ -25,12 +25,27 @@ fi
 # Check if public/build exists
 if [ ! -d "public/build" ]; then
     echo "🔨 Building assets..."
-    npm run build 2>&1 || true
+
+    # Ensure node_modules exists
+    if [ ! -d "node_modules" ]; then
+        echo "📦 Installing npm dependencies..."
+        npm ci 2>&1 || npm install 2>&1 || true
+    fi
+
+    npm run build 2>&1 || {
+        echo "⚠️  npm build failed, attempting retry..."
+        npm run build 2>&1 || echo "⚠️  npm build skipped"
+    }
 fi
 
 # Clear Laravel cache to prevent stale config
 php artisan config:clear 2>&1 || true
 php artisan cache:clear 2>&1 || true
+
+# Cache the config
+php artisan config:cache 2>&1 || {
+    echo "⚠️  Config cache failed, continuing..."
+}
 
 # Run migrations on first boot
 if [ ! -f ".migrated" ] && [ -f "artisan" ]; then
