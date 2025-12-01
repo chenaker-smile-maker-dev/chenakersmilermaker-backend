@@ -1,57 +1,57 @@
-FROM php:8.3-fpm
-
-# Install system dependencies and PHP extensions
-RUN apt-get update && apt-get install -y \
-    libzip-dev zip unzip git curl libpng-dev libonig-dev libxml2-dev libjpeg-dev libfreetype6-dev libicu-dev \
- && docker-php-ext-configure gd --with-freetype --with-jpeg \
- && docker-php-ext-configure intl \
- && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd sockets intl \
- && pecl install redis && docker-php-ext-enable redis \
- && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install Node.js (for npm/vite build)
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Install Composer (inline instead of pulling from docker image)
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --no-interaction && \
-    chmod +x /usr/local/bin/composer && \
-    composer --version
+FROM php:8.3-fpm-alpine
 
 WORKDIR /var/www/html
 
-# Copy entire application
+# Install system dependencies
+RUN apk add --no-cache \
+    curl \
+    git \
+    libpng-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libicu-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    nodejs \
+    npm
+
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
+    docker-php-ext-install -j$(nproc) \
+    pdo \
+    pdo_mysql \
+    gd \
+    zip \
+    bcmath \
+    intl \
+    pcntl \
+    sockets
+
+# Install Redis extension
+RUN pecl install redis && docker-php-ext-enable redis
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy application
 COPY . .
 
-# Install PHP dependencies
-RUN composer install --no-dev --no-interaction --optimize-autoloader --no-scripts 2>&1 || \
-    composer install --no-dev --no-interaction 2>&1 || \
-    echo "⚠️  Composer install completed"
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader --no-interaction && \
+    npm ci && npm run build
 
-# Install npm dependencies and build assets
-RUN npm ci 2>&1 || npm install 2>&1 || true
-RUN npm run build 2>&1 || echo "⚠️  npm build attempted"
+# Remove node_modules to reduce image size
+RUN rm -rf node_modules
 
-# Remove node_modules after build to reduce image size (not needed in production)
-RUN rm -rf node_modules node_modules/.cache package-lock.json && \
-    echo "✓ Cleaned up npm dependencies"
+# Create necessary directories
+RUN mkdir -p storage/logs bootstrap/cache && \
+    chown -R www-data:www-data storage bootstrap/cache
 
-# Generate optimized autoloader
-RUN composer dump-autoload --optimize 2>&1 || true
-
-# Ensure artisan is executable
-RUN chmod +x artisan || true
-
-# Ensure correct permissions
-RUN mkdir -p /var/www/html/storage /var/www/html/bootstrap/cache && \
-    chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache || true && \
-    chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache || true
-
-# Copy entrypoint scripts
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-COPY docker/horizon-entrypoint.sh /usr/local/bin/horizon-entrypoint.sh
-COPY docker/scheduler-entrypoint.sh /usr/local/bin/scheduler-entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/horizon-entrypoint.sh /usr/local/bin/scheduler-entrypoint.sh
+# Set PHP-FPM user
+RUN sed -i 's/user = www-data/user = www-data/' /usr/local/etc/php-fpm.conf && \
+    sed -i 's/group = www-data/group = www-data/' /usr/local/etc/php-fpm.conf
 
 EXPOSE 9000
 
-CMD ["/usr/local/bin/entrypoint.sh"]
+CMD ["php-fpm"]
