@@ -1,0 +1,12 @@
+vendor
+node_modules
+storage/framework/cache/data
+storage/logs
+.env
+.git
+.idea
+.vscode
+.DS_Store
+npm-debug.log
+build/
+public/build
