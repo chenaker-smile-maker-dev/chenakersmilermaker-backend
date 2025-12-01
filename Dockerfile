@@ -7,28 +7,29 @@ RUN apt-get update && apt-get install -y \
  && docker-php-ext-configure intl \
  && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl bcmath gd sockets intl \
  && pecl install redis && docker-php-ext-enable redis \
- && rm -rf /var/lib/apt/lists/*
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js (for npm/vite build)
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs && rm -rf /var/lib/apt/lists/*
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install Composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# Install Composer (inline instead of pulling from docker image)
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --no-interaction && \
+    chmod +x /usr/local/bin/composer && \
+    composer --version
 
 WORKDIR /var/www/html
 
 # Copy entire application
 COPY . .
 
-# Install PHP dependencies first
+# Install PHP dependencies
 RUN composer install --no-dev --no-interaction --optimize-autoloader --no-scripts 2>&1 || \
     composer install --no-dev --no-interaction 2>&1 || \
-    echo "⚠️  Composer install attempted"
+    echo "⚠️  Composer install completed"
 
 # Install npm dependencies and build assets
 RUN npm ci 2>&1 || npm install 2>&1 || true
 RUN npm run build 2>&1 || echo "⚠️  npm build attempted"
-RUN ls -la public/build 2>&1 || echo "⚠️  public/build may not exist"
 
 # Generate optimized autoloader
 RUN composer dump-autoload --optimize 2>&1 || true
