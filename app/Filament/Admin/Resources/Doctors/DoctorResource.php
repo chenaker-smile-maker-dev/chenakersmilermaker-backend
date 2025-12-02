@@ -40,12 +40,12 @@ class DoctorResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Médecin';
+        return __("panels/admin/resources/doctor.singular");
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Médecins';
+        return __("panels/admin/resources/doctor.plural");
     }
 
     public static function getNavigationBadge(): ?string

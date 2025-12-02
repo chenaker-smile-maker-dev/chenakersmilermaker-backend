@@ -32,12 +32,12 @@ class ServiceResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Service';
+        return __("panels/admin/resources/service.singular");
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Services';
+        return __("panels/admin/resources/service.plural");
     }
 
     public static function getNavigationBadge(): ?string

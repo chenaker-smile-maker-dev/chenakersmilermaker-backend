@@ -7,9 +7,9 @@ use Filament\Support\Icons\Heroicon;
 class AdminNavigation
 {
 
-    public const MANAGEMENT_GROUP = 'Management';
-    public const CONFIGURATION_GROUP = 'Configuration Group';
-    public const WEBSITE_CONTENT_GROUP = 'Website Content';
+    public const MANAGEMENT_GROUP = 'panels/admin/navigation.management';
+    public const CONFIGURATION_GROUP = 'panels/admin/navigation.configuration';
+    public const WEBSITE_CONTENT_GROUP = 'panels/admin/navigation.content';
 
     public const DOCTORS_RESOURCE = [
         'icon' => Heroicon::OutlinedUsers,

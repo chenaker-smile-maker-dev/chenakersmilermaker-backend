@@ -31,14 +31,14 @@ class PatientResource extends Resource
         return  __(AdminNavigation::PATIENTS_RESOURCE['group']);
     }
 
-    public static function getModelLabel(): string
+  public static function getModelLabel(): string
     {
-        return 'Patient(e)';
+        return __("panels/admin/resources/patient.singular");
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Patientes';
+        return __("panels/admin/resources/patient.plural");
     }
 
     public static function getNavigationBadge(): ?string

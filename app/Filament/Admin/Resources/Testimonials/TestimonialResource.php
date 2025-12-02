@@ -30,12 +30,12 @@ class TestimonialResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Testimonial';
+        return __("panels/admin/resources/testimonial.singular");
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Testimonials';
+        return __("panels/admin/resources/testimonial.plural");
     }
 
     public static function getNavigationBadge(): ?string

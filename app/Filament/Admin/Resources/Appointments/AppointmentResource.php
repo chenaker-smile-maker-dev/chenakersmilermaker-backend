@@ -29,12 +29,12 @@ class AppointmentResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Appointment';
+        return __("panels/admin/resources/appointment.singular");
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Appointments';
+        return __("panels/admin/resources/appointment.plural");
     }
 
     public static function getNavigationBadge(): ?string

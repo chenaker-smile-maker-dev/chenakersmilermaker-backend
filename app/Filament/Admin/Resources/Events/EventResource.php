@@ -27,12 +27,12 @@ class EventResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Event';
+        return __("panels/admin/resources/event.singular");
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Events';
+        return __("panels/admin/resources/event.plural");
     }
 
     public static function getNavigationBadge(): ?string
