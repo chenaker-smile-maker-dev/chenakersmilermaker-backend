@@ -3,8 +3,9 @@
 return [
     'singular' => 'Event',
     'plural' => 'Events',
-
-    // Table / list
+    'title' => 'Event Title',
+    'description' => 'Description',
+    'location' => 'Location',
     'no_location' => 'No location',
     'event_date' => 'Event Date',
     'archived' => 'Archived',
@@ -20,8 +21,10 @@ return [
     'archived_only' => 'Archived only',
     'active_only' => 'Active only',
     'date_range' => 'Date Range',
-    'from_date' => 'From date',
-    'to_date' => 'To date',
+    'no_location' => 'No location',
+    'created' => 'Created',
+    'updated' => 'Updated',
+    'deleted' => 'Deleted',
 
     // Infolist / sections
     'event_information' => 'Event Information',

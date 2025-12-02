@@ -28,6 +28,7 @@ class EventsTable
         return $table
             ->columns([
                 TextColumn::make('title')
+                    ->label(__('panels/admin/resources/event.title'))
                     ->searchable()
                     ->description(fn($record) => $record->getTranslation('location', app()->getLocale()) ?? __('panels/admin/resources/event.no_location'))
                     ->limit(50)
@@ -41,6 +42,7 @@ class EventsTable
                     ->toggleable(),
 
                 TextColumn::make('description')
+                    ->label(__('panels/admin/resources/event.description'))
                     ->searchable()
                     ->limit(75)
                     ->tooltip(fn($record) => $record->getTranslation('description', app()->getLocale()))

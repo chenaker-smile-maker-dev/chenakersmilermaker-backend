@@ -17,10 +17,13 @@ class PatientForm
                     ->schema([
 
                         TextInput::make('first_name')
+                            ->label(__('panels/admin/resources/patient.first_name'))
                             ->required(),
                         TextInput::make('last_name')
+                            ->label(__('panels/admin/resources/patient.last_name'))
                             ->required(),
                         TextInput::make('phone')
+                            ->label(__('panels/admin/resources/patient.phone'))
                             // ->tel()
                             ->required(),
                         TextInput::make('email')
@@ -28,6 +31,7 @@ class PatientForm
                             ->email()
                             ->required(),
                         TextInput::make('password')
+                            ->label(__('panels/admin/resources/patient.password'))
                             ->password()
                             ->visibleOn('create')
                             ->required(),

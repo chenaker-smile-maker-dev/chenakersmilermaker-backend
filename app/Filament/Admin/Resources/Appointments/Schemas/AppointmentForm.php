@@ -21,18 +21,23 @@ class AppointmentForm
                     ->schema([
 
                         DateTimePicker::make('from')
+                            ->label(__('panels/admin/resources/appointment.from'))
                             ->required(),
                         DateTimePicker::make('to')
+                            ->label(__('panels/admin/resources/appointment.to'))
                             ->required(),
                         Select::make('doctor_id')
+                            ->label(__('panels/admin/resources/appointment.doctor'))
                             ->relationship('doctor', 'name'),
                         Select::make('service_id')
+                            ->label(__('panels/admin/resources/appointment.service'))
                             ->relationship('service', 'name'),
                         // Select::make('patient_id')
                         //     ->searchable()
                         //     ->relationship('patient', 'email')
                         //     ->getOptionLabelUsing(fn($value, $record) => $record?->patient?->full_name),
                         Select::make('patient_id')
+                            ->label(__('panels/admin/resources/appointment.patient'))
                             ->searchable()
                             ->preload()
                             ->getSearchResultsUsing(
@@ -50,14 +55,17 @@ class AppointmentForm
                             ->getOptionLabelUsing(fn($value) => \App\Models\Patient::find($value)?->full_name),
 
                         TextInput::make('price')
+                            ->label(__('panels/admin/resources/appointment.price'))
                             ->required()
                             ->numeric()
                             ->suffix('DZD'),
                         Select::make('status')
+                            ->label(__('panels/admin/resources/appointment.status'))
                             ->options(AppointmentStatus::class)
                             ->default('pending')
                             ->required(),
-                        TextInput::make('metadata'),
+                        TextInput::make('metadata')
+                            ->label(__('panels/admin/resources/appointment.metadata')),
                     ])
             ]);
     }

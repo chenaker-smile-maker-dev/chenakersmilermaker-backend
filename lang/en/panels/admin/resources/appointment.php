@@ -10,5 +10,12 @@ return [
     'created' => 'Created',
     'updated' => 'Updated',
     'deleted' => 'Deleted',
-    'not_deleted' => 'Not deleted',
+    'from' => 'From',
+    'to' => 'To',
+    'price' => 'Price',
+    'status' => 'Status',
+    'metadata' => 'Metadata',
+    'created_at' => 'Created At',
+    'updated_at' => 'Updated At',
+    'deleted_at' => 'Deleted At',
 ];

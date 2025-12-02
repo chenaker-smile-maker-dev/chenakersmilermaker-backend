@@ -19,4 +19,11 @@ return [
     'both_times_services' => 'Both Times Services',
     'diplomas' => 'Diplomas',
     'not_deleted' => 'Not deleted',
+    'created_at' => 'Created At',
+    'updated_at' => 'Updated At',
+    'name' => 'Service Name',
+    'price' => 'Price',
+    'duration' => 'Duration',
+    'availability' => 'Availability',
+    'image' => 'Service Image',
 ];

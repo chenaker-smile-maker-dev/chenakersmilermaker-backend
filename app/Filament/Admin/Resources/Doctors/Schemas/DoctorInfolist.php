@@ -30,24 +30,24 @@ class DoctorInfolist
                             ->columns(2)
                             ->schema([
                                 TextEntry::make('email')
-                                    ->label('Email')
+                                    ->label(__('panels/admin/resources/doctor.email'))
                                     ->icon('heroicon-m-envelope')
                                     ->copyable()
                                     ->columnSpanFull(),
                                 TextEntry::make('phone')
-                                    ->label('Phone Number')
+                                    ->label(__('panels/admin/resources/doctor.phone_number'))
                                     ->icon('heroicon-m-phone')
                                     ->copyable()
                                     ->columnSpanFull(),
                                 TextEntry::make('address')
-                                    ->label('Address')
+                                    ->label(__('panels/admin/resources/doctor.address'))
                                     ->icon('heroicon-m-map-pin')
                                     ->columnSpanFull(),
                                 TextEntry::make('diplomas')
-                                    ->label('Diplomas & Certifications')
+                                    ->label(__('panels/admin/resources/doctor.diplomas_certifications'))
                                     ->formatStateUsing(function ($state) {
                                         if (!is_array($state) || empty($state)) {
-                                            return 'No qualifications listed';
+                                            return __('panels/admin/resources/doctor.no_qualifications_listed');
                                         }
                                         return implode(', ', $state);
                                     })
@@ -74,12 +74,12 @@ class DoctorInfolist
                 //             ->html()
                 //             ->columnSpanFull(),
                 //     ]),
-                Section::make('Services')
+                Section::make(__('panels/admin/resources/doctor.services'))
                     ->collapsed()
                     ->columnSpanFull()
                     ->schema([
                         RepeatableEntry::make('services')
-                            ->label('Medical Services')
+                            ->label(__('panels/admin/resources/doctor.medical_services'))
                             ->columnSpanFull()
                             ->columns(3)
                             ->schema([

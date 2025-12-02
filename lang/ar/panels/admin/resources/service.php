@@ -19,4 +19,11 @@ return [
     'both_times_services' => 'خدمات في جميع الأوقات',
     'diplomas' => 'الشهادات',
     'not_deleted' => 'لم يتم الحذف',
+    'created_at' => 'تاريخ الإنشاء',
+    'updated_at' => 'تاريخ التحديث',
+    'name' => 'اسم الخدمة',
+    'price' => 'السعر',
+    'duration' => 'المدة',
+    'availability' => 'التوفر',
+    'image' => 'صورة الخدمة',
 ];

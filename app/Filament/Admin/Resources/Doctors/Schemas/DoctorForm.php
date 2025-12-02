@@ -23,7 +23,7 @@ class DoctorForm
                 Grid::make()
                     ->columnSpan(5)
                     ->schema([
-                        Section::make('Basic Information')
+                        Section::make(__('panels/admin/resources/doctor.basic_information'))
                             ->columnSpanFull()
                             ->columns(2)
                             ->schema([
@@ -32,15 +32,15 @@ class DoctorForm
                                     ->schema([
                                         TextInput::make('name')
                                             ->required()
-                                            ->label('Doctor Name')
-                                            ->placeholder('Enter doctor name'),
+                                            ->label(__('panels/admin/resources/doctor.doctor_name'))
+                                            ->placeholder(__('panels/admin/resources/doctor.enter_doctor_name')),
                                         TextInput::make('specialty')
                                             ->required()
-                                            ->label('Medical Specialty')
-                                            ->placeholder('Enter specialty (e.g., Cardiology, Dermatology)'),
+                                            ->label(__('panels/admin/resources/doctor.medical_specialty'))
+                                            ->placeholder(__('panels/admin/resources/doctor.enter_specialty')),
                                     ]),
                             ]),
-                        Section::make('Services')
+                        Section::make(__('panels/admin/resources/doctor.services'))
                             ->collapsed()
                             ->columnSpanFull()
                             ->schema([
@@ -48,24 +48,24 @@ class DoctorForm
                                     ->relationship('services', 'name')
                                     ->multiple()
                                     ->preload()
-                                    ->label('Medical Services')
+                                    ->label(__('panels/admin/resources/doctor.medical_services'))
                                     ->placeholder('Select services this doctor provides')
                                     ->columnSpanFull(),
                             ]),
 
-                        Section::make('Professional Qualifications')
+                        Section::make(__('panels/admin/resources/doctor.professional_qualifications'))
                             ->collapsed()
                             ->columnSpanFull()
                             ->schema([
                                 Repeater::make('diplomas')
-                                    ->label('Diplomas & Certifications')
+                                    ->label(__('panels/admin/resources/doctor.diplomas_certifications'))
                                     ->simple(
                                         TextInput::make('value')
-                                            ->label('Diploma/Certification')
-                                            ->placeholder('e.g., MD from Harvard Medical School')
+                                            ->label(__('panels/admin/resources/doctor.diploma_certification'))
+                                            ->placeholder(__('panels/admin/resources/doctor.diploma_placeholder'))
                                             ->required(),
                                     )
-                                    ->addActionLabel('Add Diploma')
+                                    ->addActionLabel(__('panels/admin/resources/doctor.add_diploma'))
                                     ->defaultItems(1)
                                     ->columnSpanFull(),
                             ]),

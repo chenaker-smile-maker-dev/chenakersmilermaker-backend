@@ -43,4 +43,6 @@ return [
         5 => '5 Stars',
     ],
     'select_rating' => 'Select rating',
+    'created' => 'Created',
+    'content' => 'Content',
 ];

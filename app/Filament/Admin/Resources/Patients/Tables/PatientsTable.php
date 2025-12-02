@@ -41,47 +41,58 @@ class PatientsTable
             ->defaultSort('created_at', 'desc')
             ->columns([
                 ImageColumn::make('thumb_image')
+                    ->label(__('panels/admin/resources/patient.thumb_image'))
                     ->toggleable()
                     ->circular(),
                 TextColumn::make('full_name')
+                    ->label(__('panels/admin/resources/patient.full_name'))
                     ->copyable()
                     ->toggleable(),
                 TextColumn::make('first_name')
+                    ->label(__('panels/admin/resources/patient.first_name'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 TextColumn::make('last_name')
+                    ->label(__('panels/admin/resources/patient.last_name'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 TextColumn::make('email')
+                    ->label(__('panels/admin/resources/patient.email_address'))
                     ->toggleable()
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('phone')
+                    ->label(__('panels/admin/resources/patient.phone'))
                     ->toggleable()
                     ->searchable(),
                 TextColumn::make('gender')
+                    ->label(__('panels/admin/resources/patient.gender'))
                     ->badge()
                     ->alignCenter()
                     ->sortable()
                     ->searchable()
                     ->toggleable(),
                 TextColumn::make('age')
+                    ->label(__('panels/admin/resources/patient.age'))
                     ->alignCenter()
                     ->badge()
                     ->sortable()
                     ->searchable()
                     ->toggleable(),
                 TextColumn::make('created_at')
+                    ->label(__('panels/admin/resources/patient.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label(__('panels/admin/resources/patient.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('deleted_at')
+                    ->label(__('panels/admin/resources/patient.deleted_at'))
                     ->placeholder(__('panels/admin/resources/patient.not_deleted'))
                     ->dateTime()
                     ->sortable()

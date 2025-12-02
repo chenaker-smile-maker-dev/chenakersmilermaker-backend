@@ -3,8 +3,9 @@
 return [
     'singular' => 'Événement',
     'plural' => 'Événements',
-
-    // Table / list
+    'title' => 'Titre de l\'événement',
+    'description' => 'Description',
+    'location' => 'Emplacement',
     'no_location' => 'Pas de localisation',
     'event_date' => 'Date de l\'événement',
     'archived' => 'Archivé',

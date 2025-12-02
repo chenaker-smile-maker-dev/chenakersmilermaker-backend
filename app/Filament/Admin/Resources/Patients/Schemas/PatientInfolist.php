@@ -18,17 +18,23 @@ class PatientInfolist
                     ->columnSpanFull()
                     ->schema([
 
-                        TextEntry::make('full_name')->columnSpanFull(),
-                        TextEntry::make('phone'),
+                        TextEntry::make('full_name')
+                            ->label(__('panels/admin/resources/patient.full_name'))
+                            ->columnSpanFull(),
+                        TextEntry::make('phone')
+                            ->label(__('panels/admin/resources/patient.phone')),
                         TextEntry::make('email')
                             ->label(__('panels/admin/resources/patient.email_address')),
                         TextEntry::make('created_at')
+                            ->label(__('panels/admin/resources/patient.created_at'))
                             ->dateTime()
                             ->placeholder('-'),
                         TextEntry::make('updated_at')
+                            ->label(__('panels/admin/resources/patient.updated_at'))
                             ->dateTime()
                             ->placeholder('-'),
                         TextEntry::make('deleted_at')
+                            ->label(__('panels/admin/resources/patient.deleted_at'))
                             ->placeholder(__('panels/admin/resources/patient.not_deleted'))
                             ->dateTime()
                             ->visible(fn(Patient $record): bool => $record->trashed()),

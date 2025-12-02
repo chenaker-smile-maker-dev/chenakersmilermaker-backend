@@ -19,11 +19,13 @@ class EventForm
                 ->columnSpanFull()
                 ->schema([
                     TextInput::make('title')
+                        ->label(__('panels/admin/resources/event.title'))
                         ->required()
                         ->placeholder(__('panels/admin/resources/event.enter_event_title'))
                         ->maxLength(255)
                         ->columnSpanFull(),
                     RichEditor::make('description')
+                        ->label(__('panels/admin/resources/event.description'))
                         ->columnSpanFull()
                         ->placeholder(__('panels/admin/resources/event.describe_event_details'))
                         ->extraAttributes(['style' => 'min-height: 300px;'])
@@ -42,6 +44,7 @@ class EventForm
                             'undo',
                         ]),
                     TextInput::make('location')
+                        ->label(__('panels/admin/resources/event.location'))
                         ->columnSpanFull()
                         ->placeholder(__('panels/admin/resources/event.enter_event_location'))
                         ->maxLength(255),
@@ -51,6 +54,7 @@ class EventForm
                 ->columns(2)
                 ->schema([
                     DatePicker::make('date')
+                        ->label(__('panels/admin/resources/event.event_date'))
                         ->required()
                         ->placeholder(__('panels/admin/resources/event.select_event_date'))
                         ->native(false),

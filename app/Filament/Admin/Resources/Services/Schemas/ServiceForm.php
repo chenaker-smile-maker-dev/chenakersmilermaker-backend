@@ -27,6 +27,7 @@ class ServiceForm
                             ->columnSpanFull()
                             ->schema([
                                 TextInput::make('name')
+                                    ->label(__('panels/admin/resources/service.name'))
                                     ->required()
                                     ->placeholder(__('panels/admin/resources/service.enter_service_name')),
                             ]),
@@ -35,6 +36,7 @@ class ServiceForm
                             ->columns(2)
                             ->schema([
                                 TextInput::make('price')
+                                    ->label(__('panels/admin/resources/service.price'))
                                     ->required()
                                     ->numeric()
                                     ->suffix('DZD')
@@ -43,6 +45,7 @@ class ServiceForm
                                     ->minValue(0)
                                     ->step('1'),
                                 TextInput::make('duration')
+                                    ->label(__('panels/admin/resources/service.duration'))
                                     ->required()
                                     ->numeric()
                                     ->suffix(__('panels/admin/resources/service.minutes'))
@@ -51,16 +54,17 @@ class ServiceForm
                                     ->minValue(1)
                                     ->step('1'),
                                 Select::make('availability')
+                                    ->label(__('panels/admin/resources/service.availability'))
                                     ->options(ServiceAvailability::class)
                                     ->default(ServiceAvailability::BOTH->value)
                                     ->required()
                                     ->native(false),
                                 Toggle::make('active')
+                                    ->label(__('panels/admin/resources/service.active_status'))
                                     ->required()
                                     ->inline(false)
                                     ->onIcon('heroicon-m-check')
-                                    ->offIcon('heroicon-m-x-mark')
-                                    ->label(__('panels/admin/resources/service.active_status')),
+                                    ->offIcon('heroicon-m-x-mark'),
                             ]),
                     ]),
                 Grid::make()
@@ -70,11 +74,11 @@ class ServiceForm
                             ->columnSpanFull()
                             ->schema([
                                 SpatieMediaLibraryFileUpload::make('service_image')
+                                    ->label(__('panels/admin/resources/service.image'))
                                     ->collection('image')
                                     ->image()
                                     ->imageEditor()
-                                    ->columnSpanFull()
-                                    ->label(''),
+                                    ->columnSpanFull(),
                             ]),
                     ]),
             ]);

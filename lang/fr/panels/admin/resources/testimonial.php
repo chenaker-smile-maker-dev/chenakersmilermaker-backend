@@ -43,4 +43,7 @@ return [
         5 => '5 Étoiles',
     ],
     'select_rating' => 'Sélectionnez une note',
+    'created' => 'Créé',
+    'updated' => 'Modifié',
+    'content' => 'Contenu',
 ];

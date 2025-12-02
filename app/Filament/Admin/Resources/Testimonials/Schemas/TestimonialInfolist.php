@@ -40,7 +40,7 @@ class TestimonialInfolist
                         ->falseColor('warning'),
 
                     TextEntry::make('content')
-                        ->label(__('panels/admin/resources/testimonial.review'))
+                        ->label(__('panels/admin/resources/testimonial.content'))
                         ->html()
                         ->columnSpanFull(),
                 ]),

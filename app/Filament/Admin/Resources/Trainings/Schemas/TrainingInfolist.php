@@ -45,15 +45,15 @@ class TrainingInfolist
                             ->placeholder(__('panels/admin/resources/training.no_image_uploaded')),
                     ]),
 
-                Section::make('System Information')
+                Section::make(__('panels/admin/resources/training.system_information'))
                     ->columns(2)
                     ->schema([
                         TextEntry::make('created_at')
-                            ->label('Created')
+                            ->label(__('panels/admin/resources/training.created'))
                             ->dateTime('F j, Y H:i')
                             ->placeholder('-'),
                         TextEntry::make('updated_at')
-                            ->label('Last Updated')
+                            ->label(__('panels/admin/resources/training.last_updated'))
                             ->dateTime('F j, Y H:i')
                             ->placeholder('-'),
                     ]),

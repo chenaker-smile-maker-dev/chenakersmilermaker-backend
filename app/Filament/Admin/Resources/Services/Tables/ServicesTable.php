@@ -26,32 +26,39 @@ class ServicesTable
         return $table
             ->columns([
                 SpatieMediaLibraryImageColumn::make('image')
+                    ->label(__('panels/admin/resources/service.image'))
                     ->collection('image')
                     ->conversion('thumb')
                     ->circular()
                     ->placeholder(__('panels/admin/resources/service.no_image_uploaded'))
                     ->toggleable(),
                 TextColumn::make('name')
+                    ->label(__('panels/admin/resources/service.name'))
                     ->toggleable()
                     ->searchable(),
                 TextColumn::make('price')
+                    ->label(__('panels/admin/resources/service.price'))
                     ->toggleable()
                     ->money("DZD")
                     ->sortable(),
                 TextColumn::make('availability')
+                    ->label(__('panels/admin/resources/service.availability'))
                     ->toggleable()
                     ->badge()
                     ->sortable()
                     ->searchable(),
                 IconColumn::make('active')
+                    ->label(__('panels/admin/resources/service.active'))
                     ->sortable()
                     ->toggleable()
                     ->boolean(),
                 TextColumn::make('created_at')
+                    ->label(__('panels/admin/resources/service.created_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label(__('panels/admin/resources/service.updated_at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

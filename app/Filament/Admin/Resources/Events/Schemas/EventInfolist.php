@@ -17,6 +17,7 @@ class EventInfolist
                     ->columns(2)
                     ->schema([
                         TextEntry::make('title')
+                            ->label(__('panels/admin/resources/event.title'))
                             ->columnSpanFull()
                             ->size('lg'),
                         TextEntry::make('date')
@@ -27,9 +28,11 @@ class EventInfolist
                             ->label(__('panels/admin/resources/event.status'))
                             ->boolean(),
                         TextEntry::make('location')
+                            ->label(__('panels/admin/resources/event.location'))
                             ->columnSpanFull()
                             ->placeholder('-'),
                         TextEntry::make('description')
+                            ->label(__('panels/admin/resources/event.description'))
                             ->columnSpanFull()
                             ->html()
                             ->placeholder('-'),

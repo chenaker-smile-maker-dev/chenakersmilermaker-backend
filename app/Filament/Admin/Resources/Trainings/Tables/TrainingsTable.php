@@ -27,11 +27,13 @@ class TrainingsTable
         return $table
             ->columns([
                 ImageColumn::make('image')
+                    ->label(__('panels/admin/resources/training.image'))
                     ->circular()
                     ->placeholder(__('panels/admin/resources/training.no_image'))
                     ->toggleable(),
 
                 TextColumn::make('title')
+                    ->label(__('panels/admin/resources/training.title'))
                     ->searchable()
                     ->limit(50)
                     ->toggleable(),
@@ -45,6 +47,7 @@ class TrainingsTable
                     ->toggleable(),
 
                 TextColumn::make('duration')
+                    ->label(__('panels/admin/resources/training.duration'))
                     ->searchable()
                     ->sortable()
                     ->icon('heroicon-o-clock')
@@ -52,6 +55,7 @@ class TrainingsTable
                     ->toggleable(),
 
                 TextColumn::make('description')
+                    ->label(__('panels/admin/resources/training.description'))
                     ->searchable()
                     ->limit(60)
                     ->tooltip(fn($record) => $record->getTranslation('description', app()->getLocale()))

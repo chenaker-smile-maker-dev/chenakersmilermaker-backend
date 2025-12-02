@@ -3,8 +3,9 @@
 return [
     'singular' => 'حدث',
     'plural' => 'أحداث',
-
-    // Table / list
+    'title' => 'عنوان الحدث',
+    'description' => 'الوصف',
+    'location' => 'الموقع',
     'no_location' => 'بدون موقع',
     'event_date' => 'تاريخ الحدث',
     'archived' => 'مؤرشف',

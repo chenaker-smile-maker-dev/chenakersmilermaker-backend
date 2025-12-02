@@ -54,7 +54,7 @@ class SchedulesRelationManager extends RelationManager
             ->columns([
                 TextColumn::make('name')
                     ->grow(false)
-                    ->label('Schedule Name')
+                    ->label(__('panels/admin/resources/doctor.schedule_name'))
                     ->searchable()
                     ->sortable()
                     ->placeholder('—')

@@ -20,17 +20,23 @@ class ServiceInfolist
                     ->columnSpan(3)
                     ->schema([
                         TextEntry::make('price')
+                            ->label(__('panels/admin/resources/service.price'))
                             ->money(),
                         IconEntry::make('active')
+                            ->label(__('panels/admin/resources/service.active'))
                             ->boolean(),
                         TextEntry::make('availability')
+                            ->label(__('panels/admin/resources/service.availability'))
                             ->badge(),
                             TextEntry::make('duration')
+                                ->label(__('panels/admin/resources/service.duration'))
                                 ->suffix(__('panels/admin/resources/service.minutes')),
                         TextEntry::make('created_at')
+                            ->label(__('panels/admin/resources/service.created_at'))
                             ->dateTime()
                             ->placeholder('-'),
                         TextEntry::make('updated_at')
+                            ->label(__('panels/admin/resources/service.updated_at'))
                             ->dateTime()
                             ->placeholder('-'),
                     ]),
