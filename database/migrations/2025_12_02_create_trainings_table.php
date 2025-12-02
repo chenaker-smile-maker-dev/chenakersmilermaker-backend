@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('events', function (Blueprint $table) {
+        Schema::create('trainings', function (Blueprint $table) {
             $table->id();
             $table->json('title');
             $table->json('description')->nullable();
-            $table->date('date')->nullable();
-            $table->boolean('is_archived')->default(false);
-            $table->json('location')->nullable();
+            $table->string('trainer_name')->nullable();
+            $table->string('duration')->nullable();
+            $table->json('documents')->nullable();
+            $table->string('video_url')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('trainings');
     }
 };

@@ -58,7 +58,7 @@ class Appointment extends Model implements Eventable
             ->backgroundColor(color: '#34D399') // ✅ Tailwind green-400
             ->start($this->from)
             ->end($this->to);
-    }
+        }
 
     public function scopeBetween($query, $start, $end)
     {

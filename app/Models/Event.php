@@ -4,20 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
-use Spatie\Sluggable\HasSlug;
-use Spatie\Sluggable\SlugOptions;
 
 class Event extends Model
 {
     /** @use HasFactory<\Database\Factories\EventFactory> */
     use HasFactory;
     use HasTranslations;
-    use HasSlug;
+    use SoftDeletes;
 
     protected $fillable = [
         'title',
-        'slug',
         'description',
         'date',
         'is_archived',
@@ -26,7 +24,6 @@ class Event extends Model
 
     public array $translatable = [
         'title',
-        'slug',
         'description',
         'location',
     ];
@@ -41,13 +38,6 @@ class Event extends Model
             'date' => 'date',
             'is_archived' => 'boolean',
         ];
-    }
-
-    public function getSlugOptions() : SlugOptions
-    {
-        return SlugOptions::create()
-            ->generateSlugsFrom('title')
-            ->saveSlugsTo('slug');
     }
 
     public function registerMediaCollections(): void

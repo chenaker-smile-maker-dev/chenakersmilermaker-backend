@@ -53,4 +53,10 @@ class AdminNavigation
         'sort' => 5,
         'group' => self::WEBSITE_CONTENT_GROUP,
     ];
+
+    public const TRAININGS_RESOURCE = [
+        'icon' => Heroicon::OutlinedAcademicCap,
+        'sort' => 6,
+        'group' => self::WEBSITE_CONTENT_GROUP,
+    ];
 }

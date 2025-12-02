@@ -11,18 +11,19 @@ class DefaultSeeder extends Seeder
      */
     public function run(): void
     {
-        $patients = \App\Models\Patient::factory()->count(10)->create();
-        $doctors = \App\Models\Doctor::factory()->count(10)->create();
-        $services = \App\Models\Service::factory()->count(10)->create();
-        $events = \App\Models\Event::factory()->count(10)->create();
-        // $appointments = \App\Models\Appointment::factory()->count(50)->create();
-
         $admin = \App\Models\User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@admin.dev',
         ]);
 
+        $patients = \App\Models\Patient::factory()->count(10)->create();
+        $doctors = \App\Models\Doctor::factory()->count(10)->create();
+        $services = \App\Models\Service::factory()->count(10)->create();
+        $appointments = \App\Models\Appointment::factory()->count(50)->create();
         $this->AssignServicesToDoctors($doctors, $services);
+
+        $events = \App\Models\Event::factory()->count(10)->create();
+        $trainings = \App\Models\Training::factory()->count(5)->create();
     }
 
     protected function AssignServicesToDoctors($doctors, $services)

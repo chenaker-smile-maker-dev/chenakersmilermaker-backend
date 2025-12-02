@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Admin\Resources\Events\Tables;
+namespace App\Filament\Admin\Resources\Trainings\Tables;
 
-use App\Filament\Exports\EventExporter;
+use App\Filament\Exports\TrainingExporter;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -13,46 +13,50 @@ use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-class EventsTable
+class TrainingsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
+                ImageColumn::make('image')
+                    ->circular()
+                    ->placeholder('No image')
+                    ->toggleable(),
+
                 TextColumn::make('title')
                     ->searchable()
                     ->sortable()
-                    ->description(fn($record) => $record->getTranslation('location', app()->getLocale()) ?? 'No location')
                     ->limit(50)
                     ->toggleable(),
 
-                TextColumn::make('date')
-                    ->label('Event Date')
-                    ->date('M d, Y')
+                TextColumn::make('trainer_name')
+                    ->label('Trainer')
+                    ->searchable()
                     ->sortable()
-                    ->icon('heroicon-o-calendar-days')
+                    ->icon('heroicon-o-user')
+                    ->placeholder('-')
+                    ->toggleable(),
+
+                TextColumn::make('duration')
+                    ->searchable()
+                    ->sortable()
+                    ->icon('heroicon-o-clock')
+                    ->placeholder('-')
                     ->toggleable(),
 
                 TextColumn::make('description')
                     ->searchable()
-                    ->limit(75)
+                    ->limit(60)
                     ->tooltip(fn($record) => $record->getTranslation('description', app()->getLocale()))
                     ->placeholder('-')
-                    ->toggleable(),
-
-                IconColumn::make('is_archived')
-                    ->label('Archived')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-check-circle')
-                    ->falseIcon('heroicon-o-x-circle')
                     ->toggleable(),
 
                 TextColumn::make('created_at')
@@ -77,31 +81,17 @@ class EventsTable
             ->filters([
                 TrashedFilter::make(),
 
-                TernaryFilter::make('is_archived')
-                    ->label('Archived Status')
-                    ->placeholder('All events')
-                    ->trueLabel('Archived only')
-                    ->falseLabel('Active only'),
-
-                Filter::make('date_range')
-                    ->label('Date Range')
+                Filter::make('trainer_name')
                     ->form([
-                        \Filament\Forms\Components\DatePicker::make('date_from')
-                            ->placeholder('From date'),
-                        \Filament\Forms\Components\DatePicker::make('date_to')
-                            ->placeholder('To date'),
+                        \Filament\Forms\Components\TextInput::make('trainer_name')
+                            ->placeholder('Search by trainer name'),
                     ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data['date_from'],
-                                fn(Builder $q) => $q->whereDate('date', '>=', $data['date_from'])
-                            )
-                            ->when(
-                                $data['date_to'],
-                                fn(Builder $q) => $q->whereDate('date', '<=', $data['date_to'])
-                            );
-                    }),
+                    ->query(fn(Builder $query, array $data): Builder =>
+                        $query->when(
+                            $data['trainer_name'],
+                            fn(Builder $q) => $q->whereILike('trainer_name', '%' . $data['trainer_name'] . '%')
+                        )
+                    ),
             ])
             ->recordActions([
                 ViewAction::make(),
@@ -111,13 +101,13 @@ class EventsTable
             ])
             ->headerActions([
                 ExportAction::make()
-                    ->exporter(EventExporter::class)
+                    ->exporter(TrainingExporter::class)
                     ->columnMappingColumns(3),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     ExportBulkAction::make()
-                        ->exporter(EventExporter::class)
+                        ->exporter(TrainingExporter::class)
                         ->columnMappingColumns(3),
                     DeleteBulkAction::make(),
                     RestoreBulkAction::make(),

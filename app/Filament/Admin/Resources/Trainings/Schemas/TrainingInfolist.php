@@ -1,39 +1,50 @@
 <?php
 
-namespace App\Filament\Admin\Resources\Events\Schemas;
+namespace App\Filament\Admin\Resources\Trainings\Schemas;
 
-use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
-class EventInfolist
+class TrainingInfolist
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
-                Section::make('Event Information')
+                Section::make('Training Overview')
                     ->columns(2)
                     ->schema([
                         TextEntry::make('title')
                             ->columnSpanFull()
                             ->size('lg'),
-                        TextEntry::make('date')
-                            ->label('Event Date')
-                            ->date('F j, Y')
+                        TextEntry::make('trainer_name')
+                            ->label('Instructor')
                             ->placeholder('-'),
-                        IconEntry::make('is_archived')
-                            ->label('Status')
-                            ->boolean(),
-                        TextEntry::make('location')
-                            ->columnSpanFull()
+                        TextEntry::make('duration')
+                            ->label('Duration')
                             ->placeholder('-'),
                         TextEntry::make('description')
                             ->columnSpanFull()
                             ->html()
                             ->placeholder('-'),
+                        TextEntry::make('video_url')
+                            ->columnSpanFull()
+                            ->url(fn($state) => $state)
+                            ->openUrlInNewTab()
+                            ->placeholder('-')
+                            ->label('Training Video'),
                     ]),
+
+                Section::make('Media & Documents')
+                    ->columns(1)
+                    ->schema([
+                        ImageEntry::make('image')
+                            ->columnSpanFull()
+                            ->placeholder('No image uploaded'),
+                    ]),
+
                 Section::make('System Information')
                     ->columns(2)
                     ->schema([
