@@ -82,7 +82,7 @@ class PatientsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('deleted_at')
-                    ->placeholder('not deleted')
+                    ->placeholder(__('panels/admin/resources/patient.not_deleted'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

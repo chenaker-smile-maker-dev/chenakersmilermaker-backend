@@ -12,27 +12,27 @@ class TestimonialInfolist
     public static function configure(Schema $schema): Schema
     {
         return $schema->schema([
-            Section::make('Testimonial Overview')
+            Section::make(__('panels/admin/resources/testimonial.testimonial_overview'))
                 ->columns(2)
                 ->schema([
                     TextEntry::make('patient_name')
-                        ->label('Patient Name')
+                        ->label(__('panels/admin/resources/testimonial.patient_name'))
                         ->size('lg')
                         ->columnSpanFull(),
 
                     TextEntry::make('patient.first_name')
-                        ->label('Linked Patient')
+                        ->label(__('panels/admin/resources/testimonial.linked_patient'))
                         ->url(fn($record) => $record->patient_id ? route('filament.admin.resources.patients.edit', $record->patient) : null)
                         ->openUrlInNewTab()
-                        ->placeholder('No patient linked')
+                        ->placeholder(__('panels/admin/resources/testimonial.no_patient_linked'))
                         ->formatStateUsing(fn($record) => $record->patient?->full_name ?? ''),
 
                     TextEntry::make('rating')
-                        ->label('Rating')
+                        ->label(__('panels/admin/resources/testimonial.rating'))
                         ->formatStateUsing(fn($state) => str_repeat('⭐', $state)),
 
                     IconEntry::make('is_published')
-                        ->label('Published')
+                        ->label(__('panels/admin/resources/testimonial.published'))
                         ->boolean()
                         ->trueIcon('heroicon-o-check-circle')
                         ->falseIcon('heroicon-o-x-circle')
@@ -40,26 +40,26 @@ class TestimonialInfolist
                         ->falseColor('warning'),
 
                     TextEntry::make('content')
-                        ->label('Review')
+                        ->label(__('panels/admin/resources/testimonial.review'))
                         ->html()
                         ->columnSpanFull(),
                 ]),
 
-            Section::make('System Information')
+            Section::make(__('panels/admin/resources/testimonial.system_information'))
                 ->columns(2)
                 ->schema([
                     TextEntry::make('created_at')
-                        ->label('Created At')
+                        ->label(__('panels/admin/resources/testimonial.created_at'))
                         ->dateTime('F j, Y H:i'),
 
                     TextEntry::make('updated_at')
-                        ->label('Updated At')
+                        ->label(__('panels/admin/resources/testimonial.updated_at'))
                         ->dateTime('F j, Y H:i'),
 
                     TextEntry::make('deleted_at')
-                        ->label('Deleted At')
+                        ->label(__('panels/admin/resources/testimonial.deleted_at'))
                         ->dateTime('F j, Y H:i')
-                        ->placeholder('Not deleted'),
+                        ->placeholder(__('panels/admin/resources/testimonial.not_deleted')),
                 ]),
         ]);
     }

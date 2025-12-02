@@ -21,7 +21,7 @@ class PatientInfolist
                         TextEntry::make('full_name')->columnSpanFull(),
                         TextEntry::make('phone'),
                         TextEntry::make('email')
-                            ->label('Email address'),
+                            ->label(__('panels/admin/resources/patient.email_address')),
                         TextEntry::make('created_at')
                             ->dateTime()
                             ->placeholder('-'),
@@ -29,7 +29,7 @@ class PatientInfolist
                             ->dateTime()
                             ->placeholder('-'),
                         TextEntry::make('deleted_at')
-                            ->placeholder("not deleted")
+                            ->placeholder(__('panels/admin/resources/patient.not_deleted'))
                             ->dateTime()
                             ->visible(fn(Patient $record): bool => $record->trashed()),
                     ])

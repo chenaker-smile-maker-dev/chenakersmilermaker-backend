@@ -13,18 +13,18 @@ class EventInfolist
     {
         return $schema
             ->components([
-                Section::make('Event Information')
+                Section::make(__('panels/admin/resources/event.event_information'))
                     ->columns(2)
                     ->schema([
                         TextEntry::make('title')
                             ->columnSpanFull()
                             ->size('lg'),
                         TextEntry::make('date')
-                            ->label('Event Date')
+                            ->label(__('panels/admin/resources/event.event_date'))
                             ->date('F j, Y')
                             ->placeholder('-'),
                         IconEntry::make('is_archived')
-                            ->label('Status')
+                            ->label(__('panels/admin/resources/event.status'))
                             ->boolean(),
                         TextEntry::make('location')
                             ->columnSpanFull()
@@ -34,15 +34,15 @@ class EventInfolist
                             ->html()
                             ->placeholder('-'),
                     ]),
-                Section::make('System Information')
+                Section::make(__('panels/admin/resources/event.system_information'))
                     ->columns(2)
                     ->schema([
                         TextEntry::make('created_at')
-                            ->label('Created')
+                            ->label(__('panels/admin/resources/event.created'))
                             ->dateTime('F j, Y H:i')
                             ->placeholder('-'),
                         TextEntry::make('updated_at')
-                            ->label('Last Updated')
+                            ->label(__('panels/admin/resources/event.last_updated'))
                             ->dateTime('F j, Y H:i')
                             ->placeholder('-'),
                     ]),

@@ -30,19 +30,19 @@ class ServiceCards extends StatsOverviewWidget
         });
 
         return [
-            Stat::make('Total Services', $stats['total'])
+            Stat::make(__('panels/admin/resources/service.total_services'), $stats['total'])
                 ->color('info')
                 ->icon('heroicon-o-briefcase'),
 
-            Stat::make('Daytime Services', $stats['daytime'])
+            Stat::make(__('panels/admin/resources/service.daytime_services'), $stats['daytime'])
                 ->color('warning')
                 ->icon('heroicon-o-sun'),
 
-            Stat::make('Nighttime Services', $stats['nighttime'])
+            Stat::make(__('panels/admin/resources/service.nighttime_services'), $stats['nighttime'])
                 ->color('danger')
                 ->icon('heroicon-o-moon'),
 
-            Stat::make('Both Times Services', $stats['both'])
+            Stat::make(__('panels/admin/resources/service.both_times_services'), $stats['both'])
                 ->color('success')
                 ->icon('heroicon-o-clock'),
         ];

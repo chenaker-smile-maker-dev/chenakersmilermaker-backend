@@ -28,7 +28,7 @@ class ServiceForm
                             ->schema([
                                 TextInput::make('name')
                                     ->required()
-                                    ->placeholder('Enter service name'),
+                                    ->placeholder(__('panels/admin/resources/service.enter_service_name')),
                             ]),
                         Section::make('')
                             ->columnSpanFull()
@@ -45,7 +45,7 @@ class ServiceForm
                                 TextInput::make('duration')
                                     ->required()
                                     ->numeric()
-                                    ->suffix('minutes')
+                                    ->suffix(__('panels/admin/resources/service.minutes'))
                                     ->inputMode('numeric')
                                     ->placeholder('30')
                                     ->minValue(1)
@@ -60,7 +60,7 @@ class ServiceForm
                                     ->inline(false)
                                     ->onIcon('heroicon-m-check')
                                     ->offIcon('heroicon-m-x-mark')
-                                    ->label('Active Status'),
+                                    ->label(__('panels/admin/resources/service.active_status')),
                             ]),
                     ]),
                 Grid::make()

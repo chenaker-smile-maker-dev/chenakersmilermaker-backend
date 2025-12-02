@@ -28,13 +28,13 @@ class TestimonialsTable
         return $table
             ->columns([
                 TextColumn::make('patient_name')
-                    ->label('Patient Name')
+                    ->label(__('panels/admin/resources/testimonial.patient_name'))
                     ->searchable(['patient_name', 'patient.full_name'])
                     ->limit(50)
                     ->toggleable(),
 
                 TextColumn::make('rating')
-                    ->label('Rating')
+                    ->label(__('panels/admin/resources/testimonial.rating'))
                     ->formatStateUsing(fn($state) => str_repeat('⭐', $state))
                     ->sortable()
                     ->toggleable(),
@@ -47,18 +47,18 @@ class TestimonialsTable
                     ->toggleable(),
 
                 IconColumn::make('is_published')
-                    ->label('Published')
+                    ->label(__('panels/admin/resources/testimonial.published'))
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle')
                     ->trueColor('success')
                     ->falseColor('warning')
-                    ->tooltip(fn($record) => $record->is_published ? 'Published' : 'Not Published')
+                    ->tooltip(fn($record) => $record->is_published ? __('panels/admin/resources/testimonial.published') : __('panels/admin/resources/testimonial.not_published'))
                     ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('patient.first_name')
-                    ->label('Linked Patient')
+                    ->label(__('panels/admin/resources/testimonial.linked_patient'))
                     ->formatStateUsing(fn($record) => $record->patient?->full_name ?? '-')
                     ->searchable(['patient.first_name', 'patient.last_name'])
                     ->sortable()
@@ -66,45 +66,45 @@ class TestimonialsTable
                     ->toggleable(),
 
                 TextColumn::make('created_at')
-                    ->label('Created')
+                    ->label(__('panels/admin/resources/testimonial.created'))
                     ->dateTime('M d, Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
-                    ->label('Updated')
+                    ->label(__('panels/admin/resources/testimonial.updated'))
                     ->dateTime('M d, Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('deleted_at')
-                    ->label('Deleted')
+                    ->label(__('panels/admin/resources/testimonial.deleted'))
                     ->dateTime('M d, Y H:i')
                     ->sortable()
-                    ->placeholder('Not deleted')
+                    ->placeholder(__('panels/admin/resources/testimonial.not_deleted'))
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 TrashedFilter::make(),
 
                 TernaryFilter::make('is_published')
-                    ->label('Published Status')
-                    ->placeholder('All testimonials')
-                    ->trueLabel('Published only')
-                    ->falseLabel('Unpublished only'),
+                    ->label(__('panels/admin/resources/testimonial.published_status'))
+                    ->placeholder(__('panels/admin/resources/testimonial.all_testimonials'))
+                    ->trueLabel(__('panels/admin/resources/testimonial.published_only'))
+                    ->falseLabel(__('panels/admin/resources/testimonial.unpublished_only')),
 
                 Filter::make('rating')
                     ->form([
                         \Filament\Forms\Components\Select::make('rating')
                             ->options([
-                                1 => '1 Star',
-                                2 => '2 Stars',
-                                3 => '3 Stars',
-                                4 => '4 Stars',
-                                5 => '5 Stars',
+                                1 => __('panels/admin/resources/testimonial.rating_filter.1'),
+                                2 => __('panels/admin/resources/testimonial.rating_filter.2'),
+                                3 => __('panels/admin/resources/testimonial.rating_filter.3'),
+                                4 => __('panels/admin/resources/testimonial.rating_filter.4'),
+                                5 => __('panels/admin/resources/testimonial.rating_filter.5'),
                             ])
                             ->native(false)
-                            ->placeholder('Select rating'),
+                            ->placeholder(__('panels/admin/resources/testimonial.select_rating')),
                     ])
                     ->query(fn(Builder $query, array $data): Builder =>
                         $query->when(

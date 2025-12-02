@@ -29,12 +29,12 @@ class EventsTable
             ->columns([
                 TextColumn::make('title')
                     ->searchable()
-                    ->description(fn($record) => $record->getTranslation('location', app()->getLocale()) ?? 'No location')
+                    ->description(fn($record) => $record->getTranslation('location', app()->getLocale()) ?? __('panels/admin/resources/event.no_location'))
                     ->limit(50)
                     ->toggleable(),
 
                 TextColumn::make('date')
-                    ->label('Event Date')
+                    ->label(__('panels/admin/resources/event.event_date'))
                     ->date('M d, Y')
                     ->sortable()
                     ->icon('heroicon-o-calendar-days')
@@ -48,51 +48,51 @@ class EventsTable
                     ->toggleable(),
 
                 IconColumn::make('is_archived')
-                    ->label('Archived')
+                    ->label(__('panels/admin/resources/event.archived'))
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle')
                     ->trueColor('success')
                     ->falseColor('warning')
-                    ->tooltip(fn($record) => $record->is_archived ? 'Archived' : 'Not Archived')
+                    ->tooltip(fn($record) => $record->is_archived ? __('panels/admin/resources/event.archived') : __('panels/admin/resources/event.not_archived'))
                     ->sortable()
                     ->toggleable(),
 
                 TextColumn::make('created_at')
-                    ->label('Created')
+                    ->label(__('panels/admin/resources/event.created'))
                     ->dateTime('M d, Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
-                    ->label('Updated')
+                    ->label(__('panels/admin/resources/event.updated'))
                     ->dateTime('M d, Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('deleted_at')
-                    ->label('Deleted')
+                    ->label(__('panels/admin/resources/event.deleted'))
                     ->dateTime('M d, Y H:i')
                     ->sortable()
-                    ->placeholder('Not deleted')
+                    ->placeholder(__('panels/admin/resources/event.not_deleted'))
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 TrashedFilter::make(),
 
                 TernaryFilter::make('is_archived')
-                    ->label('Archived Status')
-                    ->placeholder('All events')
-                    ->trueLabel('Archived only')
-                    ->falseLabel('Active only'),
+                    ->label(__('panels/admin/resources/event.archived_status'))
+                    ->placeholder(__('panels/admin/resources/event.all_events'))
+                    ->trueLabel(__('panels/admin/resources/event.archived_only'))
+                    ->falseLabel(__('panels/admin/resources/event.active_only')),
 
                 Filter::make('date_range')
-                    ->label('Date Range')
+                    ->label(__('panels/admin/resources/event.date_range'))
                     ->form([
                         \Filament\Forms\Components\DatePicker::make('date_from')
-                            ->placeholder('From date'),
+                            ->placeholder(__('panels/admin/resources/event.from_date')),
                         \Filament\Forms\Components\DatePicker::make('date_to')
-                            ->placeholder('To date'),
+                            ->placeholder(__('panels/admin/resources/event.to_date')),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query

@@ -28,12 +28,12 @@ class TrainingResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return 'Training';
+        return __("panels/admin/resources/training.singular");
     }
 
     public static function getPluralModelLabel(): string
     {
-        return 'Trainings';
+        return __("panels/admin/resources/training.plural");
     }
 
     public static function getNavigationBadge(): ?string

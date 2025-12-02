@@ -48,7 +48,7 @@ class DoctorsRelationManager extends RelationManager
                     ->toggleable()
                     ->color("primary")
                     ->alignCenter()
-                    ->label('Diplomas'),
+                    ->label(__('panels/admin/resources/service.diplomas')),
 
                 TextColumn::make('created_at')
                     ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : '—')
@@ -65,7 +65,7 @@ class DoctorsRelationManager extends RelationManager
                 TextColumn::make('deleted_at')
                     ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : '—')
                     ->tooltip(fn($record) => $record->deleted_at?->format('Y-m-d H:i:s'))
-                    ->placeholder('Not deleted')
+                    ->placeholder(__('panels/admin/resources/service.not_deleted'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ]);

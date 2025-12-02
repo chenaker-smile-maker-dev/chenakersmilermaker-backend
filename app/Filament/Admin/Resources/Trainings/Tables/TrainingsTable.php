@@ -28,7 +28,7 @@ class TrainingsTable
             ->columns([
                 ImageColumn::make('image')
                     ->circular()
-                    ->placeholder('No image')
+                    ->placeholder(__('panels/admin/resources/training.no_image'))
                     ->toggleable(),
 
                 TextColumn::make('title')
@@ -37,7 +37,7 @@ class TrainingsTable
                     ->toggleable(),
 
                 TextColumn::make('trainer_name')
-                    ->label('Trainer')
+                    ->label(__('panels/admin/resources/training.trainer'))
                     ->searchable()
                     ->sortable()
                     ->icon('heroicon-o-user')
@@ -59,22 +59,22 @@ class TrainingsTable
                     ->toggleable(),
 
                 TextColumn::make('created_at')
-                    ->label('Created')
+                    ->label(__('panels/admin/resources/training.created'))
                     ->dateTime('M d, Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('updated_at')
-                    ->label('Updated')
+                    ->label(__('panels/admin/resources/training.updated'))
                     ->dateTime('M d, Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('deleted_at')
-                    ->label('Deleted')
+                    ->label(__('panels/admin/resources/training.deleted'))
                     ->dateTime('M d, Y H:i')
                     ->sortable()
-                    ->placeholder('Not deleted')
+                    ->placeholder(__('panels/admin/resources/training.not_deleted'))
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
@@ -83,7 +83,7 @@ class TrainingsTable
                 Filter::make('trainer_name')
                     ->form([
                         \Filament\Forms\Components\TextInput::make('trainer_name')
-                            ->placeholder('Search by trainer name'),
+                            ->placeholder(__('panels/admin/resources/training.search_by_trainer_name')),
                     ])
                     ->query(fn(Builder $query, array $data): Builder =>
                         $query->when(

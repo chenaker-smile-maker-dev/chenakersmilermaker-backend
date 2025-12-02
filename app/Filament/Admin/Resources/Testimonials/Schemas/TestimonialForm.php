@@ -14,12 +14,12 @@ class TestimonialForm
     public static function configure(Schema $schema): Schema
     {
         return $schema->components([
-            Section::make('Patient Information')
+            Section::make(__('panels/admin/resources/testimonial.patient_information'))
                 ->columnSpanFull()
                 ->columns(2)
                 ->schema([
                     Select::make('patient_id')
-                        ->label('Patient (Optional)')
+                        ->label(__('panels/admin/resources/testimonial.patient_optional'))
                         ->relationship('patient', 'first_name')
                         ->searchable(['first_name', 'last_name'])
                         ->getOptionLabelFromRecordUsing(fn($record) => $record->full_name)
@@ -33,38 +33,38 @@ class TestimonialForm
                                 }
                             }
                         })
-                        ->helperText('Select an existing patient or enter a custom name below'),
+                        ->helperText(__('panels/admin/resources/testimonial.select_existing_or_enter_custom')),
 
                     TextInput::make('patient_name')
-                        ->label('Patient Name / Display Name')
+                        ->label(__('panels/admin/resources/testimonial.patient_name_display'))
                         ->required()
-                        ->placeholder('Name to display in testimonial')
+                        ->placeholder(__('panels/admin/resources/testimonial.name_to_display_in_testimonial'))
                         ->maxLength(255),
 
                     Select::make('rating')
                         ->required()
                         ->options([
-                            1 => '⭐ 1 Star - Poor',
-                            2 => '⭐⭐ 2 Stars - Fair',
-                            3 => '⭐⭐⭐ 3 Stars - Good',
-                            4 => '⭐⭐⭐⭐ 4 Stars - Very Good',
-                            5 => '⭐⭐⭐⭐⭐ 5 Stars - Excellent',
+                            1 => __('panels/admin/resources/testimonial.rating_options.1'),
+                            2 => __('panels/admin/resources/testimonial.rating_options.2'),
+                            3 => __('panels/admin/resources/testimonial.rating_options.3'),
+                            4 => __('panels/admin/resources/testimonial.rating_options.4'),
+                            5 => __('panels/admin/resources/testimonial.rating_options.5'),
                         ])
                         ->native(false),
 
                     Toggle::make('is_published')
-                        ->label('Published')
-                        ->helperText('Publish this testimonial on the website')
+                        ->label(__('panels/admin/resources/testimonial.published'))
+                        ->helperText(__('panels/admin/resources/testimonial.publish_helper'))
                         ->inline(false),
                 ]),
 
-            Section::make('Testimonial Content')
+            Section::make(__('panels/admin/resources/testimonial.testimonial_content'))
                 ->columnSpanFull()
                 ->columns(1)
                 ->schema([
                     RichEditor::make('content')
                         ->required()
-                        ->placeholder('Write the patient\'s review and feedback')
+                        ->placeholder(__('panels/admin/resources/testimonial.write_review_placeholder'))
                         ->extraAttributes(['style' => 'min-height: 400px;'])
                         ->disableAllToolbarButtons()
                         ->toolbarButtons([

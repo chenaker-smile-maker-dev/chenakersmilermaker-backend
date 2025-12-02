@@ -25,8 +25,8 @@ class ServiceInfolist
                             ->boolean(),
                         TextEntry::make('availability')
                             ->badge(),
-                        TextEntry::make('duration')
-                            ->suffix(' minutes'),
+                            TextEntry::make('duration')
+                                ->suffix(__('panels/admin/resources/service.minutes')),
                         TextEntry::make('created_at')
                             ->dateTime()
                             ->placeholder('-'),
@@ -38,8 +38,8 @@ class ServiceInfolist
                     ->columns(1)
                     ->columnSpan(2)
                     ->schema([
-                        ImageEntry::make('image')
-                            ->placeholder('no image uploaded'),
+                            ImageEntry::make('image')
+                                ->placeholder(__('panels/admin/resources/service.no_image_uploaded')),
                     ])
             ]);
     }

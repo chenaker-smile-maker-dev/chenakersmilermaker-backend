@@ -24,21 +24,21 @@ class PatientCards extends StatsOverviewWidget
         });
 
         return [
-            Stat::make('Total Patients', $stats['total'])
-                // ->description('All registered patients')
+            Stat::make(__('panels/admin/resources/patient.total_patients'), $stats['total'])
+                // ->description(__('panels/admin/resources/patient.all_registered_patients'))
                 ->color('success')
                 ->chart($stats['chart']),
 
-            Stat::make('Male Patients', $stats['male'])
-                // ->description('Male patients')
+            Stat::make(__('panels/admin/resources/patient.male_patients'), $stats['male'])
+                // ->description(__('panels/admin/resources/patient.male_patients_desc'))
                 ->color('primary'),
 
-            Stat::make('Female Patients', $stats['female'])
-                // ->description('Female patients')
+            Stat::make(__('panels/admin/resources/patient.female_patients'), $stats['female'])
+                // ->description(__('panels/admin/resources/patient.female_patients_desc'))
                 ->color('secondary'),
 
-            Stat::make('Deleted Patients', $stats['trashed'])
-                // ->description('Soft deleted patients')
+            Stat::make(__('panels/admin/resources/patient.deleted_patients'), $stats['trashed'])
+                // ->description(__('panels/admin/resources/patient.deleted_patients_desc'))
                 ->color('danger'),
         ];
     }

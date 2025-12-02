@@ -20,12 +20,12 @@ class EventForm
                 ->schema([
                     TextInput::make('title')
                         ->required()
-                        ->placeholder('Enter event title')
+                        ->placeholder(__('panels/admin/resources/event.enter_event_title'))
                         ->maxLength(255)
                         ->columnSpanFull(),
                     RichEditor::make('description')
                         ->columnSpanFull()
-                        ->placeholder('Describe the event details')
+                        ->placeholder(__('panels/admin/resources/event.describe_event_details'))
                         ->extraAttributes(['style' => 'min-height: 300px;'])
                         ->disableAllToolbarButtons()
                         ->toolbarButtons([
@@ -43,19 +43,19 @@ class EventForm
                         ]),
                     TextInput::make('location')
                         ->columnSpanFull()
-                        ->placeholder('Enter event location (e.g., Clinic Name, Address)')
+                        ->placeholder(__('panels/admin/resources/event.enter_event_location'))
                         ->maxLength(255),
                 ]),
 
-            Section::make('Event Metadata')
+            Section::make(__('panels/admin/resources/event.event_metadata'))
                 ->columns(2)
                 ->schema([
                     DatePicker::make('date')
                         ->required()
-                        ->placeholder('Select event date')
+                        ->placeholder(__('panels/admin/resources/event.select_event_date'))
                         ->native(false),
                     Toggle::make('is_archived')
-                        ->label('Archived')
+                        ->label(__('panels/admin/resources/event.archived'))
                         ->inline(),
                 ]),
         ]);

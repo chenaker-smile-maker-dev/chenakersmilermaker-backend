@@ -24,7 +24,7 @@ class PatientForm
                             // ->tel()
                             ->required(),
                         TextInput::make('email')
-                            ->label('Email address')
+                            ->label(__('panels/admin/resources/patient.email_address'))
                             ->email()
                             ->required(),
                         TextInput::make('password')

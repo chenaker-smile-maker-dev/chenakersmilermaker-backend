@@ -23,13 +23,13 @@ class AppointmentInfolist
                         TextEntry::make('to')
                             ->dateTime(),
                         TextEntry::make('doctor.name')
-                            ->label('Doctor')
+                            ->label(__('panels/admin/resources/appointment.doctor'))
                             ->placeholder('-'),
                         TextEntry::make('service.name')
-                            ->label('Service')
+                            ->label(__('panels/admin/resources/appointment.service'))
                             ->placeholder('-'),
                         TextEntry::make('patient.full_name')
-                            ->label('Patient')
+                            ->label(__('panels/admin/resources/appointment.patient'))
                             ->placeholder('-'),
                         TextEntry::make('price')
                             ->money('DZD'),

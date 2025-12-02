@@ -19,12 +19,12 @@ class TrainingForm
                 ->schema([
                     TextInput::make('title')
                         ->required()
-                        ->placeholder('Enter training title')
+                        ->placeholder(__('panels/admin/resources/training.enter_training_title'))
                         ->maxLength(255)
                         ->columnSpanFull(),
                     RichEditor::make('description')
                         ->columnSpanFull()
-                        ->placeholder('Describe the training content, learning outcomes, and course structure')
+                        ->placeholder(__('panels/admin/resources/training.describe_training_content'))
                         ->extraAttributes(['style' => 'min-height: 300px;'])
                         ->disableAllToolbarButtons()
                         ->toolbarButtons([
@@ -42,25 +42,25 @@ class TrainingForm
                         ]),
                 ]),
 
-            Section::make('Training Information')
+            Section::make(__('panels/admin/resources/training.training_information'))
                 ->columns(2)
                 ->schema([
                     TextInput::make('trainer_name')
                         ->required()
-                        ->placeholder('Full name of the instructor')
+                        ->placeholder(__('panels/admin/resources/training.full_name_of_instructor'))
                         ->maxLength(255),
                     TextInput::make('duration')
                         ->required()
-                        ->placeholder('e.g., 5 days, 2 weeks, 40 hours')
+                        ->placeholder(__('panels/admin/resources/training.duration_placeholder'))
                         ->maxLength(255),
                     TextInput::make('video_url')
                         ->url()
                         ->columnSpanFull()
-                        ->placeholder('https://example.com/video')
-                        ->helperText('Link to the training video (optional)'),
+                        ->placeholder(__('panels/admin/resources/training.video_url_placeholder'))
+                        ->helperText(__('panels/admin/resources/training.training_video_helper')),
                 ]),
 
-            Section::make('Media')
+            Section::make(__('panels/admin/resources/training.media'))
                 ->columns(1)
                 ->schema([
                     FileUpload::make('image')
@@ -68,10 +68,10 @@ class TrainingForm
                         ->directory('trainings/images')
                         ->columnSpanFull()
                         ->maxSize(5120)
-                        ->placeholder('Click or drag image here')
-                        ->helperText('Recommended: 1200x400px (JPEG/PNG, max 5MB)'),
+                        ->placeholder(__('panels/admin/resources/training.click_or_drag_image_here'))
+                        ->helperText(__('panels/admin/resources/training.image_helper')),
 
-                    FileUpload::make('documents')
+                        FileUpload::make('documents')
                         ->multiple()
                         ->directory('trainings/documents')
                         ->acceptedFileTypes([
@@ -80,8 +80,8 @@ class TrainingForm
                             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                         ])
                         ->columnSpanFull()
-                        ->placeholder('Click or drag documents here')
-                        ->helperText('Accepted formats: PDF, DOC, DOCX'),
+                            ->placeholder(__('panels/admin/resources/training.click_or_drag_documents_here'))
+                            ->helperText(__('panels/admin/resources/training.documents_helper')),
                 ]),
         ]);
     }

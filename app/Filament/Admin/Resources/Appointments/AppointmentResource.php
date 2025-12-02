@@ -53,9 +53,9 @@ class AppointmentResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'Doctor' => $record->doctor->name,
-            'Patient' => $record->patient->full_name,
-            'Service' => $record->service->name,
+            __('panels/admin/resources/appointment.doctor') => $record->doctor->name,
+            __('panels/admin/resources/appointment.patient') => $record->patient->full_name,
+            __('panels/admin/resources/appointment.service') => $record->service->name,
         ];
     }
 

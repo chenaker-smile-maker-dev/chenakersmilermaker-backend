@@ -29,7 +29,7 @@ class ServicesTable
                     ->collection('image')
                     ->conversion('thumb')
                     ->circular()
-                    ->placeholder('no image uploaded')
+                    ->placeholder(__('panels/admin/resources/service.no_image_uploaded'))
                     ->toggleable(),
                 TextColumn::make('name')
                     ->toggleable()
@@ -59,18 +59,18 @@ class ServicesTable
             ->filters([
                 SelectFilter::make('active')
                     ->options([
-                        '1' => 'Active',
-                        '0' => 'Inactive',
+                        '1' => __('panels/admin/resources/service.active'),
+                        '0' => __('panels/admin/resources/service.inactive'),
                     ])
-                    ->label('Status'),
+                    ->label(__('panels/admin/resources/service.status')),
                 SelectFilter::make('availability')
                     ->options(ServiceAvailability::class),
                 Filter::make('created_at')
                     ->form([
                         \Filament\Forms\Components\DatePicker::make('created_from')
-                            ->placeholder('From'),
+                            ->placeholder(__('panels/admin/resources/service.from')),
                         \Filament\Forms\Components\DatePicker::make('created_until')
-                            ->placeholder('Until'),
+                            ->placeholder(__('panels/admin/resources/service.until')),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -83,7 +83,7 @@ class ServicesTable
                                 fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
-                    ->label('Created Date Range'),
+                    ->label(__('panels/admin/resources/service.created_date_range')),
             ])
             ->headerActions([
                 ExportAction::make()
