@@ -5,8 +5,10 @@ namespace App\Livewire\Widgets;
 use Guava\Calendar\Enums\CalendarViewType;
 use Guava\Calendar\Filament\CalendarWidget;
 use Guava\Calendar\ValueObjects\FetchInfo;
+use Guava\Calendar\ValueObjects\EventClickInfo;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 class AppointmentListDayViewWidget extends CalendarWidget
 {
@@ -32,6 +34,11 @@ class AppointmentListDayViewWidget extends CalendarWidget
             ->get()
             ->map(fn($appointment) => $appointment->toCalendarEvent()->backgroundColor($this->getDoctorColor($appointment->doctor_id)))
             ->toArray();
+    }
+
+    protected function onEventClick(EventClickInfo $info, Model $event, ?string $action = null): void
+    {
+        $this->dispatch('appointmentClicked', appointmentId: $event->getKey())->to('\\App\\Filament\\Admin\\Widgets\\AppointmentCalendarWidget');
     }
 
     private function getDoctorColor(?int $doctorId): string

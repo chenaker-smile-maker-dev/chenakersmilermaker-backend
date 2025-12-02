@@ -92,7 +92,7 @@
             firstDay: @js($this->getFirstDay()),
             dayMaxEvents: @js($this->getDayMaxEvents()),
             eventContent: @js($this->getEventContentJs()),
-            eventClickEnabled: @js($this->isEventClickEnabled()),
+            eventClickEnabled: true,
             eventDragEnabled: @js($this->isEventDragEnabled()),
             eventResizeEnabled: @js($this->isEventResizeEnabled()),
             noEventsClickEnabled: @js($this->isNoEventsClickEnabled()),
