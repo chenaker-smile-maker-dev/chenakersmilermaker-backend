@@ -33,7 +33,6 @@ class TrainingsTable
 
                 TextColumn::make('title')
                     ->searchable()
-                    ->sortable()
                     ->limit(50)
                     ->toggleable(),
 
@@ -88,8 +87,8 @@ class TrainingsTable
                     ])
                     ->query(fn(Builder $query, array $data): Builder =>
                         $query->when(
-                            $data['trainer_name'],
-                            fn(Builder $q) => $q->whereILike('trainer_name', '%' . $data['trainer_name'] . '%')
+                            $data['trainer_name'] ?? null,
+                            fn(Builder $q, $value) => $q->where('trainer_name', 'like', '%' . $value . '%')
                         )
                     ),
             ])

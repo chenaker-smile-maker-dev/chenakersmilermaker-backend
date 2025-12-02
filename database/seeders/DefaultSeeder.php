@@ -24,6 +24,7 @@ class DefaultSeeder extends Seeder
 
         $events = \App\Models\Event::factory()->count(10)->create();
         $trainings = \App\Models\Training::factory()->count(5)->create();
+        $testimonials = \App\Models\Testimonial::factory()->count(15)->create();
     }
 
     protected function AssignServicesToDoctors($doctors, $services)

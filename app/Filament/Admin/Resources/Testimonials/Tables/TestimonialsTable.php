@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Admin\Resources\Events\Tables;
+namespace App\Filament\Admin\Resources\Testimonials\Tables;
 
-use App\Filament\Exports\EventExporter;
+use App\Filament\Exports\TestimonialExporter;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -21,41 +21,48 @@ use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-class EventsTable
+class TestimonialsTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-                TextColumn::make('title')
-                    ->searchable()
-                    ->description(fn($record) => $record->getTranslation('location', app()->getLocale()) ?? 'No location')
+                TextColumn::make('patient_name')
+                    ->label('Patient Name')
+                    ->searchable(['patient_name', 'patient.full_name'])
                     ->limit(50)
                     ->toggleable(),
 
-                TextColumn::make('date')
-                    ->label('Event Date')
-                    ->date('M d, Y')
+                TextColumn::make('rating')
+                    ->label('Rating')
+                    ->formatStateUsing(fn($state) => str_repeat('⭐', $state))
                     ->sortable()
-                    ->icon('heroicon-o-calendar-days')
                     ->toggleable(),
 
-                TextColumn::make('description')
+                TextColumn::make('content')
                     ->searchable()
                     ->limit(75)
-                    ->tooltip(fn($record) => $record->getTranslation('description', app()->getLocale()))
+                    ->tooltip(fn($record) => strip_tags($record->content))
                     ->placeholder('-')
                     ->toggleable(),
 
-                IconColumn::make('is_archived')
-                    ->label('Archived')
+                IconColumn::make('is_published')
+                    ->label('Published')
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle')
                     ->trueColor('success')
                     ->falseColor('warning')
-                    ->tooltip(fn($record) => $record->is_archived ? 'Archived' : 'Not Archived')
+                    ->tooltip(fn($record) => $record->is_published ? 'Published' : 'Not Published')
                     ->sortable()
+                    ->toggleable(),
+
+                TextColumn::make('patient.first_name')
+                    ->label('Linked Patient')
+                    ->formatStateUsing(fn($record) => $record->patient?->full_name ?? '-')
+                    ->searchable(['patient.first_name', 'patient.last_name'])
+                    ->sortable()
+                    ->placeholder('-')
                     ->toggleable(),
 
                 TextColumn::make('created_at')
@@ -80,31 +87,31 @@ class EventsTable
             ->filters([
                 TrashedFilter::make(),
 
-                TernaryFilter::make('is_archived')
-                    ->label('Archived Status')
-                    ->placeholder('All events')
-                    ->trueLabel('Archived only')
-                    ->falseLabel('Active only'),
+                TernaryFilter::make('is_published')
+                    ->label('Published Status')
+                    ->placeholder('All testimonials')
+                    ->trueLabel('Published only')
+                    ->falseLabel('Unpublished only'),
 
-                Filter::make('date_range')
-                    ->label('Date Range')
+                Filter::make('rating')
                     ->form([
-                        \Filament\Forms\Components\DatePicker::make('date_from')
-                            ->placeholder('From date'),
-                        \Filament\Forms\Components\DatePicker::make('date_to')
-                            ->placeholder('To date'),
+                        \Filament\Forms\Components\Select::make('rating')
+                            ->options([
+                                1 => '1 Star',
+                                2 => '2 Stars',
+                                3 => '3 Stars',
+                                4 => '4 Stars',
+                                5 => '5 Stars',
+                            ])
+                            ->native(false)
+                            ->placeholder('Select rating'),
                     ])
-                    ->query(function (Builder $query, array $data): Builder {
-                        return $query
-                            ->when(
-                                $data['date_from'],
-                                fn(Builder $q) => $q->whereDate('date', '>=', $data['date_from'])
-                            )
-                            ->when(
-                                $data['date_to'],
-                                fn(Builder $q) => $q->whereDate('date', '<=', $data['date_to'])
-                            );
-                    }),
+                    ->query(fn(Builder $query, array $data): Builder =>
+                        $query->when(
+                            $data['rating'] ?? null,
+                            fn(Builder $q, $value) => $q->where('rating', $value)
+                        )
+                    ),
             ])
             ->recordActions([
                 ViewAction::make(),
@@ -114,13 +121,13 @@ class EventsTable
             ])
             ->headerActions([
                 ExportAction::make()
-                    ->exporter(EventExporter::class)
+                    ->exporter(TestimonialExporter::class)
                     ->columnMappingColumns(3),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
                     ExportBulkAction::make()
-                        ->exporter(EventExporter::class)
+                        ->exporter(TestimonialExporter::class)
                         ->columnMappingColumns(3),
                     DeleteBulkAction::make(),
                     RestoreBulkAction::make(),

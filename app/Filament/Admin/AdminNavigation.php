@@ -59,4 +59,10 @@ class AdminNavigation
         'sort' => 6,
         'group' => self::WEBSITE_CONTENT_GROUP,
     ];
+
+    public const TESTIMONIALS_RESOURCE = [
+        'icon' => Heroicon::StarSmall,
+        'sort' => 7,
+        'group' => self::WEBSITE_CONTENT_GROUP,
+    ];
 }
