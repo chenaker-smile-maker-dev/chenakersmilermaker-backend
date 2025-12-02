@@ -12,7 +12,7 @@ use Dedoc\Scramble\Attributes\BodyParameter;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\Request;
 
-#[Group('Booking', weight: 4)]
+#[Group('(booking) Booking', weight: 7)]
 class BookingController extends BaseController
 {
     /**

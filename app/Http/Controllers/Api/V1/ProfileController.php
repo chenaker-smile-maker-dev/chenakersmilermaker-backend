@@ -13,7 +13,7 @@ use Dedoc\Scramble\Attributes\BodyParameter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-#[Group('Patient Profile', weight: 2)]
+#[Group('(auth) Patient Profile', weight: 5)]
 class ProfileController extends BaseController
 {
     /**

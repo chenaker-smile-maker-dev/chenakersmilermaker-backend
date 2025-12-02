@@ -4,10 +4,28 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DoctorAvailabilityController;
 use App\Http\Controllers\Api\V1\ProfileController;
 use App\Http\Controllers\Api\V1\BookingController;
+use App\Http\Controllers\Api\V1\EventController;
+use App\Http\Controllers\Api\V1\TrainingController;
+use App\Http\Controllers\Api\V1\TestimonialController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')
     ->group(function () {
+        Route::prefix('events')->group(function () {
+            Route::get('/', [EventController::class, 'listEvents']);
+            Route::get('/{event}', [EventController::class, 'showEvent']);
+        });
+
+        Route::prefix('trainings')->group(function () {
+            Route::get('/', [TrainingController::class, 'listTrainings']);
+            Route::get('/{training}', [TrainingController::class, 'showTraining']);
+        });
+
+        Route::prefix('testimonials')->group(function () {
+            Route::get('/', [TestimonialController::class, 'listTestimonials']);
+            Route::get('/{testimonial}', [TestimonialController::class, 'showTestimonial']);
+        });
+
         Route::prefix('patient')->group(function () {
             Route::prefix('auth')->group(function () {
                 Route::post('/register', [AuthController::class, 'register']);

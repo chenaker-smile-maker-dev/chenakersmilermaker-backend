@@ -16,7 +16,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Dedoc\Scramble\Attributes\BodyParameter;
 use Illuminate\Http\Request;
 
-#[Group('Patient Auth', weight: 1)]
+#[Group('(auth) Patient Auth', weight: 4)]
 class AuthController extends BaseController
 {
     /**

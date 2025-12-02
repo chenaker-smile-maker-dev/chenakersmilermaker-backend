@@ -14,7 +14,7 @@ use Dedoc\Scramble\Attributes\Group;
 use Dedoc\Scramble\Attributes\QueryParameter;
 use Illuminate\Http\Request;
 
-#[Group('Doctor Availability', weight: 3)]
+#[Group('(booking) Doctor Availability', weight: 6)]
 class DoctorAvailabilityController extends BaseController
 {
     /**
