@@ -1,9 +1,0 @@
-node_modules
-vendor
-.git
-.env.local
-.env.*.local
-storage/logs
-bootstrap/cache
-.DS_Store
-Thumbs.db
