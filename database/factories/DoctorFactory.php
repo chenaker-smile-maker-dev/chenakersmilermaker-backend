@@ -64,13 +64,13 @@ class DoctorFactory extends Factory
         return $metadata;
     }
 
-    public function configure()
-    {
-        return $this->afterCreating(function (Doctor $doctor) {
-            $doctor
-                ->addMedia(public_path('images/profile-placeholder.png'))
-                ->preservingOriginal()
-                ->toMediaCollection('doctor_photo');
-        });
-    }
+    // public function configure()
+    // {
+    //     return $this->afterCreating(function (Doctor $doctor) {
+    //         $doctor
+    //             ->addMedia(public_path('images/profile-placeholder.png'))
+    //             ->preservingOriginal()
+    //             ->toMediaCollection('doctor_photo');
+    //     });
+    // }
 }
