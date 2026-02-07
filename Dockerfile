@@ -48,5 +48,5 @@ ENV SESSION_DRIVER=database
 # Create SQLite database and run migrations on startup
 # We use a custom entrypoint script embedded here or just a detailed CMD
 CMD sh -c "touch /var/www/html/database/database.sqlite && \
-           php artisan migrate --force && \
+           php artisan migrate --force &&  php artisan optimize:clear && \
            apache2-foreground"
