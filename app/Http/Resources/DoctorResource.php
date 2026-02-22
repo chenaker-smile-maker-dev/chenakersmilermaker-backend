@@ -16,6 +16,7 @@ class DoctorResource extends JsonResource
             'specialty' => GetModelMultilangAttribute::get($this, 'specialty'),
             // 'email' => $this->email ?? null,
             // 'phone' => $this->phone ?? null,
+            'image_url' => $this->image,
             'thumbnail_url' => $this->thumb_image,
         ];
     }
