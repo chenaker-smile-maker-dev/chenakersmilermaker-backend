@@ -6,11 +6,11 @@ class ListTestimonials
 {
     public function handle(int $page = 1, int $perPage = 10)
     {
-        $testimonials = \App\Models\Testimonial::where('is_published', true)
+        $testimonials = \App\Models\Testimonial::with('patient')->where('is_published', true)
             ->paginate($perPage, ['*'], 'page', $page);
 
         return [
-            'data' => $testimonials->items(),
+            'data' => \App\Http\Resources\TestimonialResource::collection($testimonials)->resolve(),
             'pagination' => [
                 'total' => $testimonials->total(),
                 'per_page' => $testimonials->perPage(),

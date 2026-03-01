@@ -7,10 +7,15 @@ use App\Http\Controllers\Api\V1\BookingController;
 use App\Http\Controllers\Api\V1\EventController;
 use App\Http\Controllers\Api\V1\TrainingController;
 use App\Http\Controllers\Api\V1\TestimonialController;
+use App\Http\Controllers\Api\V1\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')
     ->group(function () {
+        Route::prefix('services')->group(function () {
+            Route::get('service', [ServiceController::class, 'listServices']);
+            Route::get('service/{service}', [ServiceController::class, 'showService']);
+        });
         Route::prefix('events')->group(function () {
             Route::get('/', [EventController::class, 'listEvents']);
             Route::get('/{event}', [EventController::class, 'showEvent']);

@@ -31,7 +31,6 @@ class Testimonial extends Model
 
     public function getNameAttribute(): string
     {
-        return $this->patient?->name ?? $this->patient_name;
+        return $this->patient?->full_name ?? $this->patient_name;
     }
 }
-

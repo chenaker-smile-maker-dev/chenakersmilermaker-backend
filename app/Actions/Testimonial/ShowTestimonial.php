@@ -8,6 +8,7 @@ class ShowTestimonial
 {
     public function handle(Testimonial $testimonial)
     {
-        return $testimonial;
+        $testimonial->load('patient');
+        return \App\Http\Resources\TestimonialResource::make($testimonial)->resolve();
     }
 }

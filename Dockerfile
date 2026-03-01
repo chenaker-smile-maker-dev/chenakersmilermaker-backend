@@ -1,52 +1,52 @@
-FROM php:8.2-apache
+FROM ubuntu:24.04
 
-# Install system dependencies
+# Install dependencies required for the installer script and Laravel
+ENV TERM=xterm
 RUN apt-get update && apt-get install -y \
+    curl \
     git \
     unzip \
-    libsqlite3-dev \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    curl \
-    && docker-php-ext-install pdo_sqlite bcmath opcache gd mbstring intl xml \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    ca-certificates \
+    procps \
+    && rm -rf /var/lib/apt/lists/*
+    
+# Install PHP, Composer, and Laravel via the provided script
+RUN /bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.4)"
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+# Add the binaries to PATH
+ENV PATH="/root/.config/herd-lite/bin:$PATH"
+ENV PHP_INI_SCAN_DIR="/root/.config/herd-lite/bin:$PHP_INI_SCAN_DIR"
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Copy application files
+COPY . .
 
-# Configure Apache DocumentRoot
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+# Setup .env file
+RUN cp .env.example .env
 
-# Copy application code
-COPY . /var/www/html
-
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Set permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-
-# Environment Variables
-ENV APP_NAME=ChenakerSmileMaker
-ENV APP_URL=https://chenakersmilemaker-backend.onrender.com/
+# Setup environment variables
+ENV APP_ENV=production
+ENV APP_DEBUG=true
+ENV APP_URL=https://chenakersmilermaker.onrender.com
 ENV DB_CONNECTION=sqlite
 ENV DB_DATABASE=/var/www/html/database/database.sqlite
-ENV CACHE_STORE=database
 ENV QUEUE_CONNECTION=sync
+ENV CACHE_STORE=database
 ENV SESSION_DRIVER=database
+ENV LOG_CHANNEL=stderr
 
-# Create SQLite database and run migrations on startup
-# We use a custom entrypoint script embedded here or just a detailed CMD
-CMD sh -c "touch /var/www/html/database/database.sqlite && \
-           php artisan migrate --force &&  php artisan optimize:clear && \
-           apache2-foreground"
+# Install PHP dependencies
+RUN composer install --optimize-autoloader
+
+# Setup SQLite database and permissions
+RUN mkdir -p database && touch database/database.sqlite && \
+    chown -R root:root database storage bootstrap/cache && \
+    chmod -R 777 database storage bootstrap/cache
+
+# Expose port (Render sets PORT env)
+EXPOSE 8000
+
+# Start server
+CMD sh -c "php artisan key:generate --force && php artisan storage:link && php artisan migrate --force && php artisan db:seed --force && php artisan optimize && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"
