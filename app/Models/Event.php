@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Event extends Model
 {
@@ -43,7 +44,7 @@ class Event extends Model
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('gallery')
-        ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg'])
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg'])
             ->useDisk('public');
     }
 

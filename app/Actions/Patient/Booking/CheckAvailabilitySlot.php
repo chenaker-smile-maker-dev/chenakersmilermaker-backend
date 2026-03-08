@@ -138,8 +138,22 @@ class CheckAvailabilitySlot
         $firstPeriod = $periods->first();
 
         // Get days of week from frequency_config
-        $frequencyConfig = $firstSchedule->frequency_config ?? [];
-        $days = $frequencyConfig['days'] ?? [];
+        $frequencyConfig = $firstSchedule->frequency_config;
+        
+        // Handle both array and object formats
+        if (is_object($frequencyConfig)) {
+            if (property_exists($frequencyConfig, 'days')) {
+                $days = $frequencyConfig->days;
+            } elseif (method_exists($frequencyConfig, 'getDays')) {
+                $days = $frequencyConfig->getDays();
+            } else {
+                $days = [];
+            }
+        } elseif (is_array($frequencyConfig)) {
+            $days = $frequencyConfig['days'] ?? [];
+        } else {
+            $days = [];
+        }
 
         // Convert day names to numeric values (0=Sunday, 1=Monday, ..., 6=Saturday)
         $dayMap = [
@@ -154,8 +168,9 @@ class CheckAvailabilitySlot
 
         $numericDays = [];
         foreach ($days as $day) {
-            if (isset($dayMap[$day])) {
-                $numericDays[] = $dayMap[$day];
+            $dayLower = strtolower($day);
+            if (isset($dayMap[$dayLower])) {
+                $numericDays[] = $dayMap[$dayLower];
             }
         }
 

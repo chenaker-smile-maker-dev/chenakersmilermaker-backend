@@ -1,0 +1,29 @@
+list all events:
+
+pagination ?
+
+we got 3 types :
+
+archive events
+happening events
+future events
+
+
+
+event params for both users and events site: 
+
+
+event id 
+time
+date
+location
+speakers
+about_event
+pictures
+event name
+what_to_expect
+
+
+
+
+

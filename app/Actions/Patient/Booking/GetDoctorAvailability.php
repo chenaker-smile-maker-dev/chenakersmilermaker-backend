@@ -65,8 +65,24 @@ class GetDoctorAvailability
         }
 
         $firstPeriod = $periods->first();
-        $frequencyConfig = $firstSchedule->frequency_config ?? [];
-        $days = $frequencyConfig['days'] ?? [];
+        
+        // Get days of week from frequency_config
+        $frequencyConfig = $firstSchedule->frequency_config;
+        
+        // Handle both array and object formats
+        if (is_object($frequencyConfig)) {
+            if (property_exists($frequencyConfig, 'days')) {
+                $days = $frequencyConfig->days;
+            } elseif (method_exists($frequencyConfig, 'getDays')) {
+                $days = $frequencyConfig->getDays();
+            } else {
+                $days = [];
+            }
+        } elseif (is_array($frequencyConfig)) {
+            $days = $frequencyConfig['days'] ?? [];
+        } else {
+            $days = [];
+        }
 
         $dayMap = [
             'sunday' => 0,
@@ -80,8 +96,9 @@ class GetDoctorAvailability
 
         $numericDays = [];
         foreach ($days as $day) {
-            if (isset($dayMap[$day])) {
-                $numericDays[] = $dayMap[$day];
+            $dayLower = strtolower($day);
+            if (isset($dayMap[$dayLower])) {
+                $numericDays[] = $dayMap[$dayLower];
             }
         }
 
