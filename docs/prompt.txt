@@ -1,6 +1,9 @@
+before starting, run 1 demo action for everything that u got, so that i can garrantee permission for the entire session (execute terminal command, tool, mcp call ... etc)
+example, for command u can go with echo hello
+
 You are working on a Laravel 11+ backend project (Chenaker Smile Maker - dental clinic management system) using Filament v3 admin panel, Sanctum auth, Zap scheduling, Spatie Media Library, and Spatie Translatable (ar, en, fr).
 
-Read the step-by-step guide in `docs/guide/` (step-01 through step-09) carefully. Each step is a self-contained document with exact specifications for what to build. Also read `docs/new/events.txt` and `docs/new/training(learning).txt` for the required API fields.
+Read the step-by-step guide in `docs/guide/` (step-01 through step-10) carefully. Each step is a self-contained document with exact specifications for what to build. Also read `docs/new/events.txt` and `docs/new/training(learning).txt` for the required API fields. Use `docs/todo.md` as your progress tracker — mark items `[x]` as you complete them.
 
 Execute the steps IN ORDER:
 
@@ -20,15 +23,20 @@ Execute the steps IN ORDER:
 
 **Step 8** (step-08-event-training-updates.md): Fix Event model (implement HasMedia — currently broken), add missing fields (time, speakers, about_event, what_to_expect), add status accessor and type filter to API. Update Training model with price field, multiple images collection, reviews relation. Create Review model. Update API responses to match docs/new specs. Update Filament resources.
 
-**Step 9** (step-09-tests.md): Write comprehensive tests for ALL features. Use Pest syntax. Feature tests for every API endpoint (auth, profile, appointments, booking, events, trainings, testimonials, notifications, urgent booking). Unit tests for actions and services. Browser tests using pestphp/pest-plugin-browser for the Filament admin panel (appointment management, urgent booking management, dashboard widgets). Create all needed factories.
+**Step 9** (step-09-tests.md): Write comprehensive tests for ALL features. Use Pest syntax. Feature tests for every API endpoint (auth, profile, appointments, booking, events, trainings, testimonials, notifications, urgent booking). Convention tests (translatable responses, media responses). Unit tests for actions and services. Browser tests using pestphp/pest-plugin-browser for ALL Filament resources (appointments, urgent bookings, events, trainings, doctors, patients, services, testimonials) AND the dashboard. Create all needed factories.
+
+**Step 10** (step-10-dashboard-and-conventions.md): CRITICAL cross-cutting conventions + custom dashboard. (a) ALL translatable API fields MUST return {ar, fr, en} objects using `GetModelMultilangAttribute::get()` — fix TestimonialResource, fix Events/Trainings actions that return raw models. (b) ALL images returned via API MUST include original URL + all conversions using the MediaHelper utility. (c) ALL API error/validation messages MUST be translatable via lang/ar/api.php, lang/fr/api.php, lang/en/api.php. (d) Override the Filament dashboard with a custom page containing 6 widgets: StatsOverview, PendingActions, TodayAppointments, UrgentBookings, AppointmentCalendar (existing), RecentActivity. (e) Polish all Filament resources.
 
 IMPORTANT CONVENTIONS:
 - Follow the existing Action pattern (app/Actions/) for all business logic — controllers should be thin.
 - Use BaseController's sendResponse/sendError for all API responses.
-- All translatable fields must support ar, en, fr locales.
+- ALL translatable fields MUST return all 3 locales as {ar, fr, en} objects (use GetModelMultilangAttribute::get()).
+- ALL images MUST return {original, thumb, ...conversions} objects (use MediaHelper::single/collection).
+- ALL user-facing strings in API responses MUST use __('api.key') from lang files.
 - Patient notifications use translatable JSON arrays (NOT Laravel's notification system).
 - Admin notifications use Filament's database notification system.
 - Use Scramble attributes (#[Group], #[BodyParameter], #[QueryParameter]) on all new API controllers/methods.
 - The booking middleware `auth:sanctum, access` pattern is used for authenticated patient routes.
 - Run `php artisan migrate` after creating migrations.
+- Update `docs/todo.md` after completing each step — mark items [x].
 - Commit after completing each step.

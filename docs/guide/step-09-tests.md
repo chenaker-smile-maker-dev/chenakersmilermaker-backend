@@ -58,6 +58,9 @@ tests/
 │   │   └── UrgentBooking/
 │   │       ├── SubmitUrgentBookingTest.php
 │   │       └── ListPatientUrgentBookingsTest.php
+│   ├── Conventions/
+│   │   ├── TranslatableResponseTest.php
+│   │   └── MediaResponseTest.php
 │   ├── Booking/                     # existing tests (keep)
 │   │   ├── ComprehensiveBookingTest.php
 │   │   ├── AppointmentUpdateAvailabilityTest.php
@@ -88,7 +91,13 @@ tests/
 │   ├── Filament/
 │   │   ├── AppointmentManagementTest.php
 │   │   ├── UrgentBookingManagementTest.php
-│   │   ├── DoctorScheduleManagementTest.php
+│   │   ├── DoctorManagementTest.php
+│   │   ├── PatientManagementTest.php
+│   │   ├── ServiceManagementTest.php
+│   │   ├── EventManagementTest.php
+│   │   ├── TrainingManagementTest.php
+│   │   ├── TestimonialManagementTest.php
+│   │   ├── DashboardTest.php
 │   │   └── DashboardWidgetsTest.php
 │   └── README.md
 └── Support/
@@ -508,7 +517,350 @@ it('displays pending counts on dashboard', function () {
 
 ---
 
-## 9.5 — Factories Needed
+## 9.5 — Filament Resource Browser Tests (ALL Resources)
+
+Test every Filament resource to ensure CRUD operations work correctly.
+
+### Event Management Browser Tests
+
+```php
+// tests/Browser/Filament/EventManagementTest.php
+
+it('can list events in Filament', function () {
+    $admin = User::factory()->create();
+    Event::factory()->count(3)->create();
+
+    visit(route('filament.admin.resources.events.index'))
+        ->loginAs($admin)
+        ->assertSee('Events');
+});
+
+it('can create an event with all new fields', function () {
+    $admin = User::factory()->create();
+
+    visit(route('filament.admin.resources.events.create'))
+        ->loginAs($admin)
+        ->type('title.en', 'Dental Health Day')
+        ->type('title.ar', 'يوم صحة الأسنان')
+        ->type('title.fr', 'Journée de santé dentaire')
+        ->type('description.en', 'Annual dental health awareness event')
+        ->fillDate('date', now()->addMonth()->format('Y-m-d'))
+        ->type('time', '09:00')
+        ->type('speakers.en', 'Dr. Smith, Dr. Jones')
+        ->type('about_event.en', 'Learn about dental hygiene')
+        ->type('what_to_expect.en', 'Free checkups and consultations')
+        ->click('Create')
+        ->waitForReload()
+        ->assertSee('Dental Health Day');
+});
+
+it('can edit an event', function () {
+    $admin = User::factory()->create();
+    $event = Event::factory()->create();
+
+    visit(route('filament.admin.resources.events.edit', $event))
+        ->loginAs($admin)
+        ->clear('title.en')
+        ->type('title.en', 'Updated Event Title')
+        ->click('Save')
+        ->waitForReload();
+
+    expect($event->fresh()->getTranslation('title', 'en'))->toBe('Updated Event Title');
+});
+
+it('can view event details', function () {
+    $admin = User::factory()->create();
+    $event = Event::factory()->create();
+
+    visit(route('filament.admin.resources.events.view', $event))
+        ->loginAs($admin)
+        ->assertSee($event->title);
+});
+
+it('can delete an event', function () {
+    $admin = User::factory()->create();
+    $event = Event::factory()->create();
+
+    visit(route('filament.admin.resources.events.index'))
+        ->loginAs($admin)
+        ->click('[data-action="delete"]')
+        ->waitForDialog()
+        ->click('Delete')
+        ->waitForReload();
+
+    expect(Event::withTrashed()->find($event->id)->trashed())->toBeTrue();
+});
+```
+
+### Training Management Browser Tests
+
+```php
+// tests/Browser/Filament/TrainingManagementTest.php
+
+it('can create a training with price', function () {
+    $admin = User::factory()->create();
+
+    visit(route('filament.admin.resources.trainings.create'))
+        ->loginAs($admin)
+        ->type('title.en', 'Advanced Dental Techniques')
+        ->type('description.en', 'Professional development course')
+        ->type('trainer_name', 'Dr. Expert')
+        ->type('duration', '120')
+        ->type('price', '5000')
+        ->click('Create')
+        ->waitForReload();
+
+    expect(Training::latest()->first()->price)->toBe(5000);
+});
+
+it('can manage training reviews via relation manager', function () {
+    $admin = User::factory()->create();
+    $training = Training::factory()->create();
+    $review = Review::factory()->create([
+        'reviewable_type' => Training::class,
+        'reviewable_id' => $training->id,
+        'is_approved' => false,
+    ]);
+
+    visit(route('filament.admin.resources.trainings.edit', $training))
+        ->loginAs($admin)
+        ->assertSee('Reviews')
+        ->assertSee($review->reviewer_name);
+});
+```
+
+### Doctor Management Browser Tests
+
+```php
+// tests/Browser/Filament/DoctorManagementTest.php
+
+it('can list doctors', function () {
+    $admin = User::factory()->create();
+    Doctor::factory()->count(3)->create();
+
+    visit(route('filament.admin.resources.doctors.index'))
+        ->loginAs($admin)
+        ->assertSee('Doctors');
+});
+
+it('can create a doctor with translatable fields', function () {
+    $admin = User::factory()->create();
+
+    visit(route('filament.admin.resources.doctors.create'))
+        ->loginAs($admin)
+        ->type('name.en', 'Dr. John Smith')
+        ->type('name.ar', 'د. جون سميث')
+        ->type('name.fr', 'Dr. Jean Smith')
+        ->type('specialty.en', 'Orthodontics')
+        ->type('email', 'john@clinic.com')
+        ->type('phone', '1234567890')
+        ->click('Create')
+        ->waitForReload();
+
+    expect(Doctor::latest()->first())->not->toBeNull();
+});
+
+it('can manage doctor services (many-to-many)', function () {
+    $admin = User::factory()->create();
+    $doctor = Doctor::factory()->create();
+    $service = Service::factory()->create();
+
+    visit(route('filament.admin.resources.doctors.edit', $doctor))
+        ->loginAs($admin)
+        ->assertSee('Services');
+    // Verify service attachment UI is present
+});
+```
+
+### Patient Management Browser Tests
+
+```php
+// tests/Browser/Filament/PatientManagementTest.php
+
+it('can list patients', function () {
+    $admin = User::factory()->create();
+    Patient::factory()->count(5)->create();
+
+    visit(route('filament.admin.resources.patients.index'))
+        ->loginAs($admin)
+        ->assertSee('Patients');
+});
+
+it('can view patient details with email verification status', function () {
+    $admin = User::factory()->create();
+    $verifiedPatient = Patient::factory()->create(['email_verified_at' => now()]);
+    $unverifiedPatient = Patient::factory()->create(['email_verified_at' => null]);
+
+    visit(route('filament.admin.resources.patients.view', $verifiedPatient))
+        ->loginAs($admin)
+        ->assertSee('Verified');
+
+    visit(route('filament.admin.resources.patients.view', $unverifiedPatient))
+        ->loginAs($admin)
+        ->assertSee('Not Verified');
+});
+```
+
+### Service Management Browser Tests
+
+```php
+// tests/Browser/Filament/ServiceManagementTest.php
+
+it('can create a service with translatable name', function () {
+    $admin = User::factory()->create();
+
+    visit(route('filament.admin.resources.services.create'))
+        ->loginAs($admin)
+        ->type('name.en', 'Teeth Whitening')
+        ->type('name.ar', 'تبييض الأسنان')
+        ->type('name.fr', 'Blanchiment des dents')
+        ->type('price', '3000')
+        ->type('duration', '60')
+        ->click('Create')
+        ->waitForReload();
+
+    expect(Service::latest()->first())->not->toBeNull();
+});
+```
+
+### Testimonial Management Browser Tests
+
+```php
+// tests/Browser/Filament/TestimonialManagementTest.php
+
+it('can toggle testimonial publish status', function () {
+    $admin = User::factory()->create();
+    $testimonial = Testimonial::factory()->create(['is_published' => false]);
+
+    visit(route('filament.admin.resources.testimonials.index'))
+        ->loginAs($admin)
+        ->assertSee($testimonial->patient_name);
+    // Verify publish toggle action is available
+});
+```
+
+---
+
+## 9.6 — API Response Convention Tests
+
+Test that API responses follow the translation and media conventions from step-10.
+
+```php
+// tests/Feature/Api/Conventions/TranslatableResponseTest.php
+
+it('returns all locales for translatable fields on doctors', function () {
+    $doctor = Doctor::factory()->create([
+        'name' => ['en' => 'Dr. Smith', 'ar' => 'د. سميث', 'fr' => 'Dr. Forgeron'],
+    ]);
+
+    $this->getJson('/api/v1/doctors')
+        ->assertOk()
+        ->assertJsonStructure(['data' => ['data' => [['name' => ['en', 'ar', 'fr']]]]]);
+});
+
+it('returns all locales for translatable fields on services', function () {
+    $service = Service::factory()->create([
+        'name' => ['en' => 'Cleaning', 'ar' => 'تنظيف', 'fr' => 'Nettoyage'],
+    ]);
+
+    $this->getJson('/api/v1/services')
+        ->assertOk()
+        ->assertJsonStructure(['data' => ['data' => [['name' => ['en', 'ar', 'fr']]]]]);
+});
+
+it('returns all locales for translatable fields on events', function () {
+    $event = Event::factory()->create();
+
+    $this->getJson('/api/v1/events')
+        ->assertOk()
+        ->assertJsonStructure(['data' => ['data' => [['name' => ['en', 'ar', 'fr'], 'location' => ['en', 'ar', 'fr']]]]]);
+});
+
+it('returns error messages in requested locale', function () {
+    $this->withHeader('Accept-Language', 'ar')
+        ->postJson('/api/v1/patient/auth/login', [])
+        ->assertStatus(422);
+    // Verify validation messages are in Arabic
+});
+```
+
+```php
+// tests/Feature/Api/Conventions/MediaResponseTest.php
+
+it('returns doctor image with original and thumb conversions', function () {
+    $doctor = Doctor::factory()->create();
+    // Attach a media file to doctor_photo collection
+    $doctor->addMedia(UploadedFile::fake()->image('photo.jpg'))->toMediaCollection('doctor_photo');
+
+    $this->getJson('/api/v1/doctors')
+        ->assertOk()
+        ->assertJsonStructure(['data' => ['data' => [['image' => ['original', 'thumb']]]]]);
+});
+
+it('returns null image when no media attached', function () {
+    $doctor = Doctor::factory()->create();
+
+    $this->getJson('/api/v1/doctors')
+        ->assertOk()
+        ->assertJsonPath('data.data.0.image', null);
+});
+
+it('returns event gallery with original and thumb per image', function () {
+    $event = Event::factory()->create();
+    $event->addMedia(UploadedFile::fake()->image('pic1.jpg'))->toMediaCollection('gallery');
+    $event->addMedia(UploadedFile::fake()->image('pic2.jpg'))->toMediaCollection('gallery');
+
+    $this->getJson("/api/v1/events/{$event->id}")
+        ->assertOk()
+        ->assertJsonStructure(['data' => ['gallery' => [['id', 'original', 'thumb']]]]);
+});
+```
+
+---
+
+## 9.7 — Dashboard Widget Tests
+
+```php
+// tests/Browser/Filament/DashboardTest.php
+
+it('displays all dashboard widgets', function () {
+    $admin = User::factory()->create();
+
+    visit(route('filament.admin.pages.dashboard'))
+        ->loginAs($admin)
+        ->assertSee('Total Patients')
+        ->assertSee("Today's Appointments")
+        ->assertSee('Pending Actions');
+});
+
+it('shows correct stats in overview widget', function () {
+    $admin = User::factory()->create();
+    Patient::factory()->count(10)->create();
+    Appointment::factory()->count(3)->create(['from' => today()->setHour(10), 'status' => 'confirmed']);
+    Appointment::factory()->count(2)->create(['status' => 'pending']);
+
+    visit(route('filament.admin.pages.dashboard'))
+        ->loginAs($admin)
+        ->assertSee('10')   // patients
+        ->assertSee('3')    // today appointments
+        ->assertSee('2');   // pending
+});
+
+it('today appointments table shows correct appointments', function () {
+    $admin = User::factory()->create();
+    $todayAppt = Appointment::factory()->create(['from' => today()->setHour(14)]);
+    $tomorrowAppt = Appointment::factory()->create(['from' => tomorrow()->setHour(10)]);
+
+    visit(route('filament.admin.pages.dashboard'))
+        ->loginAs($admin)
+        ->assertSee($todayAppt->patient->full_name)
+        ->assertDontSee($tomorrowAppt->patient->full_name);
+});
+```
+
+---
+
+## 9.8 — Factories Needed
 
 Create or update factories for test data:
 
@@ -521,10 +873,14 @@ Create or update factories for test data:
 | `ReviewFactory` | `database/factories/ReviewFactory.php` — **new** |
 | `EventFactory` | `database/factories/EventFactory.php` — update for new fields |
 | `TrainingFactory` | `database/factories/TrainingFactory.php` — update for price |
+| `UserFactory` | `database/factories/UserFactory.php` — ensure admin user factory exists |
+| `DoctorFactory` | `database/factories/DoctorFactory.php` — ensure translatable fields are set |
+| `ServiceFactory` | `database/factories/ServiceFactory.php` — ensure translatable name |
+| `TestimonialFactory` | `database/factories/TestimonialFactory.php` — ensure it exists |
 
 ---
 
-## 9.6 — Test Helpers
+## 9.9 — Test Helpers
 
 ### Existing Helpers (Keep)
 - `tests/Support/DoctorSchedulingHelpers.php` — Zap scheduling helpers for booking tests
@@ -536,7 +892,7 @@ Create or update factories for test data:
 
 ---
 
-## 9.7 — Running Tests
+## 9.10 — Running Tests
 
 ```bash
 # Run all tests
