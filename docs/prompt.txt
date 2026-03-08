@@ -1,0 +1,34 @@
+You are working on a Laravel 11+ backend project (Chenaker Smile Maker - dental clinic management system) using Filament v3 admin panel, Sanctum auth, Zap scheduling, Spatie Media Library, and Spatie Translatable (ar, en, fr).
+
+Read the step-by-step guide in `docs/guide/` (step-01 through step-09) carefully. Each step is a self-contained document with exact specifications for what to build. Also read `docs/new/events.txt` and `docs/new/training(learning).txt` for the required API fields.
+
+Execute the steps IN ORDER:
+
+**Step 1** (step-01-overview.md): Understand the current codebase. Read existing models, controllers, routes, actions, and tests to understand patterns before writing any code.
+
+**Step 2** (step-02-database-models.md): Create all 7 migrations, new models (PatientNotification, UrgentBooking, Review), update existing models (Event, Training, Patient, Appointment), and create new enums (UrgentBookingStatus, PatientNotificationType).
+
+**Step 3** (step-03-patient-appointments-api.md): Build patient appointment management API — list, show, request cancellation, request reschedule. Create the controller, 4 action classes, add routes. Patient can only access their own appointments. Cancellation and reschedule are REQUEST-based (admin must approve).
+
+**Step 4** (step-04-notifications.md): Build the dual notification system. Admin/doctor: Filament database notifications (5 notification classes). Patient: custom translatable patient_notifications with service, templates, and full REST API (list, unread count, mark read, mark all read, delete). Wire up notification dispatch in all relevant actions. Enable databaseNotifications() in Filament panel provider.
+
+**Step 5** (step-05-admin-appointment-management.md): Upgrade the Filament AppointmentResource with full lifecycle management — confirm, reject, complete appointments. Handle cancellation/reschedule requests with approve/reject actions. Add filters (status, doctor, date range, change requests). Add dashboard widgets for pending counts. All admin actions must dispatch patient notifications.
+
+**Step 6** (step-06-email-verification.md): Implement patient email verification with CUSTOM Blade views (not default Laravel). Create base email layout, verify-email template, VerifyEmailMail mailable, send/verify actions. Add verify-email and resend-verification API endpoints. Add middleware to gate booking behind email verification. Send verification email on registration.
+
+**Step 7** (step-07-urgent-booking.md): Build the urgent booking system (completely separate from regular appointments). New model, new enum, new controller with submit/list/show endpoints. No auth required for submit (visitors can use it). Filament resource with accept (assign doctor + schedule time), reject, complete actions. Dashboard widget. Priority admin notifications.
+
+**Step 8** (step-08-event-training-updates.md): Fix Event model (implement HasMedia — currently broken), add missing fields (time, speakers, about_event, what_to_expect), add status accessor and type filter to API. Update Training model with price field, multiple images collection, reviews relation. Create Review model. Update API responses to match docs/new specs. Update Filament resources.
+
+**Step 9** (step-09-tests.md): Write comprehensive tests for ALL features. Use Pest syntax. Feature tests for every API endpoint (auth, profile, appointments, booking, events, trainings, testimonials, notifications, urgent booking). Unit tests for actions and services. Browser tests using pestphp/pest-plugin-browser for the Filament admin panel (appointment management, urgent booking management, dashboard widgets). Create all needed factories.
+
+IMPORTANT CONVENTIONS:
+- Follow the existing Action pattern (app/Actions/) for all business logic — controllers should be thin.
+- Use BaseController's sendResponse/sendError for all API responses.
+- All translatable fields must support ar, en, fr locales.
+- Patient notifications use translatable JSON arrays (NOT Laravel's notification system).
+- Admin notifications use Filament's database notification system.
+- Use Scramble attributes (#[Group], #[BodyParameter], #[QueryParameter]) on all new API controllers/methods.
+- The booking middleware `auth:sanctum, access` pattern is used for authenticated patient routes.
+- Run `php artisan migrate` after creating migrations.
+- Commit after completing each step.
