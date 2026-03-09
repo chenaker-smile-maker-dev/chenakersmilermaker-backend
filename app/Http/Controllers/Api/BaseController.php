@@ -5,17 +5,39 @@ namespace App\Http\Controllers\Api;
 class BaseController
 {
     /**
-     * success response method.
+     * Build a multilingual message array from a translation key or raw string.
      *
-     * @return \Illuminate\Http\Response
+     * If a translation key (e.g. 'api.login_success') is passed it is resolved
+     * in all three supported locales. A plain string is returned as-is for every
+     * locale.
      */
-    public function sendResponse($result = [], $message = 'Success', $code = 200)
+    private function buildMessage(string $key, array $replace = []): array
+    {
+        $locales = ['en', 'ar', 'fr'];
+        $result  = [];
+
+        foreach ($locales as $locale) {
+            $translated = trans($key, $replace, $locale);
+            // trans() returns the key itself when no translation is found
+            $result[$locale] = ($translated !== $key) ? $translated : $key;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Success response.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sendResponse($result = [], string $message = 'api.success', int $code = 200, array $replace = [])
     {
         $response = [
             'success' => true,
-            'message' => $message,
-            'data' => $result
+            'message' => $this->buildMessage($message, $replace),
+            'data'    => $result,
         ];
+
         if (empty($result)) {
             unset($response['data']);
         }
@@ -24,16 +46,16 @@ class BaseController
     }
 
     /**
-     * return error response.
+     * Error response.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function sendError($error, $errorMessages = [], $code = 404)
+    public function sendError(string $error, array $errorMessages = [], int $code = 404, array $replace = [])
     {
         $response = [
             'success' => false,
-            'message' => $error,
-            'data' => $errorMessages
+            'message' => $this->buildMessage($error, $replace),
+            'data'    => $errorMessages,
         ];
 
         if (empty($errorMessages)) {
@@ -44,16 +66,16 @@ class BaseController
     }
 
     /**
-     * return error response.
+     * Validation error response.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function sendValidationError($errorMessages = [])
+    public function sendValidationError(array $errorMessages = [])
     {
         $response = [
             'success' => false,
-            'message' => 'Validation Error.',
-            'data' => $errorMessages
+            'message' => $this->buildMessage('api.validation_error'),
+            'data'    => $errorMessages,
         ];
 
         if (empty($errorMessages)) {

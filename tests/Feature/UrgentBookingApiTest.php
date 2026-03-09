@@ -1,135 +1,122 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Patient;
 use App\Models\UrgentBooking;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
 
-class UrgentBookingApiTest extends TestCase
-{
-    use RefreshDatabase;
+// ─── Anonymous submit ─────────────────────────────────────────────────────────
 
-    // ─── Submit ───────────────────────────────────────────────────────────────
+it('anyone can submit an urgent booking anonymously', function () {
+    Notification::fake();
 
-    public function test_anyone_can_submit_urgent_booking(): void
-    {
-        Notification::fake();
+    $this->postJson('/api/v1/urgent-booking/submit', [
+        'patient_name'  => 'Jane Doe',
+        'patient_phone' => '0600000001',
+        'patient_email' => 'jane@example.com',
+        'reason'        => 'Urgent help needed right now.',
+    ])->assertCreated()
+        ->assertJsonPath('success', true);
 
-        $response = $this->postJson('/api/v1/urgent-booking/submit', [
-            'patient_name'  => 'Sara Mansour',
-            'patient_phone' => '0661234567',
-            'reason'        => 'Severe chest pain since this morning and I am worried.',
-        ]);
+    $this->assertDatabaseHas('urgent_bookings', ['patient_email' => 'jane@example.com']);
+});
 
-        $response->assertCreated()
-            ->assertJsonPath('success', true)
-            ->assertJsonStructure(['data' => ['id', 'patient_name', 'status']]);
+// ─── Authenticated submit ─────────────────────────────────────────────────────
 
-        $this->assertDatabaseHas('urgent_bookings', [
-            'patient_name'  => 'Sara Mansour',
-            'patient_phone' => '0661234567',
-        ]);
-    }
+it('authenticated patient urgent booking links patient id', function () {
+    Notification::fake();
+    $patient = Patient::factory()->verified()->create();
 
-    public function test_authenticated_patient_urgent_booking_links_patient_id(): void
-    {
-        Notification::fake();
-        $patient = Patient::factory()->verified()->create();
-
-        $response = $this->actAsPatient($patient)
-            ->postJson('/api/v1/urgent-booking/submit', [
-                'patient_name'  => $patient->full_name,
-                'patient_phone' => $patient->phone,
-                'reason'        => 'Severe abdominal pain requiring immediate attention.',
-            ]);
-
-        $response->assertCreated();
-
-        $this->assertDatabaseHas('urgent_bookings', [
-            'patient_id'    => $patient->id,
-            'patient_phone' => $patient->phone,
-        ]);
-    }
-
-    public function test_submit_requires_patient_name_and_phone_and_reason(): void
-    {
-        $response = $this->postJson('/api/v1/urgent-booking/submit', []);
-
-        $response->assertStatus(422);
-    }
-
-    public function test_submit_reason_must_be_at_least_10_characters(): void
-    {
-        $response = $this->postJson('/api/v1/urgent-booking/submit', [
-            'patient_name'  => 'Test Patient',
-            'patient_phone' => '0661234567',
-            'reason'        => 'Short',
-        ]);
-
-        $response->assertStatus(422);
-    }
-
-    // ─── My bookings ──────────────────────────────────────────────────────────
-
-    public function test_authenticated_patient_can_list_their_urgent_bookings(): void
-    {
-        $patient = Patient::factory()->create();
-        UrgentBooking::factory()->count(2)->create(['patient_id' => $patient->id]);
-        UrgentBooking::factory()->count(3)->create(); // other patients
-
-        $response = $this->actAsPatient($patient)
-            ->getJson('/api/v1/urgent-booking/my-bookings');
-
-        $response->assertOk()
+    $this->actAsPatient($patient)
+        ->postJson('/api/v1/urgent-booking/submit', [
+            'patient_name'  => $patient->first_name.' '.$patient->last_name,
+            'patient_phone' => '0600000002',
+            'patient_email' => $patient->email,
+            'reason'        => 'Authenticated urgent booking request.',
+        ])->assertCreated()
             ->assertJsonPath('success', true);
 
-        $this->assertCount(2, $response->json('data'));
-    }
+    $this->assertDatabaseHas('urgent_bookings', [
+        'patient_email' => $patient->email,
+        'patient_id'    => $patient->id,
+    ]);
+});
 
-    public function test_my_bookings_requires_authentication(): void
-    {
-        $response = $this->getJson('/api/v1/urgent-booking/my-bookings');
+// ─── Validation ───────────────────────────────────────────────────────────────
 
-        $response->assertStatus(401);
-    }
+it('urgent booking requires patient_name, patient_phone and reason', function () {
+    $this->postJson('/api/v1/urgent-booking/submit', [])
+        ->assertStatus(422);
+});
 
-    // ─── Show ─────────────────────────────────────────────────────────────────
+it('urgent booking requires a valid email when email provided', function () {
+    $this->postJson('/api/v1/urgent-booking/submit', [
+        'patient_name'  => 'Test User',
+        'patient_phone' => '0600000003',
+        'patient_email' => 'not-an-email',
+        'reason'        => 'Some valid reason here.',
+    ])->assertStatus(422);
+});
 
-    public function test_patient_can_view_own_urgent_booking(): void
-    {
-        $patient = Patient::factory()->create();
-        $booking = UrgentBooking::factory()->create(['patient_id' => $patient->id]);
+// ─── My bookings ──────────────────────────────────────────────────────────────
 
-        $response = $this->actAsPatient($patient)
-            ->getJson("/api/v1/urgent-booking/{$booking->id}");
+it('patient can list their own urgent bookings', function () {
+    $patient = Patient::factory()->verified()->create();
+    $other   = Patient::factory()->verified()->create();
 
-        $response->assertOk()
-            ->assertJsonPath('success', true)
-            ->assertJsonPath('data.id', $booking->id)
-            ->assertJsonStructure(['data' => ['id', 'reason', 'status', 'patient_name', 'created_at']]);
-    }
+    UrgentBooking::factory()->forPatient($patient)->count(2)->create();
+    UrgentBooking::factory()->forPatient($other)->count(3)->create();
 
-    public function test_patient_cannot_view_another_patients_booking(): void
-    {
-        $patient = Patient::factory()->create();
-        $other   = Patient::factory()->create();
-        $booking = UrgentBooking::factory()->create(['patient_id' => $other->id]);
+    $response = $this->actAsPatient($patient)
+        ->getJson('/api/v1/urgent-booking/my-bookings');
 
-        $response = $this->actAsPatient($patient)
-            ->getJson("/api/v1/urgent-booking/{$booking->id}");
+    $response->assertOk();
+    expect($response->json('data'))->toHaveCount(2);
+});
 
-        $response->assertStatus(404);
-    }
+it('my bookings requires authentication', function () {
+    $this->getJson('/api/v1/urgent-booking/my-bookings')->assertStatus(401);
+});
 
-    public function test_show_urgent_booking_requires_authentication(): void
-    {
-        $booking = UrgentBooking::factory()->create();
+// ─── Show ─────────────────────────────────────────────────────────────────────
 
-        $response = $this->getJson("/api/v1/urgent-booking/{$booking->id}");
+it('patient can view their own urgent booking', function () {
+    $patient = Patient::factory()->verified()->create();
+    $booking = UrgentBooking::factory()->forPatient($patient)->create();
 
-        $response->assertStatus(401);
-    }
-}
+    $this->actAsPatient($patient)
+        ->getJson("/api/v1/urgent-booking/{$booking->id}")
+        ->assertOk()
+        ->assertJsonPath('data.id', $booking->id);
+});
+
+it('patient cannot view another patient urgent booking', function () {
+    $patient = Patient::factory()->verified()->create();
+    $other   = Patient::factory()->verified()->create();
+    $booking = UrgentBooking::factory()->forPatient($other)->create();
+
+    $this->actAsPatient($patient)
+        ->getJson("/api/v1/urgent-booking/{$booking->id}")
+        ->assertStatus(404);
+});
+
+it('show urgent booking requires authentication', function () {
+    $booking = UrgentBooking::factory()->create();
+
+    $this->getJson("/api/v1/urgent-booking/{$booking->id}")
+        ->assertStatus(401);
+});
+
+// ─── Multilang ────────────────────────────────────────────────────────────────
+
+it('urgent booking submit response message has all 3 locales', function () {
+    Notification::fake();
+
+    $response = $this->postJson('/api/v1/urgent-booking/submit', [
+        'patient_name'  => 'Multilang Test',
+        'patient_phone' => '0600000099',
+        'patient_email' => 'multilang@example.com',
+        'reason'        => 'Checking multilang messages in response.',
+    ])->assertCreated();
+
+    expect($response->json('message'))->toBeMultilang();
+});

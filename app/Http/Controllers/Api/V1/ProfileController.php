@@ -27,7 +27,7 @@ class ProfileController extends BaseController
         /** @var \App\Models\Patient $patient */
         $patient = $request->user();
 
-        return $this->sendResponse(new PatientResource($patient), 'Patient retrieved successfully.');
+        return $this->sendResponse(new PatientResource($patient), 'api.success');
     }
 
     /**
@@ -47,7 +47,7 @@ class ProfileController extends BaseController
 
         $updatedPatient = $action->handle($patient, $request->validated());
 
-        return $this->sendResponse(new PatientResource($updatedPatient), 'Profile updated successfully.');
+        return $this->sendResponse(new PatientResource($updatedPatient), 'api.profile_updated');
     }
 
     /**
@@ -68,6 +68,6 @@ class ProfileController extends BaseController
 
         return $this->sendResponse([
             'token' => $accessToken->plainTextToken,
-        ], 'Password updated successfully. Please use the new access token.');
+        ], 'api.password_updated_new_token');
     }
 }

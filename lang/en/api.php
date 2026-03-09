@@ -28,4 +28,8 @@ return [
     'unauthorized' => 'Unauthorized.',
     'slot_unavailable' => 'The requested time slot is not available.',
     'success' => 'Success.',
+    'invalid_credentials' => 'Invalid credentials.',
+    'token_refreshed' => 'Access token refreshed successfully.',
+    'validation_error' => 'Validation Error.',
+    'password_updated_new_token' => 'Password updated successfully. Please use the new access token.',
 ];

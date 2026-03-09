@@ -63,7 +63,7 @@ class PatientAppointmentController extends BaseController
 
         try {
             $data = $action->handle($appointment, $request->user(), $request->reason);
-            return $this->sendResponse($data, __('api.cancellation_submitted'));
+            return $this->sendResponse($data, 'api.cancellation_submitted');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), [], $e->getCode() ?: 422);
         }
@@ -93,7 +93,7 @@ class PatientAppointmentController extends BaseController
                 $request->new_date,
                 $request->new_start_time
             );
-            return $this->sendResponse($data, __('api.reschedule_submitted'));
+            return $this->sendResponse($data, 'api.reschedule_submitted');
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), [], $e->getCode() ?: 422);
         }

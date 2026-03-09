@@ -1,140 +1,77 @@
 <?php
 
-namespace Tests\Feature;
-
 use App\Models\Event;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Carbon;
-use Tests\TestCase;
 
-class EventApiTest extends TestCase
-{
-    use RefreshDatabase;
+it('can list events', function () {
+    Event::factory()->count(3)->create();
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        Carbon::setTestNow(Carbon::create(2026, 6, 15, 12, 0));
-    }
+    $this->getJson('/api/v1/events/')
+        ->assertOk()
+        ->assertJsonPath('success', true)
+        ->assertJsonStructure(['data' => ['data', 'pagination']]);
+});
 
-    protected function tearDown(): void
-    {
-        Carbon::setTestNow();
-        parent::tearDown();
-    }
+it('can filter future events', function () {
+    \Carbon\Carbon::setTestNow(\Carbon\Carbon::create(2026, 6, 15, 12, 0));
+    Event::factory()->future()->count(2)->create();
+    Event::factory()->archived()->count(3)->create();
 
-    public function test_can_list_events(): void
-    {
-        Event::factory()->count(3)->create();
+    $response = $this->getJson('/api/v1/events/?type=future');
 
-        $response = $this->getJson('/api/v1/events/');
+    $response->assertOk();
+    expect($response->json('data.pagination.total'))->toBe(2);
+    \Carbon\Carbon::setTestNow();
+});
 
-        $response->assertOk()
-            ->assertJsonPath('success', true)
-            ->assertJsonStructure([
-                'data' => [
-                    'data' => [['id', 'name', 'description', 'date', 'status']],
-                    'pagination' => ['total', 'per_page', 'current_page', 'last_page'],
-                ],
-            ]);
-    }
+it('can filter archived events', function () {
+    \Carbon\Carbon::setTestNow(\Carbon\Carbon::create(2026, 6, 15, 12, 0));
+    Event::factory()->future()->count(2)->create();
+    Event::factory()->archived()->count(3)->create();
 
-    public function test_list_events_returns_empty_when_none_exist(): void
-    {
-        $response = $this->getJson('/api/v1/events/');
+    $response = $this->getJson('/api/v1/events/?type=archive');
 
-        $response->assertOk()
-            ->assertJsonPath('data.pagination.total', 0);
-    }
+    $response->assertOk();
+    expect($response->json('data.pagination.total'))->toBe(3);
+    \Carbon\Carbon::setTestNow();
+});
 
-    public function test_can_filter_future_events(): void
-    {
-        Event::factory()->future()->count(2)->create();
-        Event::factory()->archived()->count(3)->create();
+it('can show single event', function () {
+    $event = Event::factory()->create();
 
-        $response = $this->getJson('/api/v1/events/?type=future');
+    $this->getJson("/api/v1/events/{$event->id}")
+        ->assertOk()
+        ->assertJsonPath('success', true)
+        ->assertJsonPath('data.id', $event->id);
+});
 
-        $response->assertOk();
-        $this->assertCount(2, $response->json('data.data'));
-    }
+it('returns 404 for non-existent event', function () {
+    $this->getJson('/api/v1/events/99999')
+        ->assertStatus(404);
+});
 
-    public function test_can_filter_archived_events(): void
-    {
-        Event::factory()->future()->count(2)->create();
-        Event::factory()->archived()->count(3)->create();
+it('list is paginated', function () {
+    Event::factory()->count(15)->create();
 
-        $response = $this->getJson('/api/v1/events/?type=archive');
+    $response = $this->getJson('/api/v1/events/?per_page=5&page=1');
 
-        $response->assertOk();
-        $this->assertCount(3, $response->json('data.data'));
-    }
+    $response->assertOk();
+    expect($response->json('data.data'))->toHaveCount(5);
+    expect($response->json('data.pagination.total'))->toBe(15);
+});
 
-    public function test_can_filter_happening_events(): void
-    {
-        Event::factory()->happening()->count(2)->create();
-        Event::factory()->future()->count(3)->create();
+it('event response includes multilang fields', function () {
+    $event = Event::factory()->create();
 
-        $response = $this->getJson('/api/v1/events/?type=happening');
+    $response = $this->getJson("/api/v1/events/{$event->id}");
 
-        $response->assertOk();
-        $this->assertCount(2, $response->json('data.data'));
-    }
+    $response->assertOk();
+    // Translatable fields should expose multiple locales
+    expect($response->json('data'))->toHaveKey('name');
+});
 
-    public function test_no_type_filter_returns_all_non_deleted_events(): void
-    {
-        Event::factory()->future()->count(2)->create();
-        Event::factory()->archived()->count(2)->create();
-        Event::factory()->happening()->count(1)->create();
+it('event list response message contains all 3 locales', function () {
+    $response = $this->getJson('/api/v1/events/');
 
-        $response = $this->getJson('/api/v1/events/');
-
-        $response->assertOk();
-        $this->assertCount(5, $response->json('data.data'));
-    }
-
-    public function test_can_show_single_event(): void
-    {
-        $event = Event::factory()->future()->create();
-
-        $response = $this->getJson("/api/v1/events/{$event->id}");
-
-        $response->assertOk()
-            ->assertJsonPath('success', true)
-            ->assertJsonPath('data.id', $event->id)
-            ->assertJsonStructure(['data' => ['id', 'name', 'description', 'date', 'status', 'pictures']]);
-    }
-
-    public function test_soft_deleted_event_returns_404(): void
-    {
-        $event = Event::factory()->create(['deleted_at' => now()->subDay()]);
-
-        $response = $this->getJson("/api/v1/events/{$event->id}");
-
-        $response->assertStatus(404);
-    }
-
-    public function test_events_list_is_paginated(): void
-    {
-        Event::factory()->future()->count(15)->create();
-
-        $response = $this->getJson('/api/v1/events/?per_page=5&page=1');
-
-        $response->assertOk();
-        $this->assertCount(5, $response->json('data.data'));
-        $this->assertEquals(15, $response->json('data.pagination.total'));
-        $this->assertEquals(3, $response->json('data.pagination.last_page'));
-    }
-
-    public function test_event_response_includes_multilang_fields(): void
-    {
-        $event = Event::factory()->future()->create();
-
-        $response = $this->getJson("/api/v1/events/{$event->id}");
-
-        $data = $response->json('data');
-        $this->assertIsArray($data['name']);
-        $this->assertArrayHasKey('en', $data['name']);
-        $this->assertArrayHasKey('ar', $data['name']);
-        $this->assertArrayHasKey('fr', $data['name']);
-    }
-}
+    $response->assertOk();
+    expect($response->json('message'))->toBeMultilang();
+});

@@ -4,34 +4,52 @@ namespace Database\Factories;
 
 use App\Enums\PatientNotificationType;
 use App\Models\Patient;
-use App\Models\PatientNotification;
+use App\Notifications\Patient\PatientGenericNotification;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Notifications\DatabaseNotification;
 
+/**
+ * Factory for Laravel's standard DatabaseNotification (notifications table).
+ * Target: \Illuminate\Notifications\DatabaseNotification
+ */
 class PatientNotificationFactory extends Factory
 {
-    protected $model = PatientNotification::class;
+    protected $model = DatabaseNotification::class;
 
     public function definition(): array
     {
         $type = $this->faker->randomElement(PatientNotificationType::cases());
 
         return [
-            'patient_id' => Patient::factory(),
-            'type'       => $type->value,
-            'title'      => [
-                'en' => $this->faker->sentence(4),
-                'ar' => $this->faker->sentence(4),
-                'fr' => $this->faker->sentence(4),
+            'id'               => $this->faker->uuid(),
+            'type'             => PatientGenericNotification::class,
+            'notifiable_type'  => Patient::class,
+            'notifiable_id'    => Patient::factory(),
+            'data'             => [
+                'type'       => $type->value,
+                'title'      => [
+                    'en' => $this->faker->sentence(4),
+                    'ar' => $this->faker->sentence(4),
+                    'fr' => $this->faker->sentence(4),
+                ],
+                'body'       => [
+                    'en' => $this->faker->sentence(10),
+                    'ar' => $this->faker->sentence(10),
+                    'fr' => $this->faker->sentence(10),
+                ],
+                'data'       => null,
+                'action_url' => null,
             ],
-            'body'       => [
-                'en' => $this->faker->sentence(10),
-                'ar' => $this->faker->sentence(10),
-                'fr' => $this->faker->sentence(10),
-            ],
-            'data'       => null,
-            'action_url' => null,
-            'read_at'    => null,
+            'read_at'          => null,
         ];
+    }
+
+    public function forPatient(Patient $patient): static
+    {
+        return $this->state([
+            'notifiable_type' => Patient::class,
+            'notifiable_id'   => $patient->id,
+        ]);
     }
 
     public function read(): static

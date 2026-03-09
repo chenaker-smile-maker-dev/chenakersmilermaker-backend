@@ -64,6 +64,6 @@ class TrainingController extends BaseController
 
         $action->handle($training, $request->user(), $validated);
 
-        return $this->sendResponse([], __('api.review_submitted'), 201);
+        return $this->sendResponse([], 'api.review_submitted', 201);
     }
 }

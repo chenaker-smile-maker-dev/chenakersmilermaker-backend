@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravolt\Avatar\Avatar;
 use Spatie\MediaLibrary\HasMedia;
@@ -16,7 +17,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class Patient extends Authenticatable implements HasMedia
 {
     use HasApiTokens;
-    use HasFactory, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes;
     use InteractsWithMedia;
 
     protected $fillable = [
@@ -91,11 +92,6 @@ class Patient extends Authenticatable implements HasMedia
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
-    }
-
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(PatientNotification::class)->orderByDesc('created_at');
     }
 
     public function urgentBookings(): HasMany

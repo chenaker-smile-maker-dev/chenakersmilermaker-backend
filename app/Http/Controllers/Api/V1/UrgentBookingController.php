@@ -37,7 +37,7 @@ class UrgentBookingController extends BaseController
             'patient_phone' => $booking->patient_phone,
             'status' => $booking->status->value,
             'created_at' => $booking->created_at->toIso8601String(),
-        ], __('api.urgent_booking_submitted'), 201);
+        ], 'api.urgent_booking_submitted', 201);
     }
 
     /**
@@ -49,7 +49,7 @@ class UrgentBookingController extends BaseController
 
         return $this->sendResponse(
             $action->handle($patient),
-            __('api.success')
+            'api.success'
         );
     }
 
@@ -61,7 +61,7 @@ class UrgentBookingController extends BaseController
         $patient = $request->user();
 
         if ($urgentBooking->patient_id !== $patient->id) {
-            return $this->sendError(__('api.not_found'), [], 404);
+            return $this->sendError('api.not_found', [], 404);
         }
 
         return $this->sendResponse([

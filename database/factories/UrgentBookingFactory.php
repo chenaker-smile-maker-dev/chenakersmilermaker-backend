@@ -49,6 +49,15 @@ class UrgentBookingFactory extends Factory
         return $this->state(['status' => UrgentBookingStatus::COMPLETED]);
     }
 
+    public function forPatient(Patient $patient): static
+    {
+        return $this->state([
+            'patient_id'    => $patient->id,
+            'patient_name'  => $patient->first_name . ' ' . $patient->last_name,
+            'patient_email' => $patient->email,
+        ]);
+    }
+
     public function withoutPatient(): static
     {
         return $this->state(['patient_id' => null]);

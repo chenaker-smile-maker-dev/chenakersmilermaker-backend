@@ -28,4 +28,8 @@ return [
     'unauthorized' => 'غير مصرح.',
     'slot_unavailable' => 'الموعد المطلوب غير متاح.',
     'success' => 'نجاح.',
+    'invalid_credentials' => 'بيانات الاعتماد غير صالحة.',
+    'token_refreshed' => 'تم تحديث رمز الوصول بنجاح.',
+    'validation_error' => 'خطأ في التحقق من صحة البيانات.',
+    'password_updated_new_token' => 'تم تحديث كلمة المرور بنجاح. يرجى استخدام رمز الوصول الجديد.',
 ];

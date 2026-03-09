@@ -28,4 +28,8 @@ return [
     'unauthorized' => 'Non autorisé.',
     'slot_unavailable' => 'Le créneau demandé n\'est pas disponible.',
     'success' => 'Succès.',
+    'invalid_credentials' => 'Identifiants invalides.',
+    'token_refreshed' => 'Jeton d\'accès actualisé avec succès.',
+    'validation_error' => 'Erreur de validation.',
+    'password_updated_new_token' => 'Mot de passe mis à jour avec succès. Veuillez utiliser le nouveau jeton d\'accès.',
 ];

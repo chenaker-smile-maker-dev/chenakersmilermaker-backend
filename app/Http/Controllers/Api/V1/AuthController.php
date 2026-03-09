@@ -74,7 +74,7 @@ class AuthController extends BaseController
         $data = $request->validated();
 
         $patient = $loginPatient->handle($data);
-        if (!$patient) return $this->sendError(error: 'Invalid credentials.', code: 401);
+        if (!$patient) return $this->sendError(error: 'api.invalid_credentials', code: 401);
 
         [$accessToken, $refreshToken] = $generateTokensForPatient->handle($patient);
 
@@ -82,7 +82,7 @@ class AuthController extends BaseController
             'token' => $accessToken->plainTextToken,
             'refresh_token' => $refreshToken->plainTextToken,
             'patient' => new PatientResource($patient),
-        ], 'Patient logged in successfully.');
+        ], 'api.login_success');
     }
 
     /**
@@ -96,7 +96,7 @@ class AuthController extends BaseController
         $patient = $request->user();
         $patient->tokens()->delete();
 
-        return $this->sendResponse(message: 'Patient logged out successfully.');
+        return $this->sendResponse(message: 'api.logout_success');
     }
 
     /**
@@ -112,7 +112,7 @@ class AuthController extends BaseController
 
         return $this->sendResponse([
             'token' => $accessToken->plainTextToken,
-        ], 'Access token refreshed successfully.');
+        ], 'api.token_refreshed');
     }
 
     /**
@@ -148,7 +148,7 @@ class AuthController extends BaseController
         $patient = $request->user();
 
         if ($patient->hasVerifiedEmail()) {
-            return $this->sendResponse([], __('api.email_already_verified'));
+            return $this->sendResponse([], 'api.email_already_verified');
         }
 
         // Rate limit check
@@ -156,11 +156,11 @@ class AuthController extends BaseController
             $patient->email_verification_sent_at &&
             $patient->email_verification_sent_at->addMinute()->isFuture()
         ) {
-            return $this->sendError(__('api.resend_too_soon'), [], 429);
+            return $this->sendError('api.resend_too_soon', [], 429);
         }
 
         $sendVerificationEmail->handle($patient);
 
-        return $this->sendResponse([], __('api.email_verification_sent'));
+        return $this->sendResponse([], 'api.email_verification_sent');
     }
 }

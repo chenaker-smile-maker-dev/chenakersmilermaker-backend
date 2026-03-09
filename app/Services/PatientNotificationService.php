@@ -3,12 +3,20 @@
 namespace App\Services;
 
 use App\Models\Patient;
-use App\Models\PatientNotification;
+use App\Notifications\Patient\PatientGenericNotification;
+use Illuminate\Notifications\DatabaseNotification;
 
 class PatientNotificationService
 {
     /**
-     * Send a notification to a patient.
+     * Send a multilingual database notification to a patient.
+     *
+     * Uses Laravel's standard Notifiable + database channel so the record is
+     * stored in the `notifications` table with notifiable_type = Patient::class.
+     *
+     * @param  array  $title  ['en' => ..., 'ar' => ..., 'fr' => ...]
+     * @param  array  $body   ['en' => ..., 'ar' => ..., 'fr' => ...]
+     * @param  array  $data   Extra payload stored under the 'data' key
      */
     public static function send(
         Patient $patient,
@@ -17,14 +25,10 @@ class PatientNotificationService
         array $body,
         array $data = [],
         ?string $actionUrl = null,
-    ): PatientNotification {
-        return PatientNotification::create([
-            'patient_id' => $patient->id,
-            'type' => $type,
-            'title' => $title,
-            'body' => $body,
-            'data' => $data,
-            'action_url' => $actionUrl,
-        ]);
+    ): ?DatabaseNotification {
+        $patient->notify(new PatientGenericNotification($type, $title, $body, $data, $actionUrl));
+
+        /** @var DatabaseNotification|null */
+        return $patient->notifications()->latest()->first();
     }
 }

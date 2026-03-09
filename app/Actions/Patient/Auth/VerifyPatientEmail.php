@@ -16,7 +16,7 @@ class VerifyPatientEmail
             ->first();
 
         if (!$patient) {
-            return ['success' => false, 'message' => __('api.token_invalid')];
+            return ['success' => false, 'message' => 'api.token_invalid'];
         }
 
         // Check token expiry (24 hours)
@@ -24,7 +24,7 @@ class VerifyPatientEmail
             $patient->email_verification_sent_at &&
             $patient->email_verification_sent_at->addHours(24)->isPast()
         ) {
-            return ['success' => false, 'message' => __('api.token_expired')];
+            return ['success' => false, 'message' => 'api.token_expired'];
         }
 
         $patient->markEmailAsVerified();
@@ -37,6 +37,6 @@ class VerifyPatientEmail
             PatientNotificationTemplates::emailVerified()['body'],
         );
 
-        return ['success' => true, 'message' => __('api.email_verified')];
+        return ['success' => true, 'message' => 'api.email_verified'];
     }
 }
