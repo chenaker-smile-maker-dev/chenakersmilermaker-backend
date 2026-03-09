@@ -3,53 +3,49 @@
 namespace App\Filament\Admin\Widgets;
 
 use App\Enums\Appointment\AppointmentStatus;
+use App\Enums\UrgentBookingStatus;
 use App\Models\Appointment;
 use App\Models\Patient;
 use App\Models\UrgentBooking;
-use Filament\Widgets\StatsOverviewWidget;
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
-class StatsOverviewWidget extends StatsOverviewWidget
+class StatsOverviewWidget extends BaseWidget
 {
     protected static ?int $sort = 0;
 
-    protected function getColumns(): int
-    {
-        return 4;
-    }
+    protected int|string|array $columnSpan = 'full';
 
     protected function getStats(): array
     {
-        $todayCount = Appointment::whereDate('from', today())->count();
-        $todayConfirmed = Appointment::whereDate('from', today())->where('status', AppointmentStatus::CONFIRMED->value)->count();
-        $monthCount = Appointment::whereMonth('from', now()->month)->whereYear('from', now()->year)->count();
-
-        $pendingActions =
-            Appointment::where('status', AppointmentStatus::PENDING->value)->count()
-            + Appointment::whereIn('change_request_status', ['pending_cancellation', 'pending_reschedule'])->count()
-            + UrgentBooking::where('status', 'pending')->count();
+        $totalPatients = Patient::count();
+        $todayAppointments = Appointment::whereDate('from', today())->count();
+        $monthAppointments = Appointment::whereMonth('from', now()->month)
+            ->whereYear('from', now()->year)
+            ->count();
+        $pendingCount = Appointment::where('status', AppointmentStatus::PENDING)->count()
+            + UrgentBooking::where('status', UrgentBookingStatus::PENDING)->count();
 
         return [
-            Stat::make('Total Patients', Patient::count())
-                ->icon('heroicon-o-users')
-                ->color('primary')
+            Stat::make('Total Patients', $totalPatients)
                 ->description('Registered patients')
-                ->descriptionIcon('heroicon-m-user-group'),
+                ->color('primary')
+                ->icon('heroicon-o-user-group'),
 
-            Stat::make("Today's Appointments", $todayCount)
-                ->icon('heroicon-o-calendar')
-                ->color('success')
-                ->description($todayConfirmed . ' confirmed today'),
-
-            Stat::make('This Month', $monthCount)
-                ->icon('heroicon-o-chart-bar')
+            Stat::make("Today's Appointments", $todayAppointments)
+                ->description(today()->format('l, M d'))
                 ->color('info')
-                ->description('Appointments this month'),
+                ->icon('heroicon-o-calendar-days'),
 
-            Stat::make('Pending Actions', $pendingActions)
-                ->icon('heroicon-o-exclamation-triangle')
-                ->color('danger')
-                ->description('Require your attention'),
+            Stat::make('This Month', $monthAppointments)
+                ->description(now()->format('F Y') . ' appointments')
+                ->color('success')
+                ->icon('heroicon-o-chart-bar'),
+
+            Stat::make('Pending Actions', $pendingCount)
+                ->description('Appointments + urgent bookings')
+                ->color($pendingCount > 0 ? 'warning' : 'success')
+                ->icon('heroicon-o-exclamation-circle'),
         ];
     }
 }

@@ -11,50 +11,54 @@ use Illuminate\Support\Collection;
 class RecentActivityWidget extends Widget
 {
     protected static ?int $sort = 6;
-    protected static string $view = 'filament.admin.widgets.recent-activity';
+
     protected int|string|array $columnSpan = 1;
+
+    protected static string $view = 'filament.admin.widgets.recent-activity';
 
     public function getActivities(): Collection
     {
-        $recentAppointments = Appointment::with(['patient', 'doctor'])
+        $appointments = Appointment::with(['patient', 'doctor'])
             ->latest()
             ->take(5)
             ->get()
-            ->map(fn ($a) => [
-                'icon' => 'heroicon-o-calendar',
+            ->map(fn(Appointment $a) => [
+                'type' => 'appointment',
+                'icon' => 'heroicon-o-calendar-days',
                 'color' => 'primary',
-                'title' => 'New appointment booked',
+                'title' => 'New Appointment',
                 'description' => ($a->patient?->full_name ?? 'Unknown') . ' with ' . ($a->doctor?->display_name ?? 'Unknown'),
-                'time' => $a->created_at,
+                'created_at' => $a->created_at,
             ]);
 
-        $recentPatients = Patient::latest()
-            ->take(3)
+        $patients = Patient::latest()
+            ->take(5)
             ->get()
-            ->map(fn ($p) => [
+            ->map(fn(Patient $p) => [
+                'type' => 'patient',
                 'icon' => 'heroicon-o-user-plus',
                 'color' => 'success',
-                'title' => 'New patient registered',
-                'description' => $p->full_name,
-                'time' => $p->created_at,
+                'title' => 'New Patient',
+                'description' => $p->full_name . ' registered',
+                'created_at' => $p->created_at,
             ]);
 
-        $recentUrgent = UrgentBooking::latest()
-            ->take(3)
+        $urgentBookings = UrgentBooking::latest()
+            ->take(5)
             ->get()
-            ->map(fn ($u) => [
+            ->map(fn(UrgentBooking $u) => [
+                'type' => 'urgent',
                 'icon' => 'heroicon-o-exclamation-triangle',
                 'color' => 'danger',
-                'title' => 'Urgent booking received',
-                'description' => $u->patient_name,
-                'time' => $u->created_at,
+                'title' => 'Urgent Booking',
+                'description' => $u->patient_name . ': ' . \Str::limit($u->reason, 50),
+                'created_at' => $u->created_at,
             ]);
 
-        return collect()
-            ->merge($recentAppointments)
-            ->merge($recentPatients)
-            ->merge($recentUrgent)
-            ->sortByDesc('time')
+        return $appointments
+            ->concat($patients)
+            ->concat($urgentBookings)
+            ->sortByDesc('created_at')
             ->take(10)
             ->values();
     }

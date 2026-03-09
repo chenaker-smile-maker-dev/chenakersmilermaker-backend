@@ -2,42 +2,39 @@
 
 namespace App\Filament\Admin\Widgets;
 
+use App\Enums\Appointment\AppointmentStatus;
+use App\Enums\Appointment\ChangeRequestStatus;
 use App\Models\Appointment;
-use Filament\Widgets\StatsOverviewWidget;
+use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
-class PendingActionsWidget extends StatsOverviewWidget
+class PendingActionsWidget extends BaseWidget
 {
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 2;
 
-    protected function getColumns(): int
-    {
-        return 3;
-    }
+    protected int|string|array $columnSpan = 'full';
 
     protected function getStats(): array
     {
+        $pendingAppointments = Appointment::where('status', AppointmentStatus::PENDING)->count();
+        $cancellationRequests = Appointment::where('change_request_status', ChangeRequestStatus::CANCELLATION_PENDING)->count();
+        $rescheduleRequests = Appointment::where('change_request_status', ChangeRequestStatus::RESCHEDULE_PENDING)->count();
+
         return [
-            Stat::make(
-                'Pending Appointments',
-                Appointment::where('status', 'pending')->count()
-            )
-                ->icon('heroicon-o-clock')
-                ->color('warning'),
+            Stat::make('Pending Appointments', $pendingAppointments)
+                ->description('Awaiting confirmation')
+                ->color($pendingAppointments > 0 ? 'warning' : 'success')
+                ->icon('heroicon-o-clock'),
 
-            Stat::make(
-                'Cancellation Requests',
-                Appointment::where('change_request_status', 'pending_cancellation')->count()
-            )
-                ->icon('heroicon-o-x-circle')
-                ->color('danger'),
+            Stat::make('Cancellation Requests', $cancellationRequests)
+                ->description('Awaiting decision')
+                ->color($cancellationRequests > 0 ? 'danger' : 'success')
+                ->icon('heroicon-o-x-circle'),
 
-            Stat::make(
-                'Reschedule Requests',
-                Appointment::where('change_request_status', 'pending_reschedule')->count()
-            )
-                ->icon('heroicon-o-arrow-path')
-                ->color('info'),
+            Stat::make('Reschedule Requests', $rescheduleRequests)
+                ->description('Awaiting decision')
+                ->color($rescheduleRequests > 0 ? 'warning' : 'success')
+                ->icon('heroicon-o-arrow-path'),
         ];
     }
 }

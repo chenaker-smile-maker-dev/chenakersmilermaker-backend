@@ -2,16 +2,18 @@
 
 namespace App\Filament\Admin\Widgets;
 
-use App\Filament\Admin\Resources\Appointments\AppointmentResource;
 use App\Models\Appointment;
-use Filament\Tables;
+use Filament\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 
 class TodayAppointmentsWidget extends BaseWidget
 {
     protected static ?int $sort = 3;
+
     protected int|string|array $columnSpan = 'full';
+
     protected static ?string $heading = "Today's Appointments";
 
     public function table(Table $table): Table
@@ -20,32 +22,26 @@ class TodayAppointmentsWidget extends BaseWidget
             ->query(
                 Appointment::query()
                     ->whereDate('from', today())
-                    ->with(['doctor', 'patient', 'service'])
+                    ->with(['patient', 'doctor', 'service'])
                     ->orderBy('from')
             )
             ->columns([
-                Tables\Columns\TextColumn::make('from')
+                TextColumn::make('from')
                     ->label('Time')
                     ->time('H:i')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('patient.full_name')
+                TextColumn::make('patient.full_name')
                     ->label('Patient')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('doctor.display_name')
+                TextColumn::make('doctor.display_name')
                     ->label('Doctor'),
-                Tables\Columns\TextColumn::make('service.name')
+                TextColumn::make('service.name')
                     ->label('Service'),
-                Tables\Columns\TextColumn::make('status')
-                    ->label('Status')
+                TextColumn::make('status')
                     ->badge(),
             ])
-            ->actions([
-                Tables\Actions\Action::make('view')
-                    ->url(fn (Appointment $record) => AppointmentResource::getUrl('view', ['record' => $record]))
-                    ->icon('heroicon-o-eye'),
-            ])
-            ->emptyStateHeading('No appointments today')
-            ->emptyStateIcon('heroicon-o-calendar')
+            ->recordAction('view')
+            ->recordUrl(fn(Appointment $record) => route('filament.admin.resources.appointments.view', $record))
             ->paginated(false);
     }
 }

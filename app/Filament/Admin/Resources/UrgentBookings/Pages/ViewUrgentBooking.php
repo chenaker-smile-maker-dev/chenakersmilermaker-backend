@@ -6,7 +6,6 @@ use App\Enums\PatientNotificationType;
 use App\Enums\UrgentBookingStatus;
 use App\Filament\Admin\Resources\UrgentBookings\UrgentBookingResource;
 use App\Models\Doctor;
-use App\Models\UrgentBooking;
 use App\Services\PatientNotificationService;
 use App\Services\PatientNotificationTemplates;
 use Filament\Actions\Action;
@@ -27,58 +26,62 @@ class ViewUrgentBooking extends ViewRecord
                 ->label('Accept')
                 ->icon('heroicon-o-check-circle')
                 ->color('success')
-                ->visible(fn () => $this->record->status === UrgentBookingStatus::PENDING)
+                ->visible(fn() => $this->record->status === UrgentBookingStatus::PENDING)
                 ->form([
-                    Select::make('assigned_doctor_id')
-                        ->label('Assign Doctor')
-                        ->options(Doctor::pluck('name', 'id'))
-                        ->required()
-                        ->searchable(),
                     DateTimePicker::make('scheduled_datetime')
                         ->label('Scheduled Date & Time')
-                        ->required(),
+                        ->required()
+                        ->seconds(false)
+                        ->native(false),
+                    Select::make('assigned_doctor_id')
+                        ->label('Assign Doctor')
+                        ->options(Doctor::all()->pluck('display_name', 'id'))
+                        ->searchable(),
                     Textarea::make('admin_notes')
                         ->label('Notes for Patient')
-                        ->placeholder('Instructions for the patient...'),
+                        ->rows(3),
                 ])
                 ->action(function (array $data) {
                     $record = $this->record;
                     $record->update([
                         'status' => UrgentBookingStatus::ACCEPTED,
-                        'assigned_doctor_id' => $data['assigned_doctor_id'],
                         'scheduled_datetime' => $data['scheduled_datetime'],
+                        'assigned_doctor_id' => $data['assigned_doctor_id'] ?? null,
                         'admin_notes' => $data['admin_notes'] ?? null,
                     ]);
 
-                    if ($record->patient) {
-                        $doctor = Doctor::find($data['assigned_doctor_id']);
+                    if ($record->patient_id && $record->patient) {
+                        $doctorName = $record->assignedDoctor?->display_name ?? '';
                         $scheduledAt = \Carbon\Carbon::parse($data['scheduled_datetime'])->format('M d, Y H:i');
-                        $template = PatientNotificationTemplates::urgentBookingAccepted(
+                        $templates = PatientNotificationTemplates::urgentBookingAccepted(
                             $scheduledAt,
-                            $doctor->display_name,
-                            $data['admin_notes'] ?? '',
+                            $doctorName,
+                            $data['admin_notes'] ?? ''
                         );
                         PatientNotificationService::send(
                             $record->patient,
                             PatientNotificationType::URGENT_BOOKING_ACCEPTED->value,
-                            $template['title'],
-                            $template['body'],
-                            ['urgent_booking_id' => $record->id],
+                            $templates['title'],
+                            $templates['body'],
                         );
                     }
 
-                    $this->refreshFormData(['status', 'assigned_doctor_id', 'scheduled_datetime', 'admin_notes']);
-                    Notification::make()->success()->title('Urgent Booking Accepted')->send();
+                    Notification::make()->title('Urgent booking accepted.')->success()->send();
+                    $this->refreshFormData(['status', 'scheduled_datetime', 'assigned_doctor_id', 'admin_notes']);
                 }),
 
             Action::make('reject')
                 ->label('Reject')
                 ->icon('heroicon-o-x-circle')
                 ->color('danger')
-                ->visible(fn () => $this->record->status === UrgentBookingStatus::PENDING)
+                ->visible(fn() => $this->record->status === UrgentBookingStatus::PENDING)
                 ->form([
-                    Textarea::make('admin_notes')->label('Reason for rejection')->required(),
+                    Textarea::make('admin_notes')
+                        ->label('Reason for Rejection')
+                        ->required()
+                        ->rows(3),
                 ])
+                ->requiresConfirmation()
                 ->action(function (array $data) {
                     $record = $this->record;
                     $record->update([
@@ -86,33 +89,30 @@ class ViewUrgentBooking extends ViewRecord
                         'admin_notes' => $data['admin_notes'],
                     ]);
 
-                    if ($record->patient) {
-                        $template = PatientNotificationTemplates::urgentBookingRejected(
-                            $data['admin_notes'],
-                        );
+                    if ($record->patient_id && $record->patient) {
+                        $templates = PatientNotificationTemplates::urgentBookingRejected($data['admin_notes']);
                         PatientNotificationService::send(
                             $record->patient,
                             PatientNotificationType::URGENT_BOOKING_REJECTED->value,
-                            $template['title'],
-                            $template['body'],
-                            ['urgent_booking_id' => $record->id],
+                            $templates['title'],
+                            $templates['body'],
                         );
                     }
 
+                    Notification::make()->title('Urgent booking rejected.')->warning()->send();
                     $this->refreshFormData(['status', 'admin_notes']);
-                    Notification::make()->success()->title('Urgent Booking Rejected')->send();
                 }),
 
             Action::make('complete')
-                ->label('Complete')
+                ->label('Mark Complete')
                 ->icon('heroicon-o-clipboard-document-check')
-                ->color('success')
-                ->visible(fn () => $this->record->status === UrgentBookingStatus::ACCEPTED)
+                ->color('info')
+                ->visible(fn() => $this->record->status === UrgentBookingStatus::ACCEPTED)
                 ->requiresConfirmation()
                 ->action(function () {
                     $this->record->update(['status' => UrgentBookingStatus::COMPLETED]);
+                    Notification::make()->title('Marked as completed.')->success()->send();
                     $this->refreshFormData(['status']);
-                    Notification::make()->success()->title('Urgent Booking Completed')->send();
                 }),
         ];
     }

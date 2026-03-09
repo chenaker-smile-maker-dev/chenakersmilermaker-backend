@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'success' => 'نجاح.',
     'cancellation_submitted' => 'طلب الإلغاء قدم بنجاح. في انتظار موافقة المدير.',
     'reschedule_submitted' => 'طلب إعادة الجدولة قدم بنجاح. في انتظار موافقة المدير.',
     'appointment_not_yours' => 'هذا الموعد لا ينتمي إليك.',
@@ -28,4 +27,5 @@ return [
     'not_found' => 'المورد غير موجود.',
     'unauthorized' => 'غير مصرح.',
     'slot_unavailable' => 'الموعد المطلوب غير متاح.',
+    'success' => 'نجاح.',
 ];

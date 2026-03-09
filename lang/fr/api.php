@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'success' => 'Succès.',
     'cancellation_submitted' => 'Demande d\'annulation soumise avec succès. En attente d\'approbation de l\'administrateur.',
     'reschedule_submitted' => 'Demande de reprogrammation soumise avec succès. En attente d\'approbation de l\'administrateur.',
     'appointment_not_yours' => 'Ce rendez-vous ne vous appartient pas.',
@@ -28,4 +27,5 @@ return [
     'not_found' => 'Ressource introuvable.',
     'unauthorized' => 'Non autorisé.',
     'slot_unavailable' => 'Le créneau demandé n\'est pas disponible.',
+    'success' => 'Succès.',
 ];

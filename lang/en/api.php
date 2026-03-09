@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'success' => 'Success.',
     'cancellation_submitted' => 'Cancellation request submitted successfully. Awaiting admin approval.',
     'reschedule_submitted' => 'Reschedule request submitted successfully. Awaiting admin approval.',
     'appointment_not_yours' => 'This appointment does not belong to you.',
@@ -28,4 +27,5 @@ return [
     'not_found' => 'Resource not found.',
     'unauthorized' => 'Unauthorized.',
     'slot_unavailable' => 'The requested time slot is not available.',
+    'success' => 'Success.',
 ];

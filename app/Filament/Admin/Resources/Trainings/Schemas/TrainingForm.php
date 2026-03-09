@@ -2,13 +2,12 @@
 
 namespace App\Filament\Admin\Resources\Trainings\Schemas;
 
-use AbdulmajeedJamaan\FilamentTranslatableTabs\TranslatableTabs;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use AbdulmajeedJamaan\FilamentTranslatableTabs\TranslatableTabs;
 
 class TrainingForm
 {
@@ -29,9 +28,17 @@ class TrainingForm
                         ->extraAttributes(['style' => 'min-height: 300px;'])
                         ->disableAllToolbarButtons()
                         ->toolbarButtons([
-                            'attachFiles', 'blockquote', 'bold', 'bulletList',
-                            'codeBlock', 'italic', 'link', 'orderedList',
-                            'redo', 'strike', 'undo',
+                            'attachFiles',
+                            'blockquote',
+                            'bold',
+                            'bulletList',
+                            'codeBlock',
+                            'italic',
+                            'link',
+                            'orderedList',
+                            'redo',
+                            'strike',
+                            'undo',
                         ]),
                 ]),
 
@@ -47,13 +54,13 @@ class TrainingForm
                         ->placeholder(__('panels/admin/resources/training.duration_placeholder'))
                         ->maxLength(255),
                     TextInput::make('price')
-                        ->label('Price (DZD)')
                         ->numeric()
-                        ->default(0)
-                        ->suffix('DZD'),
+                        ->minValue(0)
+                        ->suffix('DZD')
+                        ->placeholder('e.g. 5000')
+                        ->helperText('Leave empty if free'),
                     TextInput::make('video_url')
                         ->url()
-                        ->columnSpanFull()
                         ->placeholder(__('panels/admin/resources/training.video_url_placeholder'))
                         ->helperText(__('panels/admin/resources/training.training_video_helper')),
                 ]),
@@ -71,22 +78,11 @@ class TrainingForm
                         ->label('Gallery Images')
                         ->collection('images')
                         ->multiple()
+                        ->reorderable()
                         ->image()
                         ->maxSize(5120)
                         ->columnSpanFull(),
-                    FileUpload::make('documents')
-                        ->multiple()
-                        ->directory('trainings/documents')
-                        ->acceptedFileTypes([
-                            'application/pdf',
-                            'application/msword',
-                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                        ])
-                        ->columnSpanFull()
-                        ->placeholder(__('panels/admin/resources/training.click_or_drag_documents_here'))
-                        ->helperText(__('panels/admin/resources/training.documents_helper')),
                 ]),
         ]);
     }
 }
-

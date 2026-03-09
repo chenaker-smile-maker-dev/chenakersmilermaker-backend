@@ -37,17 +37,17 @@ Track progress by marking items with `[x]` when completed.
 - [x] Create RequestAppointmentReschedule action
 - [x] Add routes to routes/api/v1.php
 - [x] Add Scramble attributes to controller
-- [ ] Test endpoints manually
+- [x] Test endpoints manually
 
 ## Step 4: Notification System
 - [x] Create PatientNotificationService
 - [x] Create PatientNotificationTemplates (translatable ar/fr/en)
 - [x] Create PatientNotificationController (list, unread-count, mark-read, mark-all-read, delete)
 - [x] Add notification routes
-- [x] Create Filament notification classes (NewAppointmentBooked, CancellationRequested, RescheduleRequested, NewUrgentBookingReceived, NewTestimonialSubmitted)
-- [x] Enable databaseNotifications() in AdminPanelProvider (already enabled)
-- [x] Wire up notification dispatch in all relevant actions (booking, cancellation, reschedule, urgent booking)
-- [ ] Test notification flow
+- [x] Create Filament notification classes (NewAppointmentBooked, CancellationRequested, RescheduleRequested, NewUrgentBookingReceived, NewReviewSubmitted)
+- [x] Enable databaseNotifications() in AdminPanelProvider (already enabled — verify)
+- [x] Wire up notification dispatch in all relevant actions (booking, cancellation, reschedule, urgent booking, review)
+- [x] Test notification flow
 
 ## Step 5: Admin Appointment Management (Filament)
 - [x] Upgrade AppointmentResource table (columns, filters, actions)
@@ -60,7 +60,7 @@ Track progress by marking items with `[x]` when completed.
 - [x] Add Reject Reschedule action
 - [x] Add bulk actions (confirm selected, reject selected)
 - [x] Upgrade ViewAppointment page (patient info, change request section, admin notes)
-- [x] Create PendingAppointmentsWidget
+- [x] Create PendingAppointmentsWidget (moved to step 10 dashboard)
 - [x] All admin actions dispatch patient notifications
 
 ## Step 6: Email Verification
@@ -70,13 +70,14 @@ Track progress by marking items with `[x]` when completed.
 - [x] Create SendVerificationEmail action
 - [x] Create VerifyEmail action
 - [x] Add verify-email and resend-verification API endpoints
-- [x] Send verification email on registration (update AuthController)
-- [ ] Test full verification flow
+- [x] Add EnsureEmailIsVerified middleware
+- [x] Gate booking behind email verification
+- [x] Send verification email on registration (update RegisterPatient action)
+- [x] Test full verification flow
 
 ## Step 7: Urgent Booking System
 - [x] Create UrgentBookingController (submit, list, show)
 - [x] Create SubmitUrgentBooking action
-- [x] Create ListPatientUrgentBookings action
 - [x] Add routes (submit is public, list/show require auth)
 - [x] Create UrgentBookingResource in Filament
 - [x] Add Accept action (assign doctor, schedule time)
@@ -92,32 +93,48 @@ Track progress by marking items with `[x]` when completed.
 - [x] Add status accessor and scopes (archive, happening, future)
 - [x] Update ListEvents action with type filter and new response fields
 - [x] Update ShowEvent action with new response fields
-- [x] Update EventResource in Filament (new form fields: time, speakers, about_event, what_to_expect, gallery upload)
+- [x] Update EventResource in Filament (new form fields, fix media upload)
 - [x] Add Training price field
 - [x] Add Training images collection (multiple)
 - [x] Add Training reviews relation
 - [x] Update ListTrainings action with new response fields
 - [x] Update ShowTraining action with reviews
 - [x] Create SubmitTrainingReview action + endpoint
-- [x] Update TrainingResource in Filament (price, images upload)
-- [ ] Create Review approval in Filament (relation manager or standalone resource)
+- [x] Update TrainingResource in Filament (price, images)
+- [ ] Add reviews RelationManager to TrainingResource (approve/reject reviews)
 
 ## Step 9: Tests
-- [ ] Create/update all factories
+- [ ] Create/update all factories (Patient, Appointment, UrgentBooking, PatientNotification, Review, Event, Training, User, Doctor, Service, Testimonial)
 - [ ] Feature tests: Auth (register, login, logout, refresh, email verification)
+- [ ] Feature tests: Profile (show, update, update password)
 - [ ] Feature tests: Patient appointments (list, show, cancel, reschedule)
-- [ ] Feature tests: Notifications (list, unread count, mark read, delete)
+- [ ] Feature tests: Booking (check availability, book appointment)
+- [ ] Feature tests: Notifications (list, unread count, mark read, mark all, delete)
 - [ ] Feature tests: Urgent booking (submit, list, show)
 - [ ] Feature tests: Events (list with type filter, show)
 - [ ] Feature tests: Trainings (list, show, submit review)
 - [ ] Feature tests: Testimonials (list, show)
+- [ ] Feature tests: API conventions (translatable responses, media responses)
+- [ ] Unit tests: Actions (booking, cancellation, reschedule, urgent booking)
+- [ ] Unit tests: Models (Appointment, PatientNotification, UrgentBooking, Review)
+- [ ] Unit tests: PatientNotificationService
+- [ ] Browser tests: Appointment management (confirm, reject, complete, approve/reject changes)
+- [ ] Browser tests: Urgent booking management (accept, reject, complete)
+- [ ] Browser tests: Event CRUD
+- [ ] Browser tests: Training CRUD + reviews
+- [ ] Browser tests: Doctor CRUD
+- [ ] Browser tests: Patient management + verification status
+- [ ] Browser tests: Service CRUD
+- [ ] Browser tests: Testimonial management
+- [ ] Browser tests: Dashboard widgets (stats, today's appointments, pending actions)
 
 ## Step 10: Dashboard, API Conventions & Polish
 - [x] Create MediaHelper utility (app/Utils/MediaHelper.php)
 - [x] Create lang/en/api.php, lang/ar/api.php, lang/fr/api.php with all API messages
-- [x] Update DoctorResource to use MediaHelper
-- [x] Update ServiceResource to use MediaHelper
-- [x] Fix TestimonialResource (use MediaHelper for patient photo)
+- [x] Update all API Resources to use GetModelMultilangAttribute for ALL translatable fields
+- [x] Fix TestimonialResource (currently returns single locale)
+- [x] Update all Actions to use MediaHelper for image responses
+- [x] Update all Actions to use __() for translated messages
 - [x] Create custom Dashboard page (app/Filament/Admin/Pages/Dashboard.php)
 - [x] Create StatsOverviewWidget (total patients, today appointments, monthly stats, pending actions)
 - [x] Create PendingActionsWidget (pending appointments, cancellation requests, reschedule requests)
@@ -126,17 +143,18 @@ Track progress by marking items with `[x]` when completed.
 - [x] Create recent-activity Blade view
 - [x] Update AdminPanelProvider (use custom Dashboard, clean up widget registration)
 - [x] Set $sort and $columnSpan on existing AppointmentCalendarWidget
-- [ ] Polish Trainings: reviews relation manager in Filament
+- [x] Polish all Filament resources (Events: new fields, Trainings: price/images, Patients: verification status)
+- [ ] Final run of all tests
+- [x] Verify all API responses follow conventions
 
 ---
 
 ## Completion Checklist
 - [x] All migrations run successfully
 - [x] All API endpoints return correct translatable format ({ar, fr, en})
-- [x] All API endpoints return images with {original, thumb} format (via MediaHelper)
+- [x] All API endpoints return images with {original, thumb} format
 - [x] All error messages are translatable via lang files
 - [x] Dashboard has all widgets and shows correct data
 - [x] All Filament resources CRUD works
 - [ ] All tests pass
 - [ ] Code committed
-

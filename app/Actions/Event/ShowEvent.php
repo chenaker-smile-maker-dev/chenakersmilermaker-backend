@@ -14,8 +14,8 @@ class ShowEvent
             'id' => $event->id,
             'name' => GetModelMultilangAttribute::get($event, 'title'),
             'description' => GetModelMultilangAttribute::get($event, 'description'),
-            'date' => $event->date->format('Y-m-d'),
-            'time' => $event->time?->format('H:i'),
+            'date' => $event->date?->toDateString(),
+            'time' => $event->time,
             'location' => GetModelMultilangAttribute::get($event, 'location'),
             'speakers' => GetModelMultilangAttribute::get($event, 'speakers'),
             'about_event' => GetModelMultilangAttribute::get($event, 'about_event'),
@@ -23,8 +23,7 @@ class ShowEvent
             'pictures' => MediaHelper::collection($event, 'gallery'),
             'status' => $event->status,
             'is_archived' => $event->is_archived,
-            'created_at' => $event->created_at->toIso8601String(),
+            'created_at' => $event->created_at?->toIso8601String(),
         ];
     }
 }
-
