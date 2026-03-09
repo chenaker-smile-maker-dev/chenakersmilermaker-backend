@@ -62,7 +62,7 @@ class TrainingController extends BaseController
             'rating' => 'required|integer|min:1|max:5',
         ]);
 
-        $action->handle($training, $request->user()->patient, $validated);
+        $action->handle($training, $request->user(), $validated);
 
         return $this->sendResponse([], __('api.review_submitted'), 201);
     }

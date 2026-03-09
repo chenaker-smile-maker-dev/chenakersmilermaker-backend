@@ -10,21 +10,29 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PatientFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
-            'email' => $this->faker->unique()->safeEmail(),
-            'phone' => $this->faker->unique()->phoneNumber(),
-            'first_name' => $this->faker->firstName(),
-            'last_name' => $this->faker->lastName(),
-            'age' => $this->faker->numberBetween(1, 100),
-            'password' => 'password',
-            'gender' => $this->faker->randomElement([Gender::MALE, Gender::FEMALE]),
+            'email'             => $this->faker->unique()->safeEmail(),
+            'phone'             => $this->faker->unique()->numerify('05########'),
+            'first_name'        => $this->faker->firstName(),
+            'last_name'         => $this->faker->lastName(),
+            'age'               => $this->faker->numberBetween(18, 80),
+            'password'          => 'password',
+            'gender'            => $this->faker->randomElement([Gender::MALE, Gender::FEMALE]),
+            'email_verified_at' => null,
         ];
+    }
+
+    /** Patient with verified email. */
+    public function verified(): static
+    {
+        return $this->state(['email_verified_at' => now()]);
+    }
+
+    /** Patient with unverified email. */
+    public function unverified(): static
+    {
+        return $this->state(['email_verified_at' => null]);
     }
 }

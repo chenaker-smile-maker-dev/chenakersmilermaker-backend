@@ -13,7 +13,7 @@ class TestimonialResource extends JsonResource
         return [
             'id' => $this->id,
             'patient_id' => $this->patient_id,
-            'name' => $this->name,
+            'name' => $this->patient_name,
             'content' => $this->content,
             'rating' => $this->rating,
             'is_published' => $this->is_published,

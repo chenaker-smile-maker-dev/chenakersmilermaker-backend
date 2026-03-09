@@ -9,7 +9,7 @@ class BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function sendResponse($result = [], $message = 'Success')
+    public function sendResponse($result = [], $message = 'Success', $code = 200)
     {
         $response = [
             'success' => true,
@@ -20,7 +20,7 @@ class BaseController
             unset($response['data']);
         }
 
-        return response()->json($response, 200);
+        return response()->json($response, $code);
     }
 
     /**

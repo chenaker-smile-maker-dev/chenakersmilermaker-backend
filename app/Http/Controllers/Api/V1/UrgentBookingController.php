@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Patient\UrgentBooking\ListPatientUrgentBookings;
 use App\Actions\Patient\UrgentBooking\SubmitUrgentBooking;
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Api\BaseController;
 use App\Models\UrgentBooking;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
@@ -27,7 +27,7 @@ class UrgentBookingController extends BaseController
             'preferred_datetime' => 'nullable|date_format:Y-m-d H:i',
         ]);
 
-        $patient = auth('sanctum')->user()?->patient ?? null;
+        $patient = auth('sanctum')->user() ?? null;
 
         $booking = $action->handle($validated, $patient);
 
@@ -45,7 +45,7 @@ class UrgentBookingController extends BaseController
      */
     public function myBookings(Request $request, ListPatientUrgentBookings $action): JsonResponse
     {
-        $patient = $request->user()->patient;
+        $patient = $request->user();
 
         return $this->sendResponse(
             $action->handle($patient),
@@ -58,7 +58,7 @@ class UrgentBookingController extends BaseController
      */
     public function show(Request $request, UrgentBooking $urgentBooking): JsonResponse
     {
-        $patient = $request->user()->patient;
+        $patient = $request->user();
 
         if ($urgentBooking->patient_id !== $patient->id) {
             return $this->sendError(__('api.not_found'), [], 404);

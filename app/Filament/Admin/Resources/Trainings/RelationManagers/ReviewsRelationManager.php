@@ -34,18 +34,18 @@ class ReviewsRelationManager extends RelationManager
                 TextColumn::make('rating')
                     ->label(__('panels/admin/resources/review.rating'))
                     ->badge()
-                    ->color(fn (int $state): string => match (true) {
+                    ->color(fn(int $state): string => match (true) {
                         $state >= 4 => 'success',
                         $state === 3 => 'warning',
                         default     => 'danger',
                     })
-                    ->formatStateUsing(fn (int $state): string => str_repeat('★', $state) . str_repeat('☆', 5 - $state))
+                    ->formatStateUsing(fn(int $state): string => str_repeat('★', $state) . str_repeat('☆', 5 - $state))
                     ->sortable(),
 
                 TextColumn::make('content')
                     ->label(__('panels/admin/resources/review.content'))
                     ->limit(80)
-                    ->tooltip(fn (string $state): string => $state)
+                    ->tooltip(fn(string $state): string => $state)
                     ->wrap(),
 
                 IconColumn::make('is_approved')
@@ -66,29 +66,29 @@ class ReviewsRelationManager extends RelationManager
             ->filters([
                 Filter::make('pending')
                     ->label(__('panels/admin/resources/review.filter_pending'))
-                    ->query(fn (Builder $query): Builder => $query->where('is_approved', false))
+                    ->query(fn(Builder $query): Builder => $query->where('is_approved', false))
                     ->default(),
 
                 Filter::make('approved')
                     ->label(__('panels/admin/resources/review.filter_approved'))
-                    ->query(fn (Builder $query): Builder => $query->where('is_approved', true)),
+                    ->query(fn(Builder $query): Builder => $query->where('is_approved', true)),
             ])
             ->actions([
                 TableAction::make('approve')
                     ->label(__('panels/admin/resources/review.approve'))
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->visible(fn ($record): bool => ! $record->is_approved)
+                    ->visible(fn($record): bool => ! $record->is_approved)
                     ->requiresConfirmation()
-                    ->action(fn ($record) => $record->update(['is_approved' => true])),
+                    ->action(fn($record) => $record->update(['is_approved' => true])),
 
                 TableAction::make('unapprove')
                     ->label(__('panels/admin/resources/review.unapprove'))
                     ->icon('heroicon-o-x-circle')
                     ->color('warning')
-                    ->visible(fn ($record): bool => $record->is_approved)
+                    ->visible(fn($record): bool => $record->is_approved)
                     ->requiresConfirmation()
-                    ->action(fn ($record) => $record->update(['is_approved' => false])),
+                    ->action(fn($record) => $record->update(['is_approved' => false])),
 
                 DeleteAction::make(),
             ])
@@ -99,7 +99,7 @@ class ReviewsRelationManager extends RelationManager
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
                         ->requiresConfirmation()
-                        ->action(fn ($records) => $records->each->update(['is_approved' => true])),
+                        ->action(fn($records) => $records->each->update(['is_approved' => true])),
 
                     \Filament\Tables\Actions\DeleteBulkAction::make(),
                 ]),
