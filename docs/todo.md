@@ -104,29 +104,29 @@ Track progress by marking items with `[x]` when completed.
 - [x] Add reviews RelationManager to TrainingResource (approve/reject reviews)
 
 ## Step 9: Tests
-- [ ] Create/update all factories (Patient, Appointment, UrgentBooking, PatientNotification, Review, Event, Training, User, Doctor, Service, Testimonial)
-- [ ] Feature tests: Auth (register, login, logout, refresh, email verification)
-- [ ] Feature tests: Profile (show, update, update password)
-- [ ] Feature tests: Patient appointments (list, show, cancel, reschedule)
-- [ ] Feature tests: Booking (check availability, book appointment)
-- [ ] Feature tests: Notifications (list, unread count, mark read, mark all, delete)
-- [ ] Feature tests: Urgent booking (submit, list, show)
-- [ ] Feature tests: Events (list with type filter, show)
-- [ ] Feature tests: Trainings (list, show, submit review)
-- [ ] Feature tests: Testimonials (list, show)
-- [ ] Feature tests: API conventions (translatable responses, media responses)
+- [x] Create/update all factories (Patient, Appointment, UrgentBooking, PatientNotification, Review, Event, Training, User, Doctor, Service, Testimonial)
+- [x] Feature tests: Auth (register, login, logout, refresh, email verification)
+- [x] Feature tests: Profile (show, update, update password)
+- [x] Feature tests: Patient appointments (list, show, cancel, reschedule)
+- [x] Feature tests: Booking (check availability, book appointment)
+- [x] Feature tests: Notifications (list, unread count, mark read, mark all, delete)
+- [x] Feature tests: Urgent booking (submit, list, show)
+- [x] Feature tests: Events (list with type filter, show)
+- [x] Feature tests: Trainings (list, show, submit review)
+- [x] Feature tests: Testimonials (list, show)
+- [x] Feature tests: API conventions (translatable responses, media responses)
 - [ ] Unit tests: Actions (booking, cancellation, reschedule, urgent booking)
 - [ ] Unit tests: Models (Appointment, PatientNotification, UrgentBooking, Review)
 - [ ] Unit tests: PatientNotificationService
-- [ ] Browser tests: Appointment management (confirm, reject, complete, approve/reject changes)
-- [ ] Browser tests: Urgent booking management (accept, reject, complete)
-- [ ] Browser tests: Event CRUD
-- [ ] Browser tests: Training CRUD + reviews
-- [ ] Browser tests: Doctor CRUD
-- [ ] Browser tests: Patient management + verification status
-- [ ] Browser tests: Service CRUD
-- [ ] Browser tests: Testimonial management
-- [ ] Browser tests: Dashboard widgets (stats, today's appointments, pending actions)
+- [x] Browser tests: Appointment management (confirm, reject, complete, approve/reject changes)
+- [x] Browser tests: Urgent booking management (accept, reject, complete)
+- [x] Browser tests: Event CRUD
+- [x] Browser tests: Training CRUD + reviews
+- [x] Browser tests: Doctor CRUD
+- [x] Browser tests: Patient management + verification status
+- [x] Browser tests: Service CRUD
+- [x] Browser tests: Testimonial management
+- [x] Browser tests: Dashboard widgets (stats, today's appointments, pending actions)
 
 ## Step 10: Dashboard, API Conventions & Polish
 - [x] Create MediaHelper utility (app/Utils/MediaHelper.php)
@@ -144,7 +144,7 @@ Track progress by marking items with `[x]` when completed.
 - [x] Update AdminPanelProvider (use custom Dashboard, clean up widget registration)
 - [x] Set $sort and $columnSpan on existing AppointmentCalendarWidget
 - [x] Polish all Filament resources (Events: new fields, Trainings: price/images, Patients: verification status)
-- [ ] Final run of all tests
+- [x] Final run of all tests
 - [x] Verify all API responses follow conventions
 
 ---
@@ -156,5 +156,5 @@ Track progress by marking items with `[x]` when completed.
 - [x] All error messages are translatable via lang files
 - [x] Dashboard has all widgets and shows correct data
 - [x] All Filament resources CRUD works
-- [ ] All tests pass
-- [ ] Code committed
+- [x] All tests pass
+- [x] Code committed
