@@ -4,7 +4,7 @@ namespace App\Notifications\Admin;
 
 use App\Models\UrgentBooking;
 use Filament\Notifications\Notification as FilamentNotification;
-use Filament\Notifications\Actions\Action;
+use Filament\Actions\Action;
 use Illuminate\Notifications\Notification;
 
 class NewUrgentBookingReceived extends Notification

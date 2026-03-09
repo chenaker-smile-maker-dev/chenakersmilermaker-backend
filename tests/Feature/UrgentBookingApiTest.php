@@ -28,12 +28,12 @@ it('authenticated patient urgent booking links patient id', function () {
 
     $this->actAsPatient($patient)
         ->postJson('/api/v1/urgent-booking/submit', [
-            'patient_name'  => $patient->first_name.' '.$patient->last_name,
+            'patient_name'  => $patient->first_name . ' ' . $patient->last_name,
             'patient_phone' => '0600000002',
             'patient_email' => $patient->email,
             'reason'        => 'Authenticated urgent booking request.',
         ])->assertCreated()
-            ->assertJsonPath('success', true);
+        ->assertJsonPath('success', true);
 
     $this->assertDatabaseHas('urgent_bookings', [
         'patient_email' => $patient->email,

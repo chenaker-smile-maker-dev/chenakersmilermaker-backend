@@ -17,8 +17,8 @@ class PendingActionsWidget extends BaseWidget
     protected function getStats(): array
     {
         $pendingAppointments = Appointment::where('status', AppointmentStatus::PENDING)->count();
-        $cancellationRequests = Appointment::where('change_request_status', ChangeRequestStatus::CANCELLATION_PENDING)->count();
-        $rescheduleRequests = Appointment::where('change_request_status', ChangeRequestStatus::RESCHEDULE_PENDING)->count();
+        $cancellationRequests = Appointment::where('change_request_status', ChangeRequestStatus::PENDING_CANCELLATION)->count();
+        $rescheduleRequests = Appointment::where('change_request_status', ChangeRequestStatus::PENDING_RESCHEDULE)->count();
 
         return [
             Stat::make('Pending Appointments', $pendingAppointments)

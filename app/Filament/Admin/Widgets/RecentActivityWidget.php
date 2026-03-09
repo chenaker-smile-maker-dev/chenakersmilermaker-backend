@@ -7,6 +7,7 @@ use App\Models\Patient;
 use App\Models\UrgentBooking;
 use Filament\Widgets\Widget;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 
 class RecentActivityWidget extends Widget
 {
@@ -51,7 +52,7 @@ class RecentActivityWidget extends Widget
                 'icon' => 'heroicon-o-exclamation-triangle',
                 'color' => 'danger',
                 'title' => 'Urgent Booking',
-                'description' => $u->patient_name . ': ' . \Str::limit($u->reason, 50),
+                'description' => $u->patient_name . ': ' . Str::limit($u->reason, 50),
                 'created_at' => $u->created_at,
             ]);
 

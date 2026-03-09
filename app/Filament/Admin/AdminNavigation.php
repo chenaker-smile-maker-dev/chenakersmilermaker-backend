@@ -67,7 +67,7 @@ class AdminNavigation
     ];
 
     public const TESTIMONIALS_RESOURCE = [
-        'icon' => Heroicon::StarSmall,
+        'icon' => Heroicon::Star,
         'sort' => 7,
         'group' => self::WEBSITE_CONTENT_GROUP,
     ];
