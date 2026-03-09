@@ -4,14 +4,17 @@ use App\Enums\Api\TokenAbility;
 use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\Browser\Core\AdminSession;
+use Tests\Browser\Core\FilamentPage;
 use Tests\TestCase;
 
 /*
 |--------------------------------------------------------------------------
 | Test Case
 |--------------------------------------------------------------------------
-| Feature tests: use TestCase + RefreshDatabase by default.
-| Browser tests: TestCase only (Playwright manages its own DB state via seeders).
+| Feature tests:  TestCase + RefreshDatabase (isolated SQLite per test).
+| Browser tests:  TestCase + Browsable (Playwright drives a real browser;
+|                 DB state managed via DemoSeeder / CreateAdminUserSeeder).
 */
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
@@ -30,7 +33,7 @@ expect()->extend('toBeMultilang', function () {
 
 /*
 |--------------------------------------------------------------------------
-| Functions
+| Global helper functions
 |--------------------------------------------------------------------------
 */
 
@@ -51,4 +54,21 @@ function actAsPatient(Patient $patient): Tests\TestCase
 function multilangStructure(): array
 {
     return ['en', 'ar', 'fr'];
+}
+
+/**
+ * Browser helper: log in as admin and return the dashboard page.
+ * Uses the fixed DemoSeeder credentials so no DB writes are needed.
+ */
+function adminLogin(): \Pest\Browser\Api\Webpage
+{
+    return AdminSession::login(test());
+}
+
+/**
+ * Browser helper: navigate to a Filament resource page after login.
+ */
+function adminVisit(string $path): \Pest\Browser\Api\Webpage
+{
+    return adminLogin()->visit($path);
 }

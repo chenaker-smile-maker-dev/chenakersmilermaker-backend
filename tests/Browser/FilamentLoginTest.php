@@ -1,46 +1,87 @@
 <?php
 
 use App\Models\User;
+use Tests\Browser\Core\AdminSession;
+use Tests\Browser\Core\BrowserAssertions;
+use Tests\Browser\Core\FilamentPage;
 
-// ─── Login page ───────────────────────────────────────────────────────────────
+// ─── Redirect unauthenticated ─────────────────────────────────────────────────
 
-it('redirects to login page when accessing admin unauthenticated', function () {
-    $page = $this->visit('/admin');
+it('redirects to login when visiting admin panel unauthenticated', function () {
+    $page = $this->visit(FilamentPage::base());
 
-    $page->assertPathIs('/admin/login');
+    BrowserAssertions::assertRedirectedToLogin($page);
 });
 
-it('shows the login form on the admin login page', function () {
-    $page = $this->visit('/admin/login');
+it('redirects to login when visiting resource pages unauthenticated', function () {
+    foreach ([FilamentPage::patients(), FilamentPage::doctors(), FilamentPage::appointments()] as $path) {
+        $page = $this->visit($path);
+        BrowserAssertions::assertRedirectedToLogin($page);
+    }
+});
 
-    $page->assertPathIs('/admin/login')
-        ->assertSee('Sign in')
+// ─── Login page UI ────────────────────────────────────────────────────────────
+
+it('shows the login form with email and password fields', function () {
+    $page = $this->visit(FilamentPage::login());
+
+    $page->assertPathIs(FilamentPage::login())
         ->assertPresent('input[name="email"]')
         ->assertPresent('input[name="password"]');
 });
 
-// ─── Login flow ───────────────────────────────────────────────────────────────
+it('login page has a sign-in button', function () {
+    $page = $this->visit(FilamentPage::login());
 
-it('admin user can log in to filament panel', function () {
+    $page->assertSee('Sign in');
+});
+
+// ─── Successful login ─────────────────────────────────────────────────────────
+
+it('admin can log in with valid credentials', function () {
     $user = User::factory()->create([
-        'email'    => 'test-admin@example.com',
+        'email'    => 'login-test@clinic.dz',
         'password' => bcrypt('password'),
     ]);
 
-    $page = $this->visit('/admin/login');
+    $page = AdminSession::loginAs($this, $user);
 
-    $page->type('email', 'test-admin@example.com')
-        ->type('password', 'password')
-        ->press('Sign in')
-        ->assertPathIs('/admin');
+    $page->assertPathIs(FilamentPage::dashboard());
 });
 
-it('shows error for invalid credentials', function () {
-    $page = $this->visit('/admin/login');
+it('redirects to dashboard after login', function () {
+    $user = User::factory()->create([
+        'email'    => 'login-redirect@clinic.dz',
+        'password' => bcrypt('password'),
+    ]);
 
-    $page->type('email', 'nobody@example.com')
+    $page = AdminSession::loginAs($this, $user);
+
+    BrowserAssertions::assertOnPanel($page);
+});
+
+// ─── Failed login ─────────────────────────────────────────────────────────────
+
+it('shows error message for wrong password', function () {
+    User::factory()->create([
+        'email'    => 'wrong-pass@clinic.dz',
+        'password' => bcrypt('correct-password'),
+    ]);
+
+    $page = $this->visit(FilamentPage::login())
+        ->type('email', 'wrong-pass@clinic.dz')
         ->type('password', 'wrong-password')
-        ->press('Sign in')
-        ->assertPathIs('/admin/login')
+        ->press('Sign in');
+
+    $page->assertPathIs(FilamentPage::login())
         ->assertSee('credentials');
+});
+
+it('stays on login page after failed login with unknown email', function () {
+    $page = $this->visit(FilamentPage::login())
+        ->type('email', 'nobody@clinic.dz')
+        ->type('password', 'password')
+        ->press('Sign in');
+
+    $page->assertPathIs(FilamentPage::login());
 });
