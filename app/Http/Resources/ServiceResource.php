@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Utils\GetModelMultilangAttribute;
+use App\Utils\MediaHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -16,8 +17,7 @@ class ServiceResource extends JsonResource
             'price' => $this->price,
             'duration' => $this->duration,
             'active' => $this->active,
-            'image_url' => $this->image,
-            'thumbnail_url' => $this->thumb_image,
+            'image' => MediaHelper::single($this->resource, 'image'),
         ];
     }
 }

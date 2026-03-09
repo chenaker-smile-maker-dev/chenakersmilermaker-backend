@@ -27,6 +27,9 @@ class Patient extends Authenticatable implements HasMedia
         'age',
         'gender',
         'password',
+        'email_verified_at',
+        'email_verification_token',
+        'email_verification_sent_at',
     ];
 
     protected $hidden = [
@@ -39,6 +42,7 @@ class Patient extends Authenticatable implements HasMedia
         return [
             'gender' => Gender::class,
             'email_verified_at' => 'datetime',
+            'email_verification_sent_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
@@ -73,19 +77,52 @@ class Patient extends Authenticatable implements HasMedia
         return $this->hasMedia('profile_photo')
             ? $this->getFirstMediaUrl('profile_photo', 'thumb')
             : (new Avatar)->create($this->full_name)
-                ->setDimension(100)
-                ->setBackground('#25703e')
-                ->setForeground('#ffffff')
-                ->toBase64();
+            ->setDimension(100)
+            ->setBackground('#25703e')
+            ->setForeground('#ffffff')
+            ->toBase64();
     }
 
     public function getFullNameAttribute()
     {
-        return $this->first_name.' '.$this->last_name;
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(PatientNotification::class)->orderByDesc('created_at');
+    }
+
+    public function urgentBookings(): HasMany
+    {
+        return $this->hasMany(UrgentBooking::class);
+    }
+
+    public function hasVerifiedEmail(): bool
+    {
+        return $this->email_verified_at !== null;
+    }
+
+    public function markEmailAsVerified(): bool
+    {
+        return $this->forceFill([
+            'email_verified_at' => now(),
+            'email_verification_token' => null,
+        ])->save();
+    }
+
+    public function generateVerificationToken(): string
+    {
+        $token = \Illuminate\Support\Str::random(64);
+        $this->update([
+            'email_verification_token' => $token,
+            'email_verification_sent_at' => now(),
+        ]);
+        return $token;
     }
 }

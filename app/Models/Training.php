@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Translatable\HasTranslations;
 use Spatie\MediaLibrary\HasMedia;
@@ -23,6 +24,7 @@ class Training extends Model implements HasMedia
         'description',
         'trainer_name',
         'duration',
+        'price',
         'documents',
         'video_url',
     ];
@@ -36,6 +38,7 @@ class Training extends Model implements HasMedia
     {
         return [
             'documents' => 'array',
+            'price' => 'integer',
         ];
     }
 
@@ -43,6 +46,10 @@ class Training extends Model implements HasMedia
     {
         $this->addMediaCollection('image')
             ->singleFile()
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg'])
+            ->useDisk('public');
+
+        $this->addMediaCollection('images')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg'])
             ->useDisk('public');
 
@@ -76,5 +83,20 @@ class Training extends Model implements HasMedia
     public function getImageThumbUrlAttribute(): ?string
     {
         return $this->getFirstMediaUrl('image', 'thumb');
+    }
+
+    public function reviews(): MorphMany
+    {
+        return $this->morphMany(Review::class, 'reviewable');
+    }
+
+    public function approvedReviews(): MorphMany
+    {
+        return $this->reviews()->where('is_approved', true);
+    }
+
+    public function getAverageRatingAttribute(): ?float
+    {
+        return $this->approvedReviews()->avg('rating');
     }
 }

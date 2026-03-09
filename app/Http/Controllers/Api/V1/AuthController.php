@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Actions\Patient\Auth\GenerateTokensForPatient;
 use App\Actions\Patient\Auth\LoginPatient;
 use App\Actions\Patient\Auth\RegisterPatient;
+use App\Actions\Patient\Auth\SendVerificationEmail;
+use App\Actions\Patient\Auth\VerifyPatientEmail;
 use App\Enums\Api\TokenAbility;
 use App\Models\Patient;
 use App\Http\Controllers\Api\BaseController;
@@ -34,7 +36,7 @@ class AuthController extends BaseController
     #[BodyParameter('password', description: 'Patient password (minimum 6 characters)', type: 'string', format: 'password', example: 'secure_password', required: true)]
     #[BodyParameter('password_confirmation', description: 'Password confirmation (must match password)', type: 'string', format: 'password', example: 'secure_password', required: true)]
     #[BodyParameter('image', description: 'Optional profile image (jpeg, png, jpg, max 2MB)', type: 'string', format: 'binary', required: false, example: 'use form-data to upload a file')]
-    public function register(RegisterPatientRequest $request, RegisterPatient $registerPatient, GenerateTokensForPatient $generateTokensForPatient)
+    public function register(RegisterPatientRequest $request, RegisterPatient $registerPatient, GenerateTokensForPatient $generateTokensForPatient, SendVerificationEmail $sendVerificationEmail)
     {
         $data = $request->validated();
 
@@ -47,13 +49,16 @@ class AuthController extends BaseController
             $patient->addMedia($image)->toMediaCollection('profile_photo');
         }
 
+        // Send email verification
+        $sendVerificationEmail->handle($patient);
+
         [$accessToken, $refreshToken] = $generateTokensForPatient->handle($patient);
 
         return $this->sendResponse([
             'token' => $accessToken->plainTextToken,
             'refresh_token' => $refreshToken->plainTextToken,
             'patient' => new PatientResource($patient),
-        ], 'Patient registered successfully.');
+        ], __('api.register_success'));
     }
 
     /**
@@ -108,5 +113,54 @@ class AuthController extends BaseController
         return $this->sendResponse([
             'token' => $accessToken->plainTextToken,
         ], 'Access token refreshed successfully.');
+    }
+
+    /**
+     * Verify patient email.
+     *
+     * Verify a patient's email address using the token sent to their email.
+     */
+    #[BodyParameter('email', description: 'Patient email address', type: 'string', format: 'email', required: true)]
+    #[BodyParameter('token', description: 'Verification token from email', type: 'string', required: true)]
+    public function verifyEmail(Request $request, VerifyPatientEmail $verifyPatientEmail)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'token' => 'required|string',
+        ]);
+
+        $result = $verifyPatientEmail->handle($request->email, $request->token);
+
+        if (!$result['success']) {
+            return $this->sendError($result['message'], [], 422);
+        }
+
+        return $this->sendResponse([], $result['message']);
+    }
+
+    /**
+     * Resend verification email.
+     *
+     * Resend the email verification link to the authenticated patient.
+     */
+    public function resendVerification(Request $request, SendVerificationEmail $sendVerificationEmail)
+    {
+        $patient = $request->user();
+
+        if ($patient->hasVerifiedEmail()) {
+            return $this->sendResponse([], __('api.email_already_verified'));
+        }
+
+        // Rate limit check
+        if (
+            $patient->email_verification_sent_at &&
+            $patient->email_verification_sent_at->addMinute()->isFuture()
+        ) {
+            return $this->sendError(__('api.resend_too_soon'), [], 429);
+        }
+
+        $sendVerificationEmail->handle($patient);
+
+        return $this->sendResponse([], __('api.email_verification_sent'));
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Appointment\AppointmentStatus;
+use App\Enums\Appointment\ChangeRequestStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,6 +24,16 @@ class Appointment extends Model implements Eventable
         'price',
         'status',
         'metadata',
+        'admin_notes',
+        'cancellation_reason',
+        'reschedule_reason',
+        'original_from',
+        'original_to',
+        'change_request_status',
+        'requested_new_from',
+        'requested_new_to',
+        'confirmed_by',
+        'confirmed_at',
     ];
 
     protected function casts(): array
@@ -30,6 +41,11 @@ class Appointment extends Model implements Eventable
         return [
             'from' => 'datetime',
             'to' => 'datetime',
+            'original_from' => 'datetime',
+            'original_to' => 'datetime',
+            'requested_new_from' => 'datetime',
+            'requested_new_to' => 'datetime',
+            'confirmed_at' => 'datetime',
             'price' => 'integer',
             'status' => AppointmentStatus::class,
             'metadata' => 'json',
@@ -51,6 +67,11 @@ class Appointment extends Model implements Eventable
         return $this->belongsTo(Patient::class)->withDefault();
     }
 
+    public function confirmedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'confirmed_by');
+    }
+
     public function toCalendarEvent(): CalendarEvent
     {
         return CalendarEvent::make($this)
@@ -58,7 +79,7 @@ class Appointment extends Model implements Eventable
             ->backgroundColor(color: '#34D399') // ✅ Tailwind green-400
             ->start($this->from)
             ->end($this->to);
-        }
+    }
 
     public function scopeBetween($query, $start, $end)
     {

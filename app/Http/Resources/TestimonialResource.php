@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Utils\MediaHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -21,10 +22,12 @@ class TestimonialResource extends JsonResource
             'content' => $this->content,
             'rating' => $this->rating,
             'is_published' => $this->is_published,
-            'image' => $this->patient_id ? $this->patient?->image : null,
-            'thumb_image' => $this->patient_id ? $this->patient?->thumb_image : null,
+            'image' => $this->patient_id && $this->patient
+                ? MediaHelper::single($this->patient, 'profile_photo')
+                : null,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
     }
 }
+

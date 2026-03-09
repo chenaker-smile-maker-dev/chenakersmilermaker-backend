@@ -35,6 +35,12 @@ class AdminNavigation
         'group' => self::MANAGEMENT_GROUP,
     ];
 
+    public const URGENT_BOOKINGS_RESOURCE = [
+        'icon' => Heroicon::ExclamationTriangle,
+        'sort' => 5,
+        'group' => self::MANAGEMENT_GROUP,
+    ];
+
     public const SETTINGS_PAGE = [
         'icon' => Heroicon::OutlinedCog6Tooth,
         'sort' => 99,

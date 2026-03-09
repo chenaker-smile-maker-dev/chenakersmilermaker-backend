@@ -19,6 +19,7 @@ class AppointmentCalendarWidget extends Widget implements HasForms, HasInfolists
 
     protected string $view = 'panels.widgets.appointment-calendar-wrapper';
 
+    protected static ?int $sort = 5;
     protected int|string|array $columnSpan = 'full';
 
     protected ?string $heading = 'Appointment Calendar';

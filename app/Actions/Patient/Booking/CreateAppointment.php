@@ -6,9 +6,15 @@ use App\Models\Appointment;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Service;
+use App\Models\User;
 use App\Enums\Appointment\AppointmentStatus;
+use App\Enums\PatientNotificationType;
+use App\Notifications\Admin\NewAppointmentBooked;
+use App\Services\PatientNotificationService;
+use App\Services\PatientNotificationTemplates;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Zap\Facades\Zap;
 
 class CreateAppointment
@@ -42,6 +48,24 @@ class CreateAppointment
 
             // Block this time slot in Zap to prevent double-booking
             $this->blockTimeSlotInZap($doctor, $appointment);
+
+            // Notify admin
+            $admins = User::all();
+            Notification::send($admins, new NewAppointmentBooked($appointment));
+
+            // Notify patient
+            $templates = PatientNotificationTemplates::appointmentBooked(
+                $doctor->display_name,
+                $appointment->from->format('M d, Y'),
+                $appointment->from->format('H:i')
+            );
+            PatientNotificationService::send(
+                $patient,
+                PatientNotificationType::APPOINTMENT_BOOKED->value,
+                $templates['title'],
+                $templates['body'],
+                ['appointment_id' => $appointment->id],
+            );
 
             return $this->successResponse($appointment, $availabilityCheck);
         } catch (\Exception $e) {

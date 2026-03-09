@@ -2,12 +2,13 @@
 
 namespace App\Filament\Admin\Resources\Trainings\Schemas;
 
+use AbdulmajeedJamaan\FilamentTranslatableTabs\TranslatableTabs;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use AbdulmajeedJamaan\FilamentTranslatableTabs\TranslatableTabs;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class TrainingForm
 {
@@ -28,17 +29,9 @@ class TrainingForm
                         ->extraAttributes(['style' => 'min-height: 300px;'])
                         ->disableAllToolbarButtons()
                         ->toolbarButtons([
-                            'attachFiles',
-                            'blockquote',
-                            'bold',
-                            'bulletList',
-                            'codeBlock',
-                            'italic',
-                            'link',
-                            'orderedList',
-                            'redo',
-                            'strike',
-                            'undo',
+                            'attachFiles', 'blockquote', 'bold', 'bulletList',
+                            'codeBlock', 'italic', 'link', 'orderedList',
+                            'redo', 'strike', 'undo',
                         ]),
                 ]),
 
@@ -53,6 +46,11 @@ class TrainingForm
                         ->required()
                         ->placeholder(__('panels/admin/resources/training.duration_placeholder'))
                         ->maxLength(255),
+                    TextInput::make('price')
+                        ->label('Price (DZD)')
+                        ->numeric()
+                        ->default(0)
+                        ->suffix('DZD'),
                     TextInput::make('video_url')
                         ->url()
                         ->columnSpanFull()
@@ -63,15 +61,20 @@ class TrainingForm
             Section::make(__('panels/admin/resources/training.media'))
                 ->columns(1)
                 ->schema([
-                    FileUpload::make('image')
+                    SpatieMediaLibraryFileUpload::make('image')
+                        ->label('Main Image')
+                        ->collection('image')
                         ->image()
-                        ->directory('trainings/images')
-                        ->columnSpanFull()
                         ->maxSize(5120)
-                        ->placeholder(__('panels/admin/resources/training.click_or_drag_image_here'))
-                        ->helperText(__('panels/admin/resources/training.image_helper')),
-
-                        FileUpload::make('documents')
+                        ->columnSpanFull(),
+                    SpatieMediaLibraryFileUpload::make('images')
+                        ->label('Gallery Images')
+                        ->collection('images')
+                        ->multiple()
+                        ->image()
+                        ->maxSize(5120)
+                        ->columnSpanFull(),
+                    FileUpload::make('documents')
                         ->multiple()
                         ->directory('trainings/documents')
                         ->acceptedFileTypes([
@@ -80,9 +83,10 @@ class TrainingForm
                             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                         ])
                         ->columnSpanFull()
-                            ->placeholder(__('panels/admin/resources/training.click_or_drag_documents_here'))
-                            ->helperText(__('panels/admin/resources/training.documents_helper')),
+                        ->placeholder(__('panels/admin/resources/training.click_or_drag_documents_here'))
+                        ->helperText(__('panels/admin/resources/training.documents_helper')),
                 ]),
         ]);
     }
 }
+

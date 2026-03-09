@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Utils\GetModelMultilangAttribute;
+use App\Utils\MediaHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,10 +15,7 @@ class DoctorResource extends JsonResource
             'id' => $this->id,
             'name' => GetModelMultilangAttribute::get($this, 'name'),
             'specialty' => GetModelMultilangAttribute::get($this, 'specialty'),
-            // 'email' => $this->email ?? null,
-            // 'phone' => $this->phone ?? null,
-            'image_url' => $this->image,
-            'thumbnail_url' => $this->thumb_image,
+            'image' => MediaHelper::single($this->resource, 'doctor_photo'),
         ];
     }
 }
