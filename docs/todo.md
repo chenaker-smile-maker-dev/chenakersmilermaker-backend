@@ -101,7 +101,7 @@ Track progress by marking items with `[x]` when completed.
 - [x] Update ShowTraining action with reviews
 - [x] Create SubmitTrainingReview action + endpoint
 - [x] Update TrainingResource in Filament (price, images)
-- [ ] Add reviews RelationManager to TrainingResource (approve/reject reviews)
+- [x] Add reviews RelationManager to TrainingResource (approve/reject reviews)
 
 ## Step 9: Tests
 - [ ] Create/update all factories (Patient, Appointment, UrgentBooking, PatientNotification, Review, Event, Training, User, Doctor, Service, Testimonial)

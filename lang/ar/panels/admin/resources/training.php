@@ -35,4 +35,5 @@ return [
     'search_by_trainer_name' => 'البحث باسم المدرب',
     'no_image' => 'لا توجد صورة',
     'deleted' => 'محذوف',
+    'reviews_tab' => 'التقييمات',
 ];

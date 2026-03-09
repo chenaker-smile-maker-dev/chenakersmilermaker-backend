@@ -34,4 +34,5 @@ return [
     'not_deleted' => 'Not deleted',
     'no_image' => 'No image',
     'deleted' => 'Deleted',
+    'reviews_tab' => 'Reviews',
 ];

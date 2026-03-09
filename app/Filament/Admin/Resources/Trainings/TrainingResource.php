@@ -16,6 +16,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use App\Filament\Admin\AdminNavigation;
+use App\Filament\Admin\Resources\Trainings\RelationManagers\ReviewsRelationManager;
 
 class TrainingResource extends Resource
 {
@@ -65,7 +66,7 @@ class TrainingResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ReviewsRelationManager::class,
         ];
     }
 

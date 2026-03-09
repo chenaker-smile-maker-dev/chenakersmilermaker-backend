@@ -35,4 +35,5 @@ return [
     'search_by_trainer_name' => 'Rechercher par nom du formateur',
     'no_image' => 'Pas d\'image',
     'deleted' => 'Supprimé',
+    'reviews_tab' => 'Avis',
 ];
