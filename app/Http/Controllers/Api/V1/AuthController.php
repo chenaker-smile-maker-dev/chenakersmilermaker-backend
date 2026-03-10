@@ -58,7 +58,7 @@ class AuthController extends BaseController
             'token' => $accessToken->plainTextToken,
             'refresh_token' => $refreshToken->plainTextToken,
             'patient' => new PatientResource($patient),
-        ], __('api.register_success'));
+        ], 'api.register_success');
     }
 
     /**

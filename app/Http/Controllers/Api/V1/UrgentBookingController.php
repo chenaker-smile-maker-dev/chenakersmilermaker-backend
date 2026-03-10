@@ -79,6 +79,6 @@ class UrgentBookingController extends BaseController
                 'name' => $urgentBooking->assignedDoctor->display_name,
             ] : null,
             'created_at' => $urgentBooking->created_at->toIso8601String(),
-        ], __('api.success'));
+        ], 'api.success');
     }
 }

@@ -11,10 +11,13 @@ use App\Http\Controllers\Api\V1\TrainingController;
 use App\Http\Controllers\Api\V1\TestimonialController;
 use App\Http\Controllers\Api\V1\ServiceController;
 use App\Http\Controllers\Api\V1\UrgentBookingController;
+use App\Http\Controllers\Api\V1\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')
     ->group(function () {
+        Route::get('website', [WebsiteController::class, 'show']);
+
         Route::prefix('services')->group(function () {
             Route::get('service', [ServiceController::class, 'listServices']);
             Route::get('service/{service}', [ServiceController::class, 'showService']);

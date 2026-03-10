@@ -10,6 +10,8 @@ class BaseController
      * If a translation key (e.g. 'api.login_success') is passed it is resolved
      * in all three supported locales. A plain string is returned as-is for every
      * locale.
+     *
+     * @return array{en: string, ar: string, fr: string}
      */
     private function buildMessage(string $key, array $replace = []): array
     {
@@ -28,7 +30,7 @@ class BaseController
     /**
      * Success response.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse<array{success: true, message: array{en: string, ar: string, fr: string}, data?: mixed}>
      */
     public function sendResponse($result = [], string $message = 'api.success', int $code = 200, array $replace = [])
     {
@@ -48,7 +50,7 @@ class BaseController
     /**
      * Error response.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse<array{success: false, message: array{en: string, ar: string, fr: string}, data?: mixed}>
      */
     public function sendError(string $error, array $errorMessages = [], int $code = 404, array $replace = [])
     {
@@ -68,7 +70,7 @@ class BaseController
     /**
      * Validation error response.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse<array{success: false, message: array{en: string, ar: string, fr: string}, data?: mixed}>
      */
     public function sendValidationError(array $errorMessages = [])
     {
