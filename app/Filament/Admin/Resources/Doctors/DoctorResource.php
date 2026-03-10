@@ -67,7 +67,7 @@ class DoctorResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'Specialty' => $record->specialty,
+            __('panels/admin/resources/doctor.medical_specialty') => $record->specialty ?? '—',
         ];
     }
 

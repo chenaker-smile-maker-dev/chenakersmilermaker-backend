@@ -54,12 +54,14 @@ class ServiceResource extends Resource
     }
     public static function getGloballySearchableAttributes(): array
     {
-        return ['name', 'availability'];
+        return ['name'];
     }
+
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'Price' => $record->price,
+            __('panels/admin/resources/service.price') => $record->price ? number_format($record->price, 0) . ' DZD' : '—',
+            __('panels/admin/resources/service.availability') => $record->availability?->name ?? '—',
         ];
     }
 

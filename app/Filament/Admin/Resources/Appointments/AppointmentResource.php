@@ -17,6 +17,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class AppointmentResource extends Resource
@@ -44,18 +45,31 @@ class AppointmentResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = AdminNavigation::APPOINTEMENT_RESOURCE['icon'];
     protected static ?int $navigationSort = AdminNavigation::APPOINTEMENT_RESOURCE['sort'];
-    protected static ?string $recordTitleAttribute = 'display_name';
-    public static function getGlobalSearchResultTitle(Model $record): string | Htmlable
+
+    public static function getGloballySearchableAttributes(): array
     {
-        return $record->display_name;
+        return ['patient.first_name', 'patient.last_name', 'doctor.name', 'service.name'];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->with(['patient', 'doctor', 'service']);
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string|Htmlable
+    {
+        $patient = $record->patient?->full_name ?? '—';
+        $date = $record->from?->format('M d, Y H:i') ?? '—';
+
+        return "{$patient} — {$date}";
     }
 
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            __('panels/admin/resources/appointment.doctor') => $record->doctor->name,
-            __('panels/admin/resources/appointment.patient') => $record->patient->full_name,
-            __('panels/admin/resources/appointment.service') => $record->service->name,
+            __('panels/admin/resources/appointment.doctor') => $record->doctor?->display_name ?? '—',
+            __('panels/admin/resources/appointment.service') => $record->service?->name ?? '—',
+            __('panels/admin/resources/appointment.status') => $record->status?->name ?? '—',
         ];
     }
 

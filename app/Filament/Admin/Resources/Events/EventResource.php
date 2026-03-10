@@ -16,6 +16,8 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use App\Filament\Admin\AdminNavigation;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Model;
 
 class EventResource extends Resource
 {
@@ -44,6 +46,24 @@ class EventResource extends Resource
     protected static ?int $navigationSort = AdminNavigation::EVENTS_RESOURCE['sort'];
 
     protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['title', 'location'];
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string|Htmlable
+    {
+        return $record->title;
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            __('panels/admin/resources/event.event_date') => $record->date?->format('M d, Y') ?? '—',
+            __('panels/admin/resources/event.location') => $record->location ?? '—',
+        ];
+    }
 
     public static function form(Schema $schema): Schema
     {

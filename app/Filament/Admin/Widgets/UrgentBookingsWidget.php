@@ -18,8 +18,8 @@ class UrgentBookingsWidget extends BaseWidget
         $pending = UrgentBooking::where('status', UrgentBookingStatus::PENDING)->count();
 
         return [
-            Stat::make('Pending Urgent Bookings', $pending)
-                ->description('Require immediate attention')
+            Stat::make(__('panels/admin/widgets/dashboard.pending_urgent_bookings'), $pending)
+                ->description(__('panels/admin/widgets/dashboard.pending_urgent_bookings_desc'))
                 ->color($pending > 0 ? 'danger' : 'success')
                 ->icon('heroicon-o-exclamation-triangle'),
         ];

@@ -32,23 +32,23 @@ class StatsOverviewWidget extends BaseWidget
             + UrgentBooking::where('status', UrgentBookingStatus::PENDING)->count();
 
         return [
-            Stat::make('Total Patients', $totalPatients)
-                ->description('Registered patients')
+            Stat::make(__('panels/admin/widgets/dashboard.total_patients'), $totalPatients)
+                ->description(__('panels/admin/widgets/dashboard.total_patients_desc'))
                 ->color('primary')
                 ->icon('heroicon-o-user-group'),
 
-            Stat::make("Today's Appointments", $todayAppointments)
+            Stat::make(__('panels/admin/widgets/dashboard.todays_appointments'), $todayAppointments)
                 ->description(today()->format('l, M d'))
                 ->color('info')
                 ->icon('heroicon-o-calendar-days'),
 
-            Stat::make('This Month', $monthAppointments)
-                ->description(now()->format('F Y') . ' appointments')
+            Stat::make(__('panels/admin/widgets/dashboard.this_month'), $monthAppointments)
+                ->description(now()->format('F Y') . ' ' . __('panels/admin/widgets/dashboard.this_month_suffix'))
                 ->color('success')
                 ->icon('heroicon-o-chart-bar'),
 
-            Stat::make('Pending Actions', $pendingCount)
-                ->description('Appointments + urgent bookings')
+            Stat::make(__('panels/admin/widgets/dashboard.pending_actions'), $pendingCount)
+                ->description(__('panels/admin/widgets/dashboard.pending_actions_desc'))
                 ->color($pendingCount > 0 ? 'warning' : 'success')
                 ->icon('heroicon-o-exclamation-circle'),
         ];

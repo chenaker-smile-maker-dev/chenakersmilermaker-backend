@@ -26,18 +26,18 @@ class PendingActionsWidget extends BaseWidget
         $rescheduleRequests = Appointment::where('change_request_status', ChangeRequestStatus::PENDING_RESCHEDULE)->count();
 
         return [
-            Stat::make('Pending Appointments', $pendingAppointments)
-                ->description('Awaiting confirmation')
+            Stat::make(__('panels/admin/widgets/dashboard.pending_appointments'), $pendingAppointments)
+                ->description(__('panels/admin/widgets/dashboard.pending_appointments_desc'))
                 ->color($pendingAppointments > 0 ? 'warning' : 'success')
                 ->icon('heroicon-o-clock'),
 
-            Stat::make('Cancellation Requests', $cancellationRequests)
-                ->description('Awaiting decision')
+            Stat::make(__('panels/admin/widgets/dashboard.cancellation_requests'), $cancellationRequests)
+                ->description(__('panels/admin/widgets/dashboard.cancellation_requests_desc'))
                 ->color($cancellationRequests > 0 ? 'danger' : 'success')
                 ->icon('heroicon-o-x-circle'),
 
-            Stat::make('Reschedule Requests', $rescheduleRequests)
-                ->description('Awaiting decision')
+            Stat::make(__('panels/admin/widgets/dashboard.reschedule_requests'), $rescheduleRequests)
+                ->description(__('panels/admin/widgets/dashboard.reschedule_requests_desc'))
                 ->color($rescheduleRequests > 0 ? 'warning' : 'success')
                 ->icon('heroicon-o-arrow-path'),
         ];

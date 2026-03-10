@@ -31,7 +31,7 @@ class PatientResource extends Resource
         return  __(AdminNavigation::PATIENTS_RESOURCE['group']);
     }
 
-  public static function getModelLabel(): string
+    public static function getModelLabel(): string
     {
         return __("panels/admin/resources/patient.singular");
     }
@@ -61,7 +61,8 @@ class PatientResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            'Email' => $record->email,
+            __('panels/admin/resources/patient.email_address') => $record->email ?? '—',
+            __('panels/admin/resources/patient.phone') => $record->phone ?? '—',
         ];
     }
     public static function form(Schema $schema): Schema

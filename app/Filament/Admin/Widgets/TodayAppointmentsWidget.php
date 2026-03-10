@@ -14,7 +14,12 @@ class TodayAppointmentsWidget extends BaseWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?string $heading = "Today's Appointments";
+    protected static ?string $heading = null;
+
+    public function getHeading(): string|\Illuminate\Contracts\Support\Htmlable|null
+    {
+        return __('panels/admin/widgets/dashboard.today_appointments_heading');
+    }
 
     public function table(Table $table): Table
     {
@@ -27,17 +32,18 @@ class TodayAppointmentsWidget extends BaseWidget
             )
             ->columns([
                 TextColumn::make('from')
-                    ->label('Time')
+                    ->label(__('panels/admin/widgets/dashboard.time'))
                     ->time('H:i')
                     ->sortable(),
                 TextColumn::make('patient.full_name')
-                    ->label('Patient')
+                    ->label(__('panels/admin/widgets/dashboard.patient'))
                     ->searchable(),
                 TextColumn::make('doctor.display_name')
-                    ->label('Doctor'),
+                    ->label(__('panels/admin/widgets/dashboard.doctor')),
                 TextColumn::make('service.name')
-                    ->label('Service'),
+                    ->label(__('panels/admin/widgets/dashboard.service')),
                 TextColumn::make('status')
+                    ->label(__('panels/admin/widgets/dashboard.status'))
                     ->badge(),
             ])
             ->recordAction('view')

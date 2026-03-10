@@ -16,7 +16,9 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class TestimonialResource extends Resource
@@ -47,6 +49,25 @@ class TestimonialResource extends Resource
     protected static ?int $navigationSort = 7;
 
     protected static ?string $recordTitleAttribute = 'patient_name';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['patient_name', 'content'];
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string|Htmlable
+    {
+        return $record->patient_name;
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        $stars = str_repeat('⭐', $record->rating ?? 0);
+
+        return [
+            __('panels/admin/resources/testimonial.rating') => $stars ?: '—',
+        ];
+    }
 
     public static function form(Schema $schema): Schema
     {

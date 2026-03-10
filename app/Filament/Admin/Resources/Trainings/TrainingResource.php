@@ -17,6 +17,8 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use App\Filament\Admin\AdminNavigation;
 use App\Filament\Admin\Resources\Trainings\RelationManagers\ReviewsRelationManager;
+use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Model;
 
 class TrainingResource extends Resource
 {
@@ -47,6 +49,24 @@ class TrainingResource extends Resource
     protected static ?int $navigationSort = AdminNavigation::TRAININGS_RESOURCE['sort'];
 
     protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['title', 'instructor'];
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string|Htmlable
+    {
+        return $record->title;
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            __('panels/admin/resources/training.instructor') => $record->instructor ?? '—',
+            __('panels/admin/resources/training.duration') => $record->duration ?? '—',
+        ];
+    }
 
     public static function form(Schema $schema): Schema
     {
