@@ -44,7 +44,13 @@ class AdminNavigation
     public const SETTINGS_PAGE = [
         'icon' => Heroicon::OutlinedCog6Tooth,
         'sort' => 99,
-        'group' => self::CONFIGURATION_GROUP,
+        'group' => null,
+    ];
+
+    public const WEBSITE_SETTINGS_PAGE = [
+        'icon' => Heroicon::OutlinedGlobeAlt,
+        'sort' => 98,
+        'group' => null,
     ];
 
     public const EVENTS_RESOURCE = [
