@@ -8,6 +8,7 @@ use App\Filament\Admin\Widgets\StatsOverviewWidget;
 use App\Filament\Admin\Widgets\TodayAppointmentsWidget;
 use App\Filament\Admin\Widgets\UrgentBookingsWidget;
 use Filament\Pages\Dashboard as BaseDashboard;
+use Filament\Widgets\FilamentInfoWidget;
 
 class Dashboard extends BaseDashboard
 {

@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->spa()
-
+            ->sidebarCollapsibleOnDesktop()
             ->colors([
                 'primary' => Color::hex('#8FFDC6'),
                 'success' => Color::hex('#12D18E'),
@@ -46,7 +46,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(fn() => view('panels.admin.components.brand'))
             ->darkModeBrandLogo(fn() => view('panels.admin.components.brand-dark'))
             ->brandLogoHeight('2rem')
-            ->font('Inter')
+            ->font('Poppins')
             ->viteTheme('resources/css/filament/admin/theme.css')
 
             ->databaseTransactions()
@@ -61,14 +61,6 @@ class AdminPanelProvider extends PanelProvider
             // ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\Filament\Admin\Widgets')
 
             ->pages([])
-            ->widgets([
-                \App\Filament\Admin\Widgets\StatsOverviewWidget::class,
-                \App\Filament\Admin\Widgets\PendingActionsWidget::class,
-                \App\Filament\Admin\Widgets\UrgentBookingsWidget::class,
-                \App\Filament\Admin\Widgets\TodayAppointmentsWidget::class,
-                \App\Filament\Admin\Widgets\AppointmentCalendarWidget::class,
-            ])
-
             ->plugins([
                 FilamentDeveloperLoginsPlugin::make()->enabled(config('app.debug'))->users(['ADMINISTRATEUR' => 'admin@admin.dev']),
                 FilamentEditProfilePlugin::make()->setIcon('heroicon-o-user-circle'),
