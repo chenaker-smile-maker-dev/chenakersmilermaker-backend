@@ -2,12 +2,11 @@
 
 namespace Tests\Browser\Core;
 
-use Pest\Browser\Api\Webpage;
-
 /**
  * BrowserAssertions — custom assertion helpers for dental clinic panel tests.
  *
- * All methods return the Webpage for fluent chaining.
+ * All methods accept and return mixed to be compatible with
+ * PendingAwaitablePage, AwaitableWebpage and Webpage from pest-plugin-browser.
  *
  * Usage:
  *   BrowserAssertions::assertOnPanel($page);
@@ -18,32 +17,32 @@ class BrowserAssertions
     /**
      * Assert we are on any Filament admin panel page.
      */
-    public static function assertOnPanel(Webpage $page): Webpage
+    public static function assertOnPanel(mixed $page): mixed
     {
         return $page->assertPathBeginsWith('/admin')
-            ->assertPresent('nav');
+            ->assertPresent('.fi-sidebar-nav');
     }
 
     /**
      * Assert the Filament panel sidebar navigation is present.
      */
-    public static function assertSidebarPresent(Webpage $page): Webpage
+    public static function assertSidebarPresent(mixed $page): mixed
     {
-        return $page->assertPresent('nav[aria-label]');
+        return $page->assertPresent('.fi-sidebar-nav');
     }
 
     /**
      * Assert a Filament table has at least one data row (not empty state).
      */
-    public static function assertTableHasRows(Webpage $page): Webpage
+    public static function assertTableHasRows(mixed $page): mixed
     {
-        return $page->assertPresent('table tbody tr');
+        return $page->assertPresent('.fi-ta-row');
     }
 
     /**
      * Assert a Filament table shows the empty state message.
      */
-    public static function assertTableEmpty(Webpage $page): Webpage
+    public static function assertTableEmpty(mixed $page): mixed
     {
         return $page->assertPresent('[data-empty-state]');
     }
@@ -51,7 +50,7 @@ class BrowserAssertions
     /**
      * Assert a Filament badge/status chip with the given text is visible.
      */
-    public static function assertBadge(Webpage $page, string $text): Webpage
+    public static function assertBadge(mixed $page, string $text): mixed
     {
         return $page->assertSee($text);
     }
@@ -59,7 +58,7 @@ class BrowserAssertions
     /**
      * Assert a Filament notification toast with the given text appeared.
      */
-    public static function assertNotificationToast(Webpage $page, string $text): Webpage
+    public static function assertNotificationToast(mixed $page, string $text): mixed
     {
         return $page->assertSee($text);
     }
@@ -67,7 +66,7 @@ class BrowserAssertions
     /**
      * Assert the current URL path is exactly the given path.
      */
-    public static function assertPath(Webpage $page, string $path): Webpage
+    public static function assertPath(mixed $page, string $path): mixed
     {
         return $page->assertPathIs($path);
     }
@@ -75,7 +74,7 @@ class BrowserAssertions
     /**
      * Assert the page redirected to login (unauthenticated).
      */
-    public static function assertRedirectedToLogin(Webpage $page): Webpage
+    public static function assertRedirectedToLogin(mixed $page): mixed
     {
         return $page->assertPathIs('/admin/login');
     }
@@ -83,7 +82,7 @@ class BrowserAssertions
     /**
      * Assert a create form page is loaded (has a Save/Create button).
      */
-    public static function assertCreateFormLoaded(Webpage $page): Webpage
+    public static function assertCreateFormLoaded(mixed $page): mixed
     {
         return $page->assertPresent('form');
     }
@@ -91,7 +90,7 @@ class BrowserAssertions
     /**
      * Assert a widget heading or card title is visible on the dashboard.
      */
-    public static function assertWidgetVisible(Webpage $page, string $heading): Webpage
+    public static function assertWidgetVisible(mixed $page, string $heading): mixed
     {
         return $page->assertSee($heading);
     }

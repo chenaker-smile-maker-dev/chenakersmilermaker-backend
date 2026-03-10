@@ -15,7 +15,7 @@ class RecentActivityWidget extends Widget
 
     protected int|string|array $columnSpan = 1;
 
-    protected static string $view = 'filament.admin.widgets.recent-activity';
+    protected string $view = 'filament.admin.widgets.recent-activity';
 
     public function getActivities(): Collection
     {

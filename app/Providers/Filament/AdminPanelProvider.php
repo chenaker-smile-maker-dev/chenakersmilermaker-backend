@@ -61,7 +61,14 @@ class AdminPanelProvider extends PanelProvider
             // ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\Filament\Admin\Widgets')
 
             ->pages([])
-            ->widgets([])
+            ->widgets([
+                \App\Filament\Admin\Widgets\StatsOverviewWidget::class,
+                \App\Filament\Admin\Widgets\PendingActionsWidget::class,
+                \App\Filament\Admin\Widgets\UrgentBookingsWidget::class,
+                \App\Filament\Admin\Widgets\TodayAppointmentsWidget::class,
+                \App\Filament\Admin\Widgets\AppointmentCalendarWidget::class,
+                \App\Filament\Admin\Widgets\RecentActivityWidget::class,
+            ])
 
             ->plugins([
                 FilamentDeveloperLoginsPlugin::make()->enabled(config('app.debug'))->users(['ADMINISTRATEUR' => 'admin@admin.dev']),

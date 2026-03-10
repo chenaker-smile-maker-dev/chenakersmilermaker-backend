@@ -4,8 +4,8 @@ namespace App\Filament\Admin\Resources\Trainings\RelationManagers;
 
 use Filament\Actions\Action;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Actions\Action as TableAction;
-use Filament\Tables\Actions\DeleteAction;
+use Filament\Actions\Action as TableAction;
+use Filament\Actions\DeleteAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -93,15 +93,15 @@ class ReviewsRelationManager extends RelationManager
                 DeleteAction::make(),
             ])
             ->bulkActions([
-                \Filament\Tables\Actions\BulkActionGroup::make([
-                    \Filament\Tables\Actions\BulkAction::make('approve_selected')
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\BulkAction::make('approve_selected')
                         ->label(__('panels/admin/resources/review.approve_selected'))
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
                         ->requiresConfirmation()
                         ->action(fn($records) => $records->each->update(['is_approved' => true])),
 
-                    \Filament\Tables\Actions\DeleteBulkAction::make(),
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

@@ -65,43 +65,73 @@ class DemoSeeder extends Seeder
         $data = [
             [
                 'name' => ['en' => 'Dental Cleaning',          'ar' => 'تنظيف الأسنان',         'fr' => 'Détartrage dentaire'],
-                'price' => 3000, 'availability' => ServiceAvailability::DAYTIME, 'active' => true, 'duration' => 45,
+                'price' => 3000,
+                'availability' => ServiceAvailability::DAYTIME,
+                'active' => true,
+                'duration' => 45,
             ],
             [
                 'name' => ['en' => 'Teeth Whitening',          'ar' => 'تبييض الأسنان',          'fr' => 'Blanchiment dentaire'],
-                'price' => 12000, 'availability' => ServiceAvailability::DAYTIME, 'active' => true, 'duration' => 60,
+                'price' => 12000,
+                'availability' => ServiceAvailability::DAYTIME,
+                'active' => true,
+                'duration' => 60,
             ],
             [
                 'name' => ['en' => 'Dental Implant',           'ar' => 'زراعة الأسنان',           'fr' => 'Implant dentaire'],
-                'price' => 45000, 'availability' => ServiceAvailability::DAYTIME, 'active' => true, 'duration' => 90,
+                'price' => 45000,
+                'availability' => ServiceAvailability::DAYTIME,
+                'active' => true,
+                'duration' => 90,
             ],
             [
                 'name' => ['en' => 'Root Canal Treatment',     'ar' => 'علاج قناة الجذر',         'fr' => 'Traitement de canal'],
-                'price' => 18000, 'availability' => ServiceAvailability::BOTH, 'active' => true, 'duration' => 75,
+                'price' => 18000,
+                'availability' => ServiceAvailability::BOTH,
+                'active' => true,
+                'duration' => 75,
             ],
             [
                 'name' => ['en' => 'Tooth Extraction',         'ar' => 'خلع الأسنان',             'fr' => 'Extraction dentaire'],
-                'price' => 4000, 'availability' => ServiceAvailability::BOTH, 'active' => true, 'duration' => 30,
+                'price' => 4000,
+                'availability' => ServiceAvailability::BOTH,
+                'active' => true,
+                'duration' => 30,
             ],
             [
                 'name' => ['en' => 'Dental Braces',            'ar' => 'تقويم الأسنان',            'fr' => 'Appareil dentaire'],
-                'price' => 80000, 'availability' => ServiceAvailability::DAYTIME, 'active' => true, 'duration' => 60,
+                'price' => 80000,
+                'availability' => ServiceAvailability::DAYTIME,
+                'active' => true,
+                'duration' => 60,
             ],
             [
                 'name' => ['en' => 'Ceramic Crown',            'ar' => 'تاج سيراميك',              'fr' => 'Couronne céramique'],
-                'price' => 25000, 'availability' => ServiceAvailability::DAYTIME, 'active' => true, 'duration' => 60,
+                'price' => 25000,
+                'availability' => ServiceAvailability::DAYTIME,
+                'active' => true,
+                'duration' => 60,
             ],
             [
                 'name' => ['en' => 'Emergency Consultation',   'ar' => 'استشارة طارئة',            'fr' => 'Consultation urgente'],
-                'price' => 2000, 'availability' => ServiceAvailability::NIGHTTIME, 'active' => true, 'duration' => 20,
+                'price' => 2000,
+                'availability' => ServiceAvailability::NIGHTTIME,
+                'active' => true,
+                'duration' => 20,
             ],
             [
                 'name' => ['en' => 'Pediatric Dentistry',      'ar' => 'طب أسنان الأطفال',         'fr' => 'Dentisterie pédiatrique'],
-                'price' => 5000, 'availability' => ServiceAvailability::DAYTIME, 'active' => true, 'duration' => 45,
+                'price' => 5000,
+                'availability' => ServiceAvailability::DAYTIME,
+                'active' => true,
+                'duration' => 45,
             ],
             [
                 'name' => ['en' => 'Dental X-Ray',             'ar' => 'أشعة الأسنان',             'fr' => 'Radiographie dentaire'],
-                'price' => 1500, 'availability' => ServiceAvailability::DAYTIME, 'active' => true, 'duration' => 15,
+                'price' => 1500,
+                'availability' => ServiceAvailability::DAYTIME,
+                'active' => true,
+                'duration' => 15,
             ],
         ];
 
@@ -169,7 +199,7 @@ class DemoSeeder extends Seeder
             $serviceIndices = $row['services'];
             unset($row['services']);
             $doctor     = Doctor::create($row);
-            $serviceIds = array_map(fn ($i) => $services[$i]->id, $serviceIndices);
+            $serviceIds = array_map(fn($i) => $services[$i]->id, $serviceIndices);
             $doctor->services()->attach($serviceIds);
             $doctors[] = $doctor;
         }
@@ -228,7 +258,7 @@ class DemoSeeder extends Seeder
             ['patient' => 0, 'doctor' => 0, 'service' => 0, 'from' => $now->copy()->subDays(3)->setHour(9)->setMinute(0),  'status' => AppointmentStatus::COMPLETED],
             ['patient' => 1, 'doctor' => 2, 'service' => 3, 'from' => $now->copy()->subDays(5)->setHour(11)->setMinute(0), 'status' => AppointmentStatus::COMPLETED],
             ['patient' => 2, 'doctor' => 4, 'service' => 8, 'from' => $now->copy()->subDays(7)->setHour(10)->setMinute(0), 'status' => AppointmentStatus::COMPLETED],
-            ['patient' => 3, 'doctor' => 1, 'service' => 5, 'from' => $now->copy()->subDays(10)->setHour(14)->setMinute(0),'status' => AppointmentStatus::COMPLETED],
+            ['patient' => 3, 'doctor' => 1, 'service' => 5, 'from' => $now->copy()->subDays(10)->setHour(14)->setMinute(0), 'status' => AppointmentStatus::COMPLETED],
             ['patient' => 4, 'doctor' => 0, 'service' => 1, 'from' => $now->copy()->subDays(14)->setHour(9)->setMinute(0), 'status' => AppointmentStatus::COMPLETED],
 
             // Past – cancelled / rejected
@@ -236,18 +266,28 @@ class DemoSeeder extends Seeder
             ['patient' => 6, 'doctor' => 2, 'service' => 3, 'from' => $now->copy()->subDays(4)->setHour(15)->setMinute(0),  'status' => AppointmentStatus::REJECTED,  'admin_notes' => 'Slot already taken.'],
 
             // Pending cancellation request
-            ['patient' => 7, 'doctor' => 0, 'service' => 0, 'from' => $now->copy()->addDays(3)->setHour(9)->setMinute(0),
-             'status' => AppointmentStatus::CONFIRMED,
-             'change_request_status' => ChangeRequestStatus::PENDING_CANCELLATION,
-             'cancellation_reason' => 'Patient travelling abroad.'],
+            [
+                'patient' => 7,
+                'doctor' => 0,
+                'service' => 0,
+                'from' => $now->copy()->addDays(3)->setHour(9)->setMinute(0),
+                'status' => AppointmentStatus::CONFIRMED,
+                'change_request_status' => ChangeRequestStatus::PENDING_CANCELLATION,
+                'cancellation_reason' => 'Patient travelling abroad.'
+            ],
 
             // Pending reschedule request
-            ['patient' => 8, 'doctor' => 1, 'service' => 5, 'from' => $now->copy()->addDays(5)->setHour(11)->setMinute(0),
-             'status' => AppointmentStatus::CONFIRMED,
-             'change_request_status' => ChangeRequestStatus::PENDING_RESCHEDULE,
-             'reschedule_reason' => 'Requesting an earlier slot if possible.',
-             'requested_new_from' => $now->copy()->addDays(2)->setHour(10)->setMinute(0),
-             'requested_new_to'   => $now->copy()->addDays(2)->setHour(11)->setMinute(0)],
+            [
+                'patient' => 8,
+                'doctor' => 1,
+                'service' => 5,
+                'from' => $now->copy()->addDays(5)->setHour(11)->setMinute(0),
+                'status' => AppointmentStatus::CONFIRMED,
+                'change_request_status' => ChangeRequestStatus::PENDING_RESCHEDULE,
+                'reschedule_reason' => 'Requesting an earlier slot if possible.',
+                'requested_new_from' => $now->copy()->addDays(2)->setHour(10)->setMinute(0),
+                'requested_new_to'   => $now->copy()->addDays(2)->setHour(11)->setMinute(0)
+            ],
         ];
 
         foreach ($scenarios as $s) {
@@ -267,11 +307,11 @@ class DemoSeeder extends Seeder
                 'admin_notes'          => $s['admin_notes'] ?? null,
                 'cancellation_reason'  => $s['cancellation_reason'] ?? null,
                 'reschedule_reason'    => $s['reschedule_reason'] ?? null,
-                'change_request_status'=> $s['change_request_status'] ?? null,
+                'change_request_status' => $s['change_request_status'] ?? null,
                 'requested_new_from'   => $s['requested_new_from'] ?? null,
                 'requested_new_to'     => $s['requested_new_to'] ?? null,
                 'metadata'             => ['notes' => 'Demo appointment', 'duration_minutes' => $duration],
-            ], fn ($v) => $v !== null));
+            ], fn($v) => $v !== null));
         }
     }
 

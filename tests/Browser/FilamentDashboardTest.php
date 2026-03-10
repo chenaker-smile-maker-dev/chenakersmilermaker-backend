@@ -51,55 +51,55 @@ it('dashboard shows pending actions widget', function () {
 it('can navigate to the patients resource page via sidebar', function () {
     $page = adminLogin();
 
-    $page->clickText('Patients')
+    $page->click('Patients')
         ->assertPathBeginsWith(FilamentPage::patients());
 });
 
 it('can navigate to the doctors resource page via sidebar', function () {
     $page = adminLogin();
 
-    $page->clickText('Doctors')
+    $page->click('Doctors')
         ->assertPathBeginsWith(FilamentPage::doctors());
 });
 
 it('can navigate to the appointments resource page via sidebar', function () {
     $page = adminLogin();
 
-    $page->clickText('Appointments')
+    $page->click('Appointments')
         ->assertPathBeginsWith(FilamentPage::appointments());
 });
 
 it('can navigate to services resource page via sidebar', function () {
     $page = adminLogin();
 
-    $page->clickText('Services')
+    $page->click('Services')
         ->assertPathBeginsWith(FilamentPage::services());
 });
 
 it('can navigate to events resource page via sidebar', function () {
     $page = adminLogin();
 
-    $page->clickText('Events')
+    $page->click('Events')
         ->assertPathBeginsWith(FilamentPage::events());
 });
 
 it('can navigate to trainings resource page via sidebar', function () {
     $page = adminLogin();
 
-    $page->clickText('Trainings')
+    $page->click('Trainings')
         ->assertPathBeginsWith(FilamentPage::trainings());
 });
 
 it('can navigate to urgent bookings resource page via sidebar', function () {
     $page = adminLogin();
 
-    $page->clickText('Urgent Bookings')
+    $page->click('Urgent Bookings')
         ->assertPathBeginsWith(FilamentPage::urgentBookings());
 });
 
 it('can navigate to testimonials resource page via sidebar', function () {
     $page = adminLogin();
 
-    $page->clickText('Testimonials')
+    $page->click('Testimonials')
         ->assertPathBeginsWith(FilamentPage::testimonials());
 });

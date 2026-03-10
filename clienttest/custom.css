@@ -1,0 +1,273 @@
+/* ── Google Fonts ───────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ── marimo public font variables ───────────────────────────────────────── */
+:root {
+    --marimo-text-font: 'Inter', system-ui, sans-serif;
+    --marimo-heading-font: 'Inter', system-ui, sans-serif;
+    --marimo-monospace-font: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* Design tokens (light mode) */
+    --ct-bg: #f8fafc;
+    --ct-surface: #ffffff;
+    --ct-border: #e2e8f0;
+    --ct-border-focus: #3b82f6;
+    --ct-text: #1e293b;
+    --ct-text-muted: #64748b;
+    --ct-accent: #3b82f6;
+    --ct-accent-hover: #2563eb;
+    --ct-success: #10b981;
+    --ct-success-hover: #059669;
+    --ct-danger: #ef4444;
+    --ct-radius: 8px;
+    --ct-shadow-sm: 0 1px 3px rgba(0, 0, 0, .08);
+    --ct-shadow-md: 0 4px 12px rgba(0, 0, 0, .1);
+}
+
+/* ── paragraph / body copy ──────────────────────────────────────────────── */
+.paragraph {
+    font-size: 0.95rem;
+    color: var(--ct-text-muted);
+    line-height: 1.65;
+}
+
+/* ── marimo input elements ──────────────────────────────────────────────── */
+
+/* text / password / number inputs */
+.marimo-text-input input,
+.marimo-number-input input {
+    font-family: var(--marimo-text-font) !important;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    border: 1.5px solid var(--ct-border);
+    border-radius: var(--ct-radius);
+    background: var(--ct-surface);
+    color: var(--ct-text);
+    transition: border-color .15s, box-shadow .15s;
+}
+
+.marimo-text-input input:focus,
+.marimo-number-input input:focus {
+    outline: none;
+    border-color: var(--ct-border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, .15);
+}
+
+/* dropdown / select */
+.marimo-dropdown select,
+select.marimo-select {
+    font-family: var(--marimo-text-font) !important;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    border: 1.5px solid var(--ct-border);
+    border-radius: var(--ct-radius);
+    background: var(--ct-surface);
+    color: var(--ct-text);
+}
+
+/* run-button */
+.run-button,
+button[class*="run"] {
+    font-family: var(--marimo-text-font) !important;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: var(--ct-radius);
+    border: none;
+    cursor: pointer;
+    background: var(--ct-success);
+    color: #fff;
+    box-shadow: var(--ct-shadow-sm);
+    transition: background .15s, box-shadow .15s, transform .1s;
+}
+
+.run-button:hover,
+button[class*="run"]:hover {
+    background: var(--ct-success-hover);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, .3);
+}
+
+.run-button:active,
+button[class*="run"]:active {
+    transform: scale(.97);
+}
+
+/* generic button (non-run) */
+button:not([class*="run"]):not([class*="icon"]):not([class*="close"]):not([class*="menu"]) {
+    font-family: var(--marimo-text-font) !important;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 8px 18px;
+    border-radius: var(--ct-radius);
+    border: none;
+    cursor: pointer;
+    background: var(--ct-accent);
+    color: #fff;
+    box-shadow: var(--ct-shadow-sm);
+    transition: background .15s, box-shadow .15s, transform .1s;
+}
+
+button:not([class*="run"]):not([class*="icon"]):not([class*="close"]):not([class*="menu"]):hover {
+    background: var(--ct-accent-hover);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, .3);
+}
+
+/* ── custom HTML components (defined in helpers/ui.py) ──────────────────── */
+
+/* Request preview panel */
+.ct-request {
+    background: #0f172a;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-family: var(--marimo-monospace-font);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #94a3b8;
+    margin-bottom: 8px;
+}
+
+.ct-request .ct-method-GET {
+    color: #34d399;
+    font-weight: 700;
+}
+
+.ct-request .ct-method-POST {
+    color: #60a5fa;
+    font-weight: 700;
+}
+
+.ct-request .ct-method-PUT {
+    color: #fbbf24;
+    font-weight: 700;
+}
+
+.ct-request .ct-method-PATCH {
+    color: #a78bfa;
+    font-weight: 700;
+}
+
+.ct-request .ct-method-DELETE {
+    color: #f87171;
+    font-weight: 700;
+}
+
+.ct-request .ct-url {
+    color: #e2e8f0;
+}
+
+.ct-request .ct-key {
+    color: #7dd3fc;
+}
+
+.ct-request .ct-val {
+    color: #fde68a;
+}
+
+.ct-request .ct-label {
+    color: #475569;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* Response panel */
+.ct-response {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--ct-shadow-sm);
+    border: 1px solid var(--ct-border);
+}
+
+.ct-response-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    font-family: var(--marimo-text-font);
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: var(--ct-surface);
+    border-bottom: 1px solid var(--ct-border);
+}
+
+.ct-response-header .ct-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 99px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.ct-badge-ok {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.ct-badge-err {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.ct-badge-warn {
+    background: #fef9c3;
+    color: #854d0e;
+}
+
+.ct-elapsed {
+    color: var(--ct-text-muted);
+    font-weight: 400;
+    margin-left: auto;
+}
+
+.ct-response-body {
+    background: #0f172a;
+    padding: 14px 16px;
+    font-family: var(--marimo-monospace-font);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #e2e8f0;
+    max-height: 400px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* JSON syntax highlighting */
+.ct-j-key {
+    color: #7dd3fc;
+}
+
+.ct-j-str {
+    color: #86efac;
+}
+
+.ct-j-num {
+    color: #fde68a;
+}
+
+.ct-j-bool {
+    color: #f9a8d4;
+}
+
+.ct-j-null {
+    color: #94a3b8;
+    font-style: italic;
+}
+
+/* scrollbar */
+.ct-response-body::-webkit-scrollbar {
+    width: 5px;
+}
+
+.ct-response-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ct-response-body::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 99px;
+}

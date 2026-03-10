@@ -2,8 +2,6 @@
 
 namespace Tests\Browser\Core;
 
-use Pest\Browser\Api\Webpage;
-
 /**
  * FilamentActions — reusable helpers for common Filament UI interactions.
  *
@@ -19,18 +17,18 @@ class FilamentActions
      * Click a table row action button by its label text.
      * Works with Filament's dropdown row actions.
      */
-    public static function openTableAction(Webpage $page, string $label): Webpage
+    public static function openTableAction(mixed $page, string $label): mixed
     {
         // Open the actions dropdown for the first row, then click the action
         return $page->click('[data-action-name]')
-            ->waitFor('[role="menuitem"]')
-            ->clickText($label);
+            ->wait(1)
+            ->click($label);
     }
 
     /**
      * Submit a Filament form (Save button).
      */
-    public static function save(Webpage $page): Webpage
+    public static function save(mixed $page): mixed
     {
         return $page->press('Save');
     }
@@ -38,7 +36,7 @@ class FilamentActions
     /**
      * Submit a Filament Create form.
      */
-    public static function create(Webpage $page): Webpage
+    public static function create(mixed $page): mixed
     {
         return $page->press('Create');
     }
@@ -46,7 +44,7 @@ class FilamentActions
     /**
      * Click the "New [Resource]" button on a list page.
      */
-    public static function clickNew(Webpage $page): Webpage
+    public static function clickNew(mixed $page): mixed
     {
         return $page->click('[wire\\:click*="create"]');
     }
@@ -54,16 +52,16 @@ class FilamentActions
     /**
      * Confirm a Filament confirmation modal by pressing the confirm button.
      */
-    public static function confirmModal(Webpage $page, string $buttonText = 'Confirm'): Webpage
+    public static function confirmModal(mixed $page, string $buttonText = 'Confirm'): mixed
     {
-        return $page->waitFor('[role="dialog"]')
+        return $page->wait(2)
             ->press($buttonText);
     }
 
     /**
      * Fill a Filament text input by its name attribute.
      */
-    public static function fillInput(Webpage $page, string $name, string $value): Webpage
+    public static function fillInput(mixed $page, string $name, string $value): mixed
     {
         return $page->type("input[name='{$name}']", $value);
     }
@@ -71,7 +69,7 @@ class FilamentActions
     /**
      * Select a Filament select option by its value.
      */
-    public static function selectOption(Webpage $page, string $name, string $value): Webpage
+    public static function selectOption(mixed $page, string $name, string $value): mixed
     {
         return $page->select("select[name='{$name}']", $value);
     }
@@ -79,23 +77,23 @@ class FilamentActions
     /**
      * Search in a Filament table search input.
      */
-    public static function searchTable(Webpage $page, string $query): Webpage
+    public static function searchTable(mixed $page, string $query): mixed
     {
-        return $page->type('input[placeholder*="Search"]', $query);
+        return $page->type('.fi-ta-search-field input', $query);
     }
 
     /**
      * Click a Filament tab by its label.
      */
-    public static function clickTab(Webpage $page, string $label): Webpage
+    public static function clickTab(mixed $page, string $label): mixed
     {
-        return $page->clickText($label);
+        return $page->click($label);
     }
 
     /**
      * Assert a Filament success notification is visible.
      */
-    public static function assertSuccess(Webpage $page, string $text = 'success'): Webpage
+    public static function assertSuccess(mixed $page, string $text = 'success'): mixed
     {
         return $page->assertSee($text);
     }
@@ -103,8 +101,8 @@ class FilamentActions
     /**
      * Navigate via sidebar link to a Filament resource.
      */
-    public static function navigateTo(Webpage $page, string $label): Webpage
+    public static function navigateTo(mixed $page, string $label): mixed
     {
-        return $page->clickText($label);
+        return $page->click($label);
     }
 }

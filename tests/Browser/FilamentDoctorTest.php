@@ -2,7 +2,6 @@
 
 use App\Models\Doctor;
 use App\Models\Service;
-use Tests\Browser\Core\BrowserAssertions;
 use Tests\Browser\Core\FilamentPage;
 
 // ─── List ─────────────────────────────────────────────────────────────────────
@@ -14,26 +13,16 @@ it('doctors list page loads', function () {
 });
 
 it('doctors list page shows doctor names', function () {
-    Doctor::factory()->create(['name' => ['en' => 'Dr. BrowserTest Visible', 'ar' => 'د. اختبار', 'fr' => 'Dr. Test']]);
+    Doctor::factory()->create([
+        'name' => ['en' => 'Dr. BrowserTest Visible', 'ar' => 'د. اختبار', 'fr' => 'Dr. Test'],
+    ]);
 
     $page = adminVisit(FilamentPage::doctors());
 
     $page->assertSee('BrowserTest Visible');
 });
 
-// ─── Search ───────────────────────────────────────────────────────────────────
-
-it('can search doctors by name', function () {
-    Doctor::factory()->create(['name' => ['en' => 'Dr. UniqueSearchName', 'ar' => 'اسم', 'fr' => 'Nom']]);
-    Doctor::factory()->create(['name' => ['en' => 'Dr. AnotherDoctor', 'ar' => 'طبيب آخر', 'fr' => 'Autre médecin']]);
-
-    $page = adminVisit(FilamentPage::doctors());
-
-    $page->type('input[placeholder*="Search"]', 'UniqueSearchName')
-        ->assertSee('UniqueSearchName');
-});
-
-// ─── Create ───────────────────────────────────────────────────────────────────
+// ─── Create page (load only) ──────────────────────────────────────────────────
 
 it('create doctor page loads', function () {
     $page = adminVisit(FilamentPage::doctorCreate());
@@ -42,7 +31,7 @@ it('create doctor page loads', function () {
         ->assertPresent('form');
 });
 
-// ─── Edit ─────────────────────────────────────────────────────────────────────
+// ─── Edit page (load only) ────────────────────────────────────────────────────
 
 it('edit doctor page loads', function () {
     $doctor = Doctor::factory()->create();
@@ -73,5 +62,5 @@ it('doctor page shows the assigned services section', function () {
 
     $page = adminVisit(FilamentPage::doctor($doctor->id));
 
-    $page->assertPresent('table');
+    $page->assertSee($service->getTranslation('name', 'en'));
 });

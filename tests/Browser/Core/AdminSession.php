@@ -3,7 +3,6 @@
 namespace Tests\Browser\Core;
 
 use App\Models\User;
-use Pest\Browser\Api\Webpage;
 
 /**
  * AdminSession — helpers for authenticating as an admin in browser tests.
@@ -21,24 +20,28 @@ class AdminSession
     public const PASSWORD = 'password';
 
     /**
-     * Create an admin user (if not exists) and navigate to the Filament panel.
-     * Returns the page already sitting on /admin after successful login.
+     * Authenticate as admin and navigate to the Filament panel.
+     *
+     * Uses actingAs() (server-side) to bypass the Livewire login form because
+     * Playwright's fill() doesn't reliably trigger Alpine.js / Livewire v3
+     * reactive binding, which causes the form to submit with empty credentials.
      */
-    public static function login(\Tests\TestCase $test, ?string $email = null, ?string $password = null): Webpage
+    public static function login(mixed $test, ?string $email = null, ?string $password = null): mixed
     {
         $email    ??= self::EMAIL;
         $password ??= self::PASSWORD;
 
         // Ensure a user with these credentials exists in the database.
-        User::firstOrCreate(
+        $user = User::firstOrCreate(
             ['email' => $email],
-            ['name' => 'Test Admin', 'password' => bcrypt($password)]
+            ['name' => 'Test Admin', 'password' => 'password']
         );
 
-        return $test->visit('/admin/login')
-            ->type('email', $email)
-            ->type('password', $password)
-            ->press('Sign in');
+        // Authenticate via test helper so the Filament guard session is set.
+        $test->actingAs($user, 'web');
+
+        // Navigate directly to the admin panel (skip the login form).
+        return $test->visit('/admin');
     }
 
     /**
@@ -55,11 +58,10 @@ class AdminSession
     /**
      * Log in with a specific User model instance.
      */
-    public static function loginAs(\Tests\TestCase $test, User $user, string $password = 'password'): Webpage
+    public static function loginAs(mixed $test, User $user): mixed
     {
-        return $test->visit('/admin/login')
-            ->type('email', $user->email)
-            ->type('password', $password)
-            ->press('Sign in');
+        $test->actingAs($user, 'web');
+
+        return $test->visit('/admin');
     }
 }

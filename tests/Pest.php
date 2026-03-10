@@ -18,7 +18,31 @@ use Tests\TestCase;
 */
 
 uses(TestCase::class, RefreshDatabase::class)->in('Feature');
-uses(TestCase::class, \Pest\Browser\Browsable::class)->in('Browser');
+
+// Browser tests use a persistent file-based SQLite so the embedded Playwright
+// HTTP server shares the same database as the test code (avoids the :memory:
+// new-connection-per-access problem that makes test data invisible to the browser).
+uses(TestCase::class, \Pest\Browser\Browsable::class)
+    ->beforeEach(function () {
+        $dbFile = base_path('database/browser.sqlite');
+
+        if (! file_exists($dbFile)) {
+            touch($dbFile);
+        }
+
+        // Point the sqlite connection at the persistent file.
+        config([
+            'database.connections.sqlite.database' => $dbFile,
+            'database.default'                     => 'sqlite',
+        ]);
+
+        // Purge cached in-memory connection so the next query uses the file.
+        \Illuminate\Support\Facades\DB::purge('sqlite');
+
+        // Fresh schema for every test (gives us clean isolation without transactions).
+        \Illuminate\Support\Facades\Artisan::call('migrate:fresh');
+    })
+    ->in('Browser');
 
 /*
 |--------------------------------------------------------------------------
@@ -58,17 +82,18 @@ function multilangStructure(): array
 
 /**
  * Browser helper: log in as admin and return the dashboard page.
- * Uses the fixed DemoSeeder credentials so no DB writes are needed.
+ * Returns the page after successful redirect to /admin.
  */
-function adminLogin(): \Pest\Browser\Api\Webpage
+function adminLogin(): mixed
 {
     return AdminSession::login(test());
 }
 
 /**
  * Browser helper: navigate to a Filament resource page after login.
+ * Uses navigate() (page.goto) on the already-authenticated Webpage.
  */
-function adminVisit(string $path): \Pest\Browser\Api\Webpage
+function adminVisit(string $path): mixed
 {
-    return adminLogin()->visit($path);
+    return adminLogin()->navigate($path);
 }
