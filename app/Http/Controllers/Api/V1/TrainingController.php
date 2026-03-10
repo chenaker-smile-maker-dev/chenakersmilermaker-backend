@@ -6,6 +6,7 @@ use App\Actions\Training\ListTrainings;
 use App\Actions\Training\ShowTraining;
 use App\Actions\Training\SubmitTrainingReview;
 use App\Http\Controllers\Api\BaseController;
+use App\Http\Resources\TrainingResource;
 use App\Models\Training;
 use Dedoc\Scramble\Attributes\BodyParameter;
 use Dedoc\Scramble\Attributes\Group;
@@ -25,10 +26,22 @@ class TrainingController extends BaseController
     #[QueryParameter('per_page', description: 'Number of trainings per page.', type: 'int', default: 10, example: 20)]
     public function listTrainings(Request $request, ListTrainings $listTrainings)
     {
-        $page = $request->query('page', 1);
-        $perPage = $request->query('per_page', 10);
-        $data = $listTrainings->handle($page, $perPage);
-        return $this->sendResponse($data);
+        $paginator = $listTrainings->handle(
+            $request->integer('page', 1),
+            $request->integer('per_page', 10),
+        );
+
+        return $this->sendResponse([
+            'data'       => TrainingResource::collection($paginator),
+            'pagination' => [
+                'total'        => $paginator->total(),
+                'per_page'     => $paginator->perPage(),
+                'current_page' => $paginator->currentPage(),
+                'last_page'    => $paginator->lastPage(),
+                'from'         => $paginator->firstItem(),
+                'to'           => $paginator->lastItem(),
+            ],
+        ]);
     }
 
     /**
@@ -39,12 +52,7 @@ class TrainingController extends BaseController
      */
     public function showTraining(Training $training, ShowTraining $showTraining)
     {
-        try {
-            $data = $showTraining->handle($training);
-            return $this->sendResponse($data);
-        } catch (\Exception $e) {
-            return $this->sendError($e->getMessage(), [], 422);
-        }
+        return $this->sendResponse(TrainingResource::make($showTraining->handle($training)));
     }
 
     /**

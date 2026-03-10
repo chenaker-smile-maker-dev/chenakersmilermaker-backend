@@ -8,6 +8,8 @@ class MediaHelper
 {
     /**
      * Format a single media item for API response.
+     *
+     * @return array{original: string, thumb?: string}|null
      */
     public static function single(Model $model, string $collection): ?array
     {
@@ -32,6 +34,8 @@ class MediaHelper
 
     /**
      * Format multiple media items for API response.
+     *
+     * @return list<array{id: int, original: string, thumb?: string}>
      */
     public static function collection(Model $model, string $collection): array
     {

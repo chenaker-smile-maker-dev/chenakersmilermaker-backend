@@ -7,6 +7,7 @@ use App\Actions\Patient\Appointment\RequestAppointmentCancellation;
 use App\Actions\Patient\Appointment\RequestAppointmentReschedule;
 use App\Actions\Patient\Appointment\ShowPatientAppointment;
 use App\Http\Controllers\Api\BaseController;
+use App\Http\Resources\AppointmentResource;
 use App\Models\Appointment;
 use Dedoc\Scramble\Attributes\BodyParameter;
 use Dedoc\Scramble\Attributes\Group;
@@ -28,10 +29,24 @@ class PatientAppointmentController extends BaseController
     #[QueryParameter('per_page', description: 'Items per page', type: 'int', default: 10)]
     public function index(Request $request, ListPatientAppointments $action)
     {
-        $patient = $request->user();
-        $filters = $request->only(['status', 'from_date', 'to_date']);
-        $data = $action->handle($patient, $filters, $request->integer('page', 1), $request->integer('per_page', 10));
-        return $this->sendResponse($data);
+        $paginator = $action->handle(
+            $request->user(),
+            $request->only(['status', 'from_date', 'to_date']),
+            $request->integer('page', 1),
+            $request->integer('per_page', 10),
+        );
+
+        return $this->sendResponse([
+            'data'       => AppointmentResource::collection($paginator),
+            'pagination' => [
+                'total'        => $paginator->total(),
+                'per_page'     => $paginator->perPage(),
+                'current_page' => $paginator->currentPage(),
+                'last_page'    => $paginator->lastPage(),
+                'from'         => $paginator->firstItem(),
+                'to'           => $paginator->lastItem(),
+            ],
+        ]);
     }
 
     /**
@@ -42,8 +57,7 @@ class PatientAppointmentController extends BaseController
     public function show(Appointment $appointment, Request $request, ShowPatientAppointment $action)
     {
         try {
-            $data = $action->handle($appointment, $request->user());
-            return $this->sendResponse($data);
+            return $this->sendResponse(AppointmentResource::make($action->handle($appointment, $request->user())));
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), [], $e->getCode() ?: 422);
         }

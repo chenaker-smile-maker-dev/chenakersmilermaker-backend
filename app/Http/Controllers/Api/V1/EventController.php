@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Actions\Event\ListEvents;
 use App\Actions\Event\ShowEvent;
 use App\Http\Controllers\Api\BaseController;
+use App\Http\Resources\EventResource;
 use App\Models\Event;
 use Dedoc\Scramble\Attributes\Group;
 use Dedoc\Scramble\Attributes\QueryParameter;
@@ -25,11 +26,23 @@ class EventController extends BaseController
     #[QueryParameter('type', description: 'Filter by event type: archive, happening, future. Omit for all.', type: 'string', example: 'future')]
     public function listEvents(Request $request, ListEvents $listEvents)
     {
-        $page = $request->query('page', 1);
-        $perPage = $request->query('per_page', 10);
-        $type = $request->query('type');
-        $data = $listEvents->handle($page, $perPage, $type);
-        return $this->sendResponse($data);
+        $paginator = $listEvents->handle(
+            $request->integer('page', 1),
+            $request->integer('per_page', 10),
+            $request->query('type'),
+        );
+
+        return $this->sendResponse([
+            'data'       => EventResource::collection($paginator),
+            'pagination' => [
+                'total'        => $paginator->total(),
+                'per_page'     => $paginator->perPage(),
+                'current_page' => $paginator->currentPage(),
+                'last_page'    => $paginator->lastPage(),
+                'from'         => $paginator->firstItem(),
+                'to'           => $paginator->lastItem(),
+            ],
+        ]);
     }
 
     /**
@@ -40,11 +53,6 @@ class EventController extends BaseController
      */
     public function showEvent(Event $event, ShowEvent $showEvent)
     {
-        try {
-            $data = $showEvent->handle($event);
-            return $this->sendResponse($data);
-        } catch (\Exception $e) {
-            return $this->sendError($e->getMessage(), [], 422);
-        }
+        return $this->sendResponse(EventResource::make($showEvent->handle($event)));
     }
 }

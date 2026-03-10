@@ -3,27 +3,11 @@
 namespace App\Actions\Event;
 
 use App\Models\Event;
-use App\Utils\GetModelMultilangAttribute;
-use App\Utils\MediaHelper;
 
 class ShowEvent
 {
-    public function handle(Event $event): array
+    public function handle(Event $event): Event
     {
-        return [
-            'id' => $event->id,
-            'name' => GetModelMultilangAttribute::get($event, 'title'),
-            'description' => GetModelMultilangAttribute::get($event, 'description'),
-            'date' => $event->date?->toDateString(),
-            'time' => $event->time,
-            'location' => GetModelMultilangAttribute::get($event, 'location'),
-            'speakers' => GetModelMultilangAttribute::get($event, 'speakers'),
-            'about_event' => GetModelMultilangAttribute::get($event, 'about_event'),
-            'what_to_expect' => GetModelMultilangAttribute::get($event, 'what_to_expect'),
-            'pictures' => MediaHelper::collection($event, 'gallery'),
-            'status' => $event->status,
-            'is_archived' => $event->is_archived,
-            'created_at' => $event->created_at?->toIso8601String(),
-        ];
+        return $event;
     }
 }

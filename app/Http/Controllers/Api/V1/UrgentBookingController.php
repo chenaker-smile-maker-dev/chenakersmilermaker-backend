@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Actions\Patient\UrgentBooking\ListPatientUrgentBookings;
 use App\Actions\Patient\UrgentBooking\SubmitUrgentBooking;
 use App\Http\Controllers\Api\BaseController;
+use App\Http\Resources\UrgentBookingResource;
 use App\Models\UrgentBooking;
 use Dedoc\Scramble\Attributes\Group;
 use Illuminate\Http\JsonResponse;
@@ -19,11 +20,11 @@ class UrgentBookingController extends BaseController
     public function submit(Request $request, SubmitUrgentBooking $action): JsonResponse
     {
         $validated = $request->validate([
-            'patient_name' => 'required|string|max:255',
-            'patient_phone' => 'required|string|max:20',
-            'patient_email' => 'nullable|email',
-            'reason' => 'required|string|min:10|max:1000',
-            'description' => 'nullable|string|max:2000',
+            'patient_name'       => 'required|string|max:255',
+            'patient_phone'      => 'required|string|max:20',
+            'patient_email'      => 'nullable|email',
+            'reason'             => 'required|string|min:10|max:1000',
+            'description'        => 'nullable|string|max:2000',
             'preferred_datetime' => 'nullable|date_format:Y-m-d H:i',
         ]);
 
@@ -31,13 +32,7 @@ class UrgentBookingController extends BaseController
 
         $booking = $action->handle($validated, $patient);
 
-        return $this->sendResponse([
-            'id' => $booking->id,
-            'patient_name' => $booking->patient_name,
-            'patient_phone' => $booking->patient_phone,
-            'status' => $booking->status->value,
-            'created_at' => $booking->created_at->toIso8601String(),
-        ], 'api.urgent_booking_submitted', 201);
+        return $this->sendResponse(UrgentBookingResource::make($booking), 'api.urgent_booking_submitted', 201);
     }
 
     /**
@@ -45,10 +40,8 @@ class UrgentBookingController extends BaseController
      */
     public function myBookings(Request $request, ListPatientUrgentBookings $action): JsonResponse
     {
-        $patient = $request->user();
-
         return $this->sendResponse(
-            $action->handle($patient),
+            UrgentBookingResource::collection($action->handle($request->user())),
             'api.success'
         );
     }
@@ -58,27 +51,12 @@ class UrgentBookingController extends BaseController
      */
     public function show(Request $request, UrgentBooking $urgentBooking): JsonResponse
     {
-        $patient = $request->user();
-
-        if ($urgentBooking->patient_id !== $patient->id) {
+        if ($urgentBooking->patient_id !== $request->user()->id) {
             return $this->sendError('api.not_found', [], 404);
         }
 
-        return $this->sendResponse([
-            'id' => $urgentBooking->id,
-            'reason' => $urgentBooking->reason,
-            'description' => $urgentBooking->description,
-            'status' => $urgentBooking->status->value,
-            'patient_name' => $urgentBooking->patient_name,
-            'patient_phone' => $urgentBooking->patient_phone,
-            'preferred_datetime' => $urgentBooking->preferred_datetime?->toIso8601String(),
-            'scheduled_datetime' => $urgentBooking->scheduled_datetime?->toIso8601String(),
-            'admin_notes' => $urgentBooking->admin_notes,
-            'assigned_doctor' => $urgentBooking->assignedDoctor ? [
-                'id' => $urgentBooking->assignedDoctor->id,
-                'name' => $urgentBooking->assignedDoctor->display_name,
-            ] : null,
-            'created_at' => $urgentBooking->created_at->toIso8601String(),
-        ], 'api.success');
+        $urgentBooking->load('assignedDoctor');
+
+        return $this->sendResponse(UrgentBookingResource::make($urgentBooking), 'api.success');
     }
 }
