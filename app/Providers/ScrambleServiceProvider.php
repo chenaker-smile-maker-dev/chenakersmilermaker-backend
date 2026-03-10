@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Providers\Scramble\BaseControllerResponseExtension;
 use Illuminate\Support\ServiceProvider;
 use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
@@ -19,6 +20,8 @@ class ScrambleServiceProvider extends ServiceProvider
 
     private function configureScramble(): void
     {
+        Scramble::registerExtension(BaseControllerResponseExtension::class);
+
         Scramble::registerApi('v1', [
             'api_path' => 'api/v1',
             'export_path' => 'public/v1.json',
