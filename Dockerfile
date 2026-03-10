@@ -28,6 +28,7 @@ RUN cp .env.example .env
 
 # Setup environment variables
 ENV APP_ENV=production
+ENV APP_NAME=CHENAKERSMILERMAKER
 ENV APP_DEBUG=true
 ENV APP_URL=https://chenakersmilermaker.onrender.com
 ENV DB_CONNECTION=sqlite
