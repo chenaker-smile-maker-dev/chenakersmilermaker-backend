@@ -47,13 +47,6 @@ class AdminNavigation
         'group' => self::CONFIGURATION_GROUP,
     ];
 
-    public const HEALTH_PAGE = [
-        'icon' => Heroicon::ShieldCheck,
-        'sort' => 100,
-        'group' => self::CONFIGURATION_GROUP,
-        // 'group' => self::MANAGEMENT_GROUP,
-    ];
-
     public const EVENTS_RESOURCE = [
         'icon' => Heroicon::CalendarDays,
         'sort' => 5,
