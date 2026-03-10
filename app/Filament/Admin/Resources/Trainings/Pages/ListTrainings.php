@@ -24,8 +24,10 @@ class ListTrainings extends ListRecords
     {
         return [
             'all'     => Tab::make(__('panels/admin/resources/training.tabs.all'))
+                ->icon('heroicon-o-queue-list')
                 ->badge(fn() => Training::count()),
             'trashed' => Tab::make(__('panels/admin/resources/training.tabs.trashed'))
+                ->icon('heroicon-o-trash')
                 ->badge(fn() => Training::onlyTrashed()->count())
                 ->badgeColor('danger')
                 ->modifyQueryUsing(fn(Builder $query) => $query->onlyTrashed()),

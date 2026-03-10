@@ -33,12 +33,15 @@ class ListPatients extends ListRecords
     {
         return [
             'all'    => Tab::make(__('panels/admin/resources/patient.tabs.all'))
+                ->icon('heroicon-o-queue-list')
                 ->badge(fn() => Patient::count()),
             'male'   => Tab::make(__('panels/admin/resources/patient.tabs.male'))
+                ->icon('heroicon-o-user')
                 ->badge(fn() => Patient::where('gender', Gender::MALE)->count())
                 ->badgeColor('info')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('gender', Gender::MALE)),
             'female' => Tab::make(__('panels/admin/resources/patient.tabs.female'))
+                ->icon('heroicon-o-user-circle')
                 ->badge(fn() => Patient::where('gender', Gender::FEMALE)->count())
                 ->badgeColor('danger')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('gender', Gender::FEMALE)),

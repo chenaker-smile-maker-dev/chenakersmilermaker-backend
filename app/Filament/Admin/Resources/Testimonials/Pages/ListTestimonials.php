@@ -24,16 +24,20 @@ class ListTestimonials extends ListRecords
     {
         return [
             'all'         => Tab::make(__('panels/admin/resources/testimonial.tabs.all'))
+                ->icon('heroicon-o-queue-list')
                 ->badge(fn() => Testimonial::count()),
             'published'   => Tab::make(__('panels/admin/resources/testimonial.tabs.published'))
+                ->icon('heroicon-o-eye')
                 ->badge(fn() => Testimonial::where('is_published', true)->count())
                 ->badgeColor('success')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('is_published', true)),
             'unpublished' => Tab::make(__('panels/admin/resources/testimonial.tabs.unpublished'))
+                ->icon('heroicon-o-eye-slash')
                 ->badge(fn() => Testimonial::where('is_published', false)->count())
                 ->badgeColor('warning')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('is_published', false)),
             'trashed'     => Tab::make(__('panels/admin/resources/testimonial.tabs.trashed'))
+                ->icon('heroicon-o-trash')
                 ->badge(fn() => Testimonial::onlyTrashed()->count())
                 ->badgeColor('danger')
                 ->modifyQueryUsing(fn(Builder $query) => $query->onlyTrashed()),

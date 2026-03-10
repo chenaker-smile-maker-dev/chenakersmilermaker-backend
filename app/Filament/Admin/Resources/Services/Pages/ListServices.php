@@ -32,12 +32,15 @@ class ListServices extends ListRecords
     {
         return [
             'all'      => Tab::make(__('panels/admin/resources/service.tabs.all'))
+                ->icon('heroicon-o-queue-list')
                 ->badge(fn() => Service::count()),
             'active'   => Tab::make(__('panels/admin/resources/service.tabs.active'))
+                ->icon('heroicon-o-check-circle')
                 ->badge(fn() => Service::where('active', true)->count())
                 ->badgeColor('success')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('active', true)),
             'inactive' => Tab::make(__('panels/admin/resources/service.tabs.inactive'))
+                ->icon('heroicon-o-x-circle')
                 ->badge(fn() => Service::where('active', false)->count())
                 ->badgeColor('warning')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('active', false)),

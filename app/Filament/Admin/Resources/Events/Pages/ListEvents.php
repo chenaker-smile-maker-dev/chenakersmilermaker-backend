@@ -24,20 +24,25 @@ class ListEvents extends ListRecords
     {
         return [
             'all'       => Tab::make(__('panels/admin/resources/event.tabs.all'))
+                ->icon('heroicon-o-queue-list')
                 ->badge(fn() => Event::count()),
             'future'    => Tab::make(__('panels/admin/resources/event.tabs.future'))
+                ->icon('heroicon-o-calendar-days')
                 ->badge(fn() => Event::future()->count())
                 ->badgeColor('info')
                 ->modifyQueryUsing(fn(Builder $query) => $query->future()),
             'happening' => Tab::make(__('panels/admin/resources/event.tabs.happening'))
+                ->icon('heroicon-o-bolt')
                 ->badge(fn() => Event::happening()->count())
                 ->badgeColor('success')
                 ->modifyQueryUsing(fn(Builder $query) => $query->happening()),
             'archive'   => Tab::make(__('panels/admin/resources/event.tabs.archive'))
+                ->icon('heroicon-o-archive-box')
                 ->badge(fn() => Event::archived()->count())
                 ->badgeColor('gray')
                 ->modifyQueryUsing(fn(Builder $query) => $query->archived()),
             'trashed'   => Tab::make(__('panels/admin/resources/event.tabs.trashed'))
+                ->icon('heroicon-o-trash')
                 ->badge(fn() => Event::onlyTrashed()->count())
                 ->badgeColor('danger')
                 ->modifyQueryUsing(fn(Builder $query) => $query->onlyTrashed()),

@@ -32,8 +32,10 @@ class ListDoctors extends ListRecords
     {
         return [
             'all'     => Tab::make(__('panels/admin/resources/doctor.tabs.all'))
+                ->icon('heroicon-o-queue-list')
                 ->badge(fn() => Doctor::count()),
             'trashed' => Tab::make(__('panels/admin/resources/doctor.tabs.trashed'))
+                ->icon('heroicon-o-trash')
                 ->badge(fn() => Doctor::onlyTrashed()->count())
                 ->badgeColor('danger')
                 ->modifyQueryUsing(fn(Builder $query) => $query->onlyTrashed()),
