@@ -16,6 +16,11 @@ class StatsOverviewWidget extends BaseWidget
 
     protected int|string|array $columnSpan = 'full';
 
+    protected function getColumns(): int
+    {
+        return 4;
+    }
+
     protected function getStats(): array
     {
         $totalPatients = Patient::count();

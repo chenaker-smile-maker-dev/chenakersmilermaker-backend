@@ -67,7 +67,6 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Admin\Widgets\UrgentBookingsWidget::class,
                 \App\Filament\Admin\Widgets\TodayAppointmentsWidget::class,
                 \App\Filament\Admin\Widgets\AppointmentCalendarWidget::class,
-                \App\Filament\Admin\Widgets\RecentActivityWidget::class,
             ])
 
             ->plugins([

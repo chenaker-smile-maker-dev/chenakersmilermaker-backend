@@ -14,6 +14,11 @@ class PendingActionsWidget extends BaseWidget
 
     protected int|string|array $columnSpan = 'full';
 
+    protected function getColumns(): int
+    {
+        return 4;
+    }
+
     protected function getStats(): array
     {
         $pendingAppointments = Appointment::where('status', AppointmentStatus::PENDING)->count();
