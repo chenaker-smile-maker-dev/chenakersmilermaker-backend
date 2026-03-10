@@ -53,19 +53,19 @@ class Patient extends Authenticatable implements HasMedia
         $this->addMediaCollection('profile_photo')
             ->singleFile()
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg'])
-            ->useDisk('public');
+            ->useDisk('public')
+            ->registerMediaConversions(function (Media $media) {
+                $this->addMediaConversion('thumb')
+                    ->width(100)
+                    ->height(100);
+
+                $this->addMediaConversion('medium')
+                    ->width(300)
+                    ->height(300);
+            });
 
         $this->addMediaCollection('documents')
             ->useDisk('local');
-    }
-
-    public function registerMediaConversions(?Media $media = null): void
-    {
-        if ($media && $media->collection_name === 'profile_photo') {
-            $this->addMediaConversion('thumb')
-                ->width(width: 100)
-                ->height(100);
-        }
     }
 
     public function getImageAttribute()

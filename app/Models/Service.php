@@ -34,16 +34,16 @@ class Service extends Model implements HasMedia
         $this->addMediaCollection('image')
             ->singleFile()
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg'])
-            ->useDisk('public');
-    }
+            ->useDisk('public')
+            ->registerMediaConversions(function (Media $media) {
+                $this->addMediaConversion('thumb')
+                    ->width(100)
+                    ->height(100);
 
-    public function registerMediaConversions(?Media $media = null): void
-    {
-        if ($media && $media->collection_name === 'image') {
-            $this->addMediaConversion('thumb')
-                ->width(100)
-                ->height(100);
-        }
+                $this->addMediaConversion('medium')
+                    ->width(400)
+                    ->height(300);
+            });
     }
 
     public function getImageAttribute()

@@ -33,7 +33,7 @@ class TrainingResource extends JsonResource
             'reviews_count'  => $this->resource->approved_reviews_count ?? 0,
             'reviews'        => $this->when(
                 $this->resource->relationLoaded('approvedReviews'),
-                fn () => TrainingReviewResource::collection($this->approvedReviews),
+                fn() => TrainingReviewResource::collection($this->approvedReviews),
             ),
         ];
     }

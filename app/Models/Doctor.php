@@ -47,15 +47,16 @@ class Doctor extends Model implements HasMedia
         $this->addMediaCollection('doctor_photo')
             ->singleFile()
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg'])
-            ->useDisk('public');
-    }
-    public function registerMediaConversions(?Media $media = null): void
-    {
-        if ($media && $media->collection_name === 'doctor_photo') {
-            $this->addMediaConversion('thumb')
-                ->width(width: 100)
-                ->height(100);
-        }
+            ->useDisk('public')
+            ->registerMediaConversions(function (Media $media) {
+                $this->addMediaConversion('thumb')
+                    ->width(100)
+                    ->height(100);
+
+                $this->addMediaConversion('medium')
+                    ->width(400)
+                    ->height(400);
+            });
     }
 
 

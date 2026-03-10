@@ -12,7 +12,15 @@ class MediaResource extends JsonResource
         return [
             'id'       => $this->resource->id,
             'original' => $this->resource->getUrl(),
-            'thumb'    => $this->resource->getUrl('thumb') ?: null,
+            'thumb'    => $this->resource->hasGeneratedConversion('thumb')
+                ? $this->resource->getUrl('thumb')
+                : null,
+            'medium'   => $this->resource->hasGeneratedConversion('medium')
+                ? $this->resource->getUrl('medium')
+                : null,
+            'hero'     => $this->resource->hasGeneratedConversion('hero')
+                ? $this->resource->getUrl('hero')
+                : null,
         ];
     }
 }

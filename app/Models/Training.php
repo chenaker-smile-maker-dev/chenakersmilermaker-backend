@@ -47,11 +47,25 @@ class Training extends Model implements HasMedia
         $this->addMediaCollection('image')
             ->singleFile()
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg'])
-            ->useDisk('public');
+            ->useDisk('public')
+            ->registerMediaConversions(function (Media $media) {
+                $this->addMediaConversion('thumb')
+                    ->width(300)
+                    ->height(200);
+
+                $this->addMediaConversion('hero')
+                    ->width(1200)
+                    ->height(400);
+            });
 
         $this->addMediaCollection('images')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg'])
-            ->useDisk('public');
+            ->useDisk('public')
+            ->registerMediaConversions(function (Media $media) {
+                $this->addMediaConversion('thumb')
+                    ->width(300)
+                    ->height(200);
+            });
 
         $this->addMediaCollection('documents')
             ->acceptsMimeTypes([
@@ -60,19 +74,6 @@ class Training extends Model implements HasMedia
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             ])
             ->useDisk('public');
-    }
-
-    public function registerMediaConversions(?Media $media = null): void
-    {
-        if ($media && $media->collection_name === 'image') {
-            $this->addMediaConversion('thumb')
-                ->width(300)
-                ->height(200);
-
-            $this->addMediaConversion('hero')
-                ->width(1200)
-                ->height(400);
-        }
     }
 
     public function getImageUrlAttribute(): ?string

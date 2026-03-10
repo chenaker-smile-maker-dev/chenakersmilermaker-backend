@@ -76,15 +76,15 @@ class Event extends Model implements HasMedia
     {
         $this->addMediaCollection('gallery')
             ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/jpg'])
-            ->useDisk('public');
-    }
+            ->useDisk('public')
+            ->registerMediaConversions(function (Media $media) {
+                $this->addMediaConversion('thumb')
+                    ->width(100)
+                    ->height(100);
 
-    public function registerMediaConversions(?Media $media = null): void
-    {
-        if ($media && $media->collection_name === 'gallery') {
-            $this->addMediaConversion('thumb')
-                ->width(width: 100)
-                ->height(100);
-        }
+                $this->addMediaConversion('medium')
+                    ->width(800)
+                    ->height(600);
+            });
     }
 }
