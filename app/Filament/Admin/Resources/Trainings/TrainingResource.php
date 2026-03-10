@@ -52,7 +52,7 @@ class TrainingResource extends Resource
 
     public static function getGloballySearchableAttributes(): array
     {
-        return ['title', 'instructor'];
+        return ['title', 'trainer_name'];
     }
 
     public static function getGlobalSearchResultTitle(Model $record): string|Htmlable
@@ -63,7 +63,7 @@ class TrainingResource extends Resource
     public static function getGlobalSearchResultDetails(Model $record): array
     {
         return [
-            __('panels/admin/resources/training.instructor') => $record->instructor ?? '—',
+            __('panels/admin/resources/training.trainer') => $record->trainer_name ?? '—',
             __('panels/admin/resources/training.duration') => $record->duration ?? '—',
         ];
     }
