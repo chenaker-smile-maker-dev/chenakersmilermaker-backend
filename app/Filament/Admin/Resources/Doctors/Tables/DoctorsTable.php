@@ -23,7 +23,6 @@ use Filament\Tables\Columns\Layout\Panel;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class DoctorsTable
@@ -50,9 +49,6 @@ class DoctorsTable
                     'xl' => 3,
                 ])
             )
-            ->filters([
-                TrashedFilter::make(),
-            ])
             ->recordActions([
                 // ViewAction::make(),
                 // EditAction::make(),

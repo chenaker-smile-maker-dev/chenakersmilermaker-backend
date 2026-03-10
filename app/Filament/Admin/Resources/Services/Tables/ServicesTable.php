@@ -15,7 +15,6 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -64,12 +63,6 @@ class ServicesTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('active')
-                    ->options([
-                        '1' => __('panels/admin/resources/service.active'),
-                        '0' => __('panels/admin/resources/service.inactive'),
-                    ])
-                    ->label(__('panels/admin/resources/service.status')),
                 SelectFilter::make('availability')
                     ->options(ServiceAvailability::class),
                 Filter::make('created_at')

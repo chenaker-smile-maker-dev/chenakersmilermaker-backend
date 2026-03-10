@@ -16,8 +16,6 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\TernaryFilter;
-use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -85,14 +83,6 @@ class TestimonialsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                TrashedFilter::make(),
-
-                TernaryFilter::make('is_published')
-                    ->label(__('panels/admin/resources/testimonial.published_status'))
-                    ->placeholder(__('panels/admin/resources/testimonial.all_testimonials'))
-                    ->trueLabel(__('panels/admin/resources/testimonial.published_only'))
-                    ->falseLabel(__('panels/admin/resources/testimonial.unpublished_only')),
-
                 Filter::make('rating')
                     ->form([
                         \Filament\Forms\Components\Select::make('rating')

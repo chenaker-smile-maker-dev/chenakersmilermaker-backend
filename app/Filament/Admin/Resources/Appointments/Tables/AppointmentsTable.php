@@ -74,9 +74,6 @@ class AppointmentsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('status')
-                    ->options(AppointmentStatus::class)
-                    ->label('Status'),
                 SelectFilter::make('change_request_status')
                     ->options([
                         'pending_cancellation' => 'Pending Cancellation',

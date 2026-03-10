@@ -21,9 +21,8 @@ use Filament\Tables\Filters\QueryBuilder\Constraints\DateConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\NumberConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\SelectConstraint;
 use Filament\Tables\Filters\QueryBuilder\Constraints\TextConstraint;
-use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
-use Filament\Tables\Filters\SelectFilter;
+
 
 class PatientsTable
 {
@@ -100,9 +99,6 @@ class PatientsTable
             ])
             ->filters(
                 [
-                    SelectFilter::make('gender')
-                        ->options(Gender::class),
-                    TrashedFilter::make(),
                     QueryBuilder::make()
                         ->columnSpanFull()
                         ->constraints([

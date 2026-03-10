@@ -80,7 +80,7 @@ class UrgentBookingResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->label(__('panels/admin/resources/urgent_booking.id') ?? 'ID')->sortable()->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('id')->label('ID')->sortable()->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('patient_name')->label(__('panels/admin/resources/urgent_booking.patient'))->searchable(),
                 TextColumn::make('patient_phone')->label(__('panels/admin/resources/urgent_booking.phone'))->searchable(),
                 TextColumn::make('patient_email')->label(__('panels/admin/resources/urgent_booking.email'))->toggleable(isToggledHiddenByDefault: true),

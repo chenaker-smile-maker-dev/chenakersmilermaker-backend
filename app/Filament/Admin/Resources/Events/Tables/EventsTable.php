@@ -16,8 +16,6 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\TernaryFilter;
-use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -80,14 +78,6 @@ class EventsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                TrashedFilter::make(),
-
-                TernaryFilter::make('is_archived')
-                    ->label(__('panels/admin/resources/event.archived_status'))
-                    ->placeholder(__('panels/admin/resources/event.all_events'))
-                    ->trueLabel(__('panels/admin/resources/event.archived_only'))
-                    ->falseLabel(__('panels/admin/resources/event.active_only')),
-
                 Filter::make('date_range')
                     ->label(__('panels/admin/resources/event.date_range'))
                     ->form([
