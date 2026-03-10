@@ -22,6 +22,10 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin;
 use Filament\Enums\GlobalSearchPosition;
+use Hammadzafar05\MobileBottomNav\MobileBottomNav;
+use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
+use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
+use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -64,7 +68,17 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 FilamentDeveloperLoginsPlugin::make()->enabled(config('app.debug'))->users(['ADMINISTRATEUR' => 'admin@admin.dev']),
                 FilamentEditProfilePlugin::make()->setIcon('heroicon-o-user-circle'),
-                GlobalSearchModalPlugin::make()->highlighter(true)->modal(slideOver: true)
+                GlobalSearchModalPlugin::make()->highlighter(true)->modal(slideOver: true),
+                MobileBottomNav::make(),
+                AuthDesignerPlugin::make()
+                    ->defaults(
+                        fn(AuthPageConfig $config) => $config
+                            ->media('https://picsum.photos/1920/1080', alt: 'Authentication background')
+                            ->mediaPosition(MediaPosition::Right)
+                            ->blur(8)
+                    )
+                    ->login()
+                    ->themeToggle(top: '1.5rem', right: '1.5rem'),
             ])
             ->middleware([
                 EncryptCookies::class,

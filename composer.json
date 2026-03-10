@@ -39,6 +39,7 @@
         "abdulmajeed-jamaan/filament-translatable-tabs": "^5.0",
         "aymanalhattami/filament-page-with-sidebar": "^5.0",
         "bezhansalleh/filament-language-switch": "^4.1",
+        "caresome/filament-auth-designer": "^3.0",
         "charrafimed/global-search-modal": "^5.0",
         "dedoc/scramble": "^0.12.34",
         "doctrine/dbal": "^4.3",
