@@ -30,7 +30,7 @@ class DoctorAvailabilityController extends BaseController
             $data = $getDoctorAvailability->handle($doctor, $service);
             return $this->sendResponse($data);
         } catch (\Exception $e) {
-            return $this->sendError($e->getMessage(), 422);
+            return $this->sendError($e->getMessage(), [], 422);
         }
     }
 

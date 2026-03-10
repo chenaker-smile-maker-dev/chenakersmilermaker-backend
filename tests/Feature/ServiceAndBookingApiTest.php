@@ -55,7 +55,7 @@ it('can show a single doctor for booking', function () {
 
 it('doctor availability endpoint requires valid doctor and service', function () {
     $doctor  = Doctor::factory()->create();
-    $service = Service::factory()->create();
+    $service = Service::factory()->create(['active' => true]);
     $doctor->services()->attach($service->id);
 
     $this->getJson("/api/v1/appointement/{$doctor->id}/{$service->id}/availability")

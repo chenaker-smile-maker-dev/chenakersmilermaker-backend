@@ -19,4 +19,12 @@ return [
     'created_at' => 'Créé le',
     'updated_at' => 'Modifié le',
     'deleted_at' => 'Supprimé le',
+    'tabs' => [
+        'all'       => 'Tous',
+        'pending'   => 'En attente',
+        'confirmed' => 'Confirmé',
+        'rejected'  => 'Rejeté',
+        'cancelled' => 'Annulé',
+        'completed' => 'Terminé',
+    ],
 ];

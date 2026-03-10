@@ -86,7 +86,8 @@ class TrainingsTable
                         \Filament\Forms\Components\TextInput::make('trainer_name')
                             ->placeholder(__('panels/admin/resources/training.search_by_trainer_name')),
                     ])
-                    ->query(fn(Builder $query, array $data): Builder =>
+                    ->query(
+                        fn(Builder $query, array $data): Builder =>
                         $query->when(
                             $data['trainer_name'] ?? null,
                             fn(Builder $q, $value) => $q->where('trainer_name', 'like', '%' . $value . '%')

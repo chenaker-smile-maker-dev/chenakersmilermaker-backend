@@ -23,12 +23,12 @@ class ListTrainings extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all'     => Tab::make()
-                ->badge(fn () => Training::count()),
-            'trashed' => Tab::make()
-                ->badge(fn () => Training::onlyTrashed()->count())
+            'all'     => Tab::make(__('panels/admin/resources/training.tabs.all'))
+                ->badge(fn() => Training::count()),
+            'trashed' => Tab::make(__('panels/admin/resources/training.tabs.trashed'))
+                ->badge(fn() => Training::onlyTrashed()->count())
                 ->badgeColor('danger')
-                ->modifyQueryUsing(fn (Builder $query) => $query->onlyTrashed()),
+                ->modifyQueryUsing(fn(Builder $query) => $query->onlyTrashed()),
         ];
     }
 }

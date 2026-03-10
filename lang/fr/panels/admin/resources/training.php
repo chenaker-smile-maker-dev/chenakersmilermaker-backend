@@ -36,4 +36,8 @@ return [
     'no_image' => 'Pas d\'image',
     'deleted' => 'Supprimé',
     'reviews_tab' => 'Avis',
+    'tabs' => [
+        'all'     => 'Tous',
+        'trashed' => 'Supprimés',
+    ],
 ];

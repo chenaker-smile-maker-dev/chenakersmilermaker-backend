@@ -36,4 +36,11 @@ return [
     'enter_event_location' => 'أدخل موقع الحدث (مثال: اسم العيادة، العنوان)',
     'event_metadata' => 'بيانات وصفية للحدث',
     'select_event_date' => 'اختر تاريخ الحدث',
+    'tabs' => [
+        'all'       => 'الكل',
+        'future'    => 'القادمة',
+        'happening' => 'جارية',
+        'archive'   => 'أرشيف',
+        'trashed'   => 'المحذوفة',
+    ],
 ];

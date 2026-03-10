@@ -26,4 +26,9 @@ return [
     'duration' => 'المدة',
     'availability' => 'التوفر',
     'image' => 'صورة الخدمة',
+    'tabs' => [
+        'all'      => 'الكل',
+        'active'   => 'نشط',
+        'inactive' => 'غير نشط',
+    ],
 ];

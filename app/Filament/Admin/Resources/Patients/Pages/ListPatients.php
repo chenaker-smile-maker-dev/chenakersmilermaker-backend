@@ -32,16 +32,16 @@ class ListPatients extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all'    => Tab::make()
-                ->badge(fn () => Patient::count()),
-            'male'   => Tab::make()
-                ->badge(fn () => Patient::where('gender', Gender::MALE)->count())
+            'all'    => Tab::make(__('panels/admin/resources/patient.tabs.all'))
+                ->badge(fn() => Patient::count()),
+            'male'   => Tab::make(__('panels/admin/resources/patient.tabs.male'))
+                ->badge(fn() => Patient::where('gender', Gender::MALE)->count())
                 ->badgeColor('info')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('gender', Gender::MALE)),
-            'female' => Tab::make()
-                ->badge(fn () => Patient::where('gender', Gender::FEMALE)->count())
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('gender', Gender::MALE)),
+            'female' => Tab::make(__('panels/admin/resources/patient.tabs.female'))
+                ->badge(fn() => Patient::where('gender', Gender::FEMALE)->count())
                 ->badgeColor('danger')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('gender', Gender::FEMALE)),
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('gender', Gender::FEMALE)),
         ];
     }
 }

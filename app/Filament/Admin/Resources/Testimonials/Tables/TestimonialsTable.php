@@ -96,7 +96,8 @@ class TestimonialsTable
                             ->native(false)
                             ->placeholder(__('panels/admin/resources/testimonial.select_rating')),
                     ])
-                    ->query(fn(Builder $query, array $data): Builder =>
+                    ->query(
+                        fn(Builder $query, array $data): Builder =>
                         $query->when(
                             $data['rating'] ?? null,
                             fn(Builder $q, $value) => $q->where('rating', $value)

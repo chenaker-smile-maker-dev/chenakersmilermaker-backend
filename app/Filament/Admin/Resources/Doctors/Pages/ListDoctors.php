@@ -31,12 +31,12 @@ class ListDoctors extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all'     => Tab::make()
-                ->badge(fn () => Doctor::count()),
-            'trashed' => Tab::make()
-                ->badge(fn () => Doctor::onlyTrashed()->count())
+            'all'     => Tab::make(__('panels/admin/resources/doctor.tabs.all'))
+                ->badge(fn() => Doctor::count()),
+            'trashed' => Tab::make(__('panels/admin/resources/doctor.tabs.trashed'))
+                ->badge(fn() => Doctor::onlyTrashed()->count())
                 ->badgeColor('danger')
-                ->modifyQueryUsing(fn (Builder $query) => $query->onlyTrashed()),
+                ->modifyQueryUsing(fn(Builder $query) => $query->onlyTrashed()),
         ];
     }
 }

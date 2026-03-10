@@ -45,4 +45,10 @@ return [
     'select_rating' => 'Select rating',
     'created' => 'Created',
     'content' => 'Content',
+    'tabs' => [
+        'all'         => 'All',
+        'published'   => 'Published',
+        'unpublished' => 'Unpublished',
+        'trashed'     => 'Trashed',
+    ],
 ];

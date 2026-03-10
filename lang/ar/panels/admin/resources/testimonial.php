@@ -46,4 +46,10 @@ return [
     'created' => 'منشأ',
     'updated' => 'محدث',
     'content' => 'المحتوى',
+    'tabs' => [
+        'all'         => 'الكل',
+        'published'   => 'منشور',
+        'unpublished' => 'غير منشور',
+        'trashed'     => 'المحذوفة',
+    ],
 ];

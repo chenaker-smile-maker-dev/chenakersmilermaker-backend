@@ -23,24 +23,24 @@ class ListEvents extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all'       => Tab::make()
-                ->badge(fn () => Event::count()),
-            'future'    => Tab::make()
-                ->badge(fn () => Event::future()->count())
+            'all'       => Tab::make(__('panels/admin/resources/event.tabs.all'))
+                ->badge(fn() => Event::count()),
+            'future'    => Tab::make(__('panels/admin/resources/event.tabs.future'))
+                ->badge(fn() => Event::future()->count())
                 ->badgeColor('info')
-                ->modifyQueryUsing(fn (Builder $query) => $query->future()),
-            'happening' => Tab::make()
-                ->badge(fn () => Event::happening()->count())
+                ->modifyQueryUsing(fn(Builder $query) => $query->future()),
+            'happening' => Tab::make(__('panels/admin/resources/event.tabs.happening'))
+                ->badge(fn() => Event::happening()->count())
                 ->badgeColor('success')
-                ->modifyQueryUsing(fn (Builder $query) => $query->happening()),
-            'archive'   => Tab::make()
-                ->badge(fn () => Event::archived()->count())
+                ->modifyQueryUsing(fn(Builder $query) => $query->happening()),
+            'archive'   => Tab::make(__('panels/admin/resources/event.tabs.archive'))
+                ->badge(fn() => Event::archived()->count())
                 ->badgeColor('gray')
-                ->modifyQueryUsing(fn (Builder $query) => $query->archived()),
-            'trashed'   => Tab::make()
-                ->badge(fn () => Event::onlyTrashed()->count())
+                ->modifyQueryUsing(fn(Builder $query) => $query->archived()),
+            'trashed'   => Tab::make(__('panels/admin/resources/event.tabs.trashed'))
+                ->badge(fn() => Event::onlyTrashed()->count())
                 ->badgeColor('danger')
-                ->modifyQueryUsing(fn (Builder $query) => $query->onlyTrashed()),
+                ->modifyQueryUsing(fn(Builder $query) => $query->onlyTrashed()),
         ];
     }
 }

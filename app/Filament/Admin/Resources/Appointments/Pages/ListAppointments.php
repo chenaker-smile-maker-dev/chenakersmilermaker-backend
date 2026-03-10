@@ -24,28 +24,28 @@ class ListAppointments extends ListRecords
     public function getTabs(): array
     {
         return [
-            'all'       => Tab::make()
-                ->badge(fn () => Appointment::count()),
-            'pending'   => Tab::make()
-                ->badge(fn () => Appointment::where('status', AppointmentStatus::PENDING)->count())
+            'all'       => Tab::make(__('panels/admin/resources/appointment.tabs.all'))
+                ->badge(fn() => Appointment::count()),
+            'pending'   => Tab::make(__('panels/admin/resources/appointment.tabs.pending'))
+                ->badge(fn() => Appointment::where('status', AppointmentStatus::PENDING)->count())
                 ->badgeColor('warning')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::PENDING)),
-            'confirmed' => Tab::make()
-                ->badge(fn () => Appointment::where('status', AppointmentStatus::CONFIRMED)->count())
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', AppointmentStatus::PENDING)),
+            'confirmed' => Tab::make(__('panels/admin/resources/appointment.tabs.confirmed'))
+                ->badge(fn() => Appointment::where('status', AppointmentStatus::CONFIRMED)->count())
                 ->badgeColor('info')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::CONFIRMED)),
-            'rejected'  => Tab::make()
-                ->badge(fn () => Appointment::where('status', AppointmentStatus::REJECTED)->count())
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', AppointmentStatus::CONFIRMED)),
+            'rejected'  => Tab::make(__('panels/admin/resources/appointment.tabs.rejected'))
+                ->badge(fn() => Appointment::where('status', AppointmentStatus::REJECTED)->count())
                 ->badgeColor('danger')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::REJECTED)),
-            'cancelled' => Tab::make()
-                ->badge(fn () => Appointment::where('status', AppointmentStatus::CANCELLED)->count())
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', AppointmentStatus::REJECTED)),
+            'cancelled' => Tab::make(__('panels/admin/resources/appointment.tabs.cancelled'))
+                ->badge(fn() => Appointment::where('status', AppointmentStatus::CANCELLED)->count())
                 ->badgeColor('gray')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::CANCELLED)),
-            'completed' => Tab::make()
-                ->badge(fn () => Appointment::where('status', AppointmentStatus::COMPLETED)->count())
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', AppointmentStatus::CANCELLED)),
+            'completed' => Tab::make(__('panels/admin/resources/appointment.tabs.completed'))
+                ->badge(fn() => Appointment::where('status', AppointmentStatus::COMPLETED)->count())
                 ->badgeColor('success')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('status', AppointmentStatus::COMPLETED)),
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('status', AppointmentStatus::COMPLETED)),
         ];
     }
 }

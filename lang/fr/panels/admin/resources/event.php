@@ -36,4 +36,11 @@ return [
     'enter_event_location' => 'Entrez la localisation de l\'événement (ex. Nom de la clinique, Adresse)',
     'event_metadata' => 'Métadonnées de l\'événement',
     'select_event_date' => 'Sélectionnez la date de l\'événement',
+    'tabs' => [
+        'all'       => 'Tous',
+        'future'    => 'À venir',
+        'happening' => 'En cours',
+        'archive'   => 'Archive',
+        'trashed'   => 'Supprimés',
+    ],
 ];

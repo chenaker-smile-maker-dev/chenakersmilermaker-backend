@@ -38,4 +38,11 @@ return [
     'enter_event_location' => 'Enter event location (e.g., Clinic Name, Address)',
     'event_metadata' => 'Event Metadata',
     'select_event_date' => 'Select event date',
+    'tabs' => [
+        'all'       => 'All',
+        'future'    => 'Future',
+        'happening' => 'Happening',
+        'archive'   => 'Archive',
+        'trashed'   => 'Trashed',
+    ],
 ];

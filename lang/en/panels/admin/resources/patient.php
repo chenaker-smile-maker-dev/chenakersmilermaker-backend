@@ -26,4 +26,9 @@ return [
     'updated_at' => 'Updated At',
     'deleted_at' => 'Deleted At',
     'password' => 'Password',
+    'tabs' => [
+        'all'    => 'All',
+        'male'   => 'Male',
+        'female' => 'Female',
+    ],
 ];

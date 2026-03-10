@@ -36,4 +36,8 @@ return [
     'no_image' => 'لا توجد صورة',
     'deleted' => 'محذوف',
     'reviews_tab' => 'التقييمات',
+    'tabs' => [
+        'all'     => 'الكل',
+        'trashed' => 'المحذوفة',
+    ],
 ];

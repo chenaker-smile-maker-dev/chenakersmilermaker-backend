@@ -26,4 +26,9 @@ return [
     'duration' => 'Duration',
     'availability' => 'Availability',
     'image' => 'Service Image',
+    'tabs' => [
+        'all'      => 'All',
+        'active'   => 'Active',
+        'inactive' => 'Inactive',
+    ],
 ];

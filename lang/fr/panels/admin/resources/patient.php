@@ -26,4 +26,9 @@ return [
     'updated_at' => 'Modifié le',
     'deleted_at' => 'Supprimé le',
     'password' => 'Mot de passe',
+    'tabs' => [
+        'all'    => 'Tous',
+        'male'   => 'Hommes',
+        'female' => 'Femmes',
+    ],
 ];

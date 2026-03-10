@@ -20,4 +20,8 @@ return [
     'diploma_certification' => 'Diplôme/Certification',
     'diploma_placeholder' => 'ex. : MD de la Harvard Medical School',
     'schedule_name' => 'Nom de l\'horaire',
+    'tabs' => [
+        'all'     => 'Tous',
+        'trashed' => 'Supprimés',
+    ],
 ];

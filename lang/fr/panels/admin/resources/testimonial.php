@@ -46,4 +46,10 @@ return [
     'created' => 'Créé',
     'updated' => 'Modifié',
     'content' => 'Contenu',
+    'tabs' => [
+        'all'         => 'Tous',
+        'published'   => 'Publiés',
+        'unpublished' => 'Non publiés',
+        'trashed'     => 'Supprimés',
+    ],
 ];

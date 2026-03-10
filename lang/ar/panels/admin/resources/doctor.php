@@ -20,4 +20,8 @@ return [
     'diploma_certification' => 'شهادة/ترخيص',
     'diploma_placeholder' => 'مثال: درجة طب من جامعة هارفارد الطبية',
     'schedule_name' => 'اسم الجدول الزمني',
+    'tabs' => [
+        'all'     => 'الكل',
+        'trashed' => 'المحذوفون',
+    ],
 ];
