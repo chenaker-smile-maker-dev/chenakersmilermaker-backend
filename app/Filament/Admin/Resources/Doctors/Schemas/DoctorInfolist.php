@@ -75,7 +75,6 @@ class DoctorInfolist
                 //             ->columnSpanFull(),
                 //     ]),
                 Section::make(__('panels/admin/resources/doctor.services'))
-                    ->collapsed()
                     ->columnSpanFull()
                     ->schema([
                         RepeatableEntry::make('services')

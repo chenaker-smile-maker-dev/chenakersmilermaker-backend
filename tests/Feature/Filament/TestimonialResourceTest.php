@@ -47,7 +47,7 @@ it('can filter testimonials by published status', function () {
     $unpublished = Testimonial::factory()->create(['is_published' => false, 'deleted_at' => null]);
 
     livewire(ListTestimonials::class)
-        ->filterTable('is_published', true)
+        ->set('activeTab', 'published')
         ->assertCanSeeTableRecords(collect([$published]))
         ->assertCanNotSeeTableRecords(collect([$unpublished]));
 });

@@ -61,7 +61,7 @@ it('can filter appointments by status', function () {
     ]);
 
     livewire(ListAppointments::class)
-        ->filterTable('status', AppointmentStatus::PENDING->value)
+        ->set('activeTab', 'pending')
         ->assertCanSeeTableRecords($pending)
         ->assertCanNotSeeTableRecords($completed);
 });

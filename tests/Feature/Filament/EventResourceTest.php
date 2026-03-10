@@ -48,7 +48,7 @@ it('can filter events by archived status', function () {
     $archived = Event::factory()->count(2)->create(['is_archived' => true]);
 
     livewire(ListEvents::class)
-        ->filterTable('is_archived', true)
+        ->set('activeTab', 'archive')
         ->assertCanSeeTableRecords($archived)
         ->assertCanNotSeeTableRecords($active);
 });
