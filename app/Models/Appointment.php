@@ -48,6 +48,7 @@ class Appointment extends Model implements Eventable
             'confirmed_at' => 'datetime',
             'price' => 'integer',
             'status' => AppointmentStatus::class,
+            'change_request_status' => \App\Enums\Appointment\ChangeRequestStatus::class,
             'metadata' => 'json',
         ];
     }
@@ -74,11 +75,33 @@ class Appointment extends Model implements Eventable
 
     public function toCalendarEvent(): CalendarEvent
     {
+        $statusColor = match ($this->status) {
+            \App\Enums\Appointment\AppointmentStatus::PENDING   => '#F59E0B', // amber-400
+            \App\Enums\Appointment\AppointmentStatus::CONFIRMED => '#3B82F6', // blue-500
+            \App\Enums\Appointment\AppointmentStatus::REJECTED  => '#EF4444', // red-500
+            \App\Enums\Appointment\AppointmentStatus::CANCELLED => '#6B7280', // gray-500
+            \App\Enums\Appointment\AppointmentStatus::COMPLETED => '#10B981', // emerald-500
+            default                                             => '#6B7280',
+        };
+
+        $doctorName = $this->doctor?->display_name ?? '';
+        $patientName = $this->patient?->full_name ?? '';
+        $serviceName = $this->service?->name ?? '';
+
         return CalendarEvent::make($this)
-            ->title($this->service->name . ($this->doctor ? ' - ' . $this->doctor->display_name : ""))
-            ->backgroundColor(color: '#34D399') // ✅ Tailwind green-400
+            ->title($serviceName . ($doctorName ? ' · ' . $doctorName : ''))
+            ->backgroundColor($statusColor)
+            ->textColor('#ffffff')
             ->start($this->from)
-            ->end($this->to);
+            ->end($this->to)
+            ->extendedProps([
+                'status'      => $this->status->value,
+                'doctor_id'   => $this->doctor_id,
+                'doctor_name' => $doctorName,
+                'patient'     => $patientName,
+                'service'     => $serviceName,
+                'price'       => $this->price,
+            ]);
     }
 
     public function scopeBetween($query, $start, $end)

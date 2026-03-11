@@ -20,7 +20,7 @@ class Doctor extends Model implements HasMedia
     use HasSchedules;
 
     protected $fillable = ['name', 'specialty', 'diplomas', 'email', 'phone', 'address', 'metadata'];
-    public array $translatable = ['name', 'specialty'];
+    public $translatable = ['name', 'specialty'];
     protected $hidden = [];
 
     protected function casts(): array
@@ -85,6 +85,6 @@ class Doctor extends Model implements HasMedia
 
     public function getDisplayNameAttribute()
     {
-        return 'Dr.' . $this->name;
+        return __('panels/admin/resources/doctor.dr_prefix') . ' ' . $this->getTranslation('name', app()->getLocale());
     }
 }

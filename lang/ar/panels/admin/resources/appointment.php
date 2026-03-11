@@ -26,4 +26,10 @@ return [
         'cancelled' => 'ملغى',
         'completed' => 'مكتمل',
     ],
+    'change_request_status' => [
+        'pending_cancellation' => 'طلب إلغاء معلق',
+        'pending_reschedule'   => 'طلب إعادة جدولة معلق',
+        'approved'             => 'مقبول',
+        'rejected'             => 'مرفوض',
+    ],
 ];

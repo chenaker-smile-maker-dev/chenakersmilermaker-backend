@@ -16,13 +16,7 @@ enum AppointmentStatus: string implements HasLabel, HasColor, HasIcon
 
     public function getLabel(): string
     {
-        return match ($this) {
-            self::PENDING => 'Pending',
-            self::CONFIRMED => 'Confirmed',
-            self::REJECTED => 'Rejected',
-            self::CANCELLED => 'Cancelled',
-            self::COMPLETED => 'Completed',
-        };
+        return __('panels/admin/resources/appointment.tabs.' . $this->value);
     }
 
     public function getColor(): string|array|null
@@ -45,5 +39,24 @@ enum AppointmentStatus: string implements HasLabel, HasColor, HasIcon
             self::CANCELLED => 'heroicon-o-trash',
             self::COMPLETED => 'heroicon-o-check-badge',
         };
+    }
+
+    /**
+     * Returns the list of statuses this status can transition to.
+     */
+    public function allowedTransitions(): array
+    {
+        return match ($this) {
+            self::PENDING   => [self::CONFIRMED, self::REJECTED, self::CANCELLED],
+            self::CONFIRMED => [self::COMPLETED, self::CANCELLED],
+            self::REJECTED  => [],
+            self::CANCELLED => [],
+            self::COMPLETED => [],
+        };
+    }
+
+    public function canTransitionTo(self $target): bool
+    {
+        return in_array($target, $this->allowedTransitions());
     }
 }

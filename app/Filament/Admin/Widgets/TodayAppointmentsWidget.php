@@ -12,7 +12,7 @@ class TodayAppointmentsWidget extends BaseWidget
 {
     protected static ?int $sort = 3;
 
-    protected int|string|array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 2;
 
     protected static ?string $heading = null;
 

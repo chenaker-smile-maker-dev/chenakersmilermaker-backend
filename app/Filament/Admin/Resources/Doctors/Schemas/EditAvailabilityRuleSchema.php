@@ -22,8 +22,8 @@ class EditAvailabilityRuleSchema
         $startTime = $firstPeriod?->start_time ?? app(PlatformSettings::class)->start_time;
         $endTime = $firstPeriod?->end_time ?? app(PlatformSettings::class)->end_time;
 
-        // Get days from frequency_config (Zap stores as ['days' => ['monday', 'tuesday', ...]])
-        $daysOfWeekValues = $record->frequency_config['days'] ?? [];
+        // Get days from frequency_config (Zap stores as a WeeklyFrequencyConfig object with ->days property)
+        $daysOfWeekValues = $record->frequency_config?->days ?? [];
 
         // Convert day names to numeric values for checkbox list
         $dayMap = [

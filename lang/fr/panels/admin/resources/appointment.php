@@ -27,4 +27,10 @@ return [
         'cancelled' => 'Annulé',
         'completed' => 'Terminé',
     ],
+    'change_request_status' => [
+        'pending_cancellation' => 'Annulation en attente',
+        'pending_reschedule'   => 'Reprogrammation en attente',
+        'approved'             => 'Approuvé',
+        'rejected'             => 'Refusé',
+    ],
 ];

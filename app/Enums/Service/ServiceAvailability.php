@@ -15,11 +15,7 @@ enum ServiceAvailability: string implements HasLabel, HasColor, HasIcon
 
     public function getLabel(): string
     {
-        return match ($this) {
-            self::DAYTIME => 'Working Hours',
-            self::NIGHTTIME => "Urgence (NIGHT)",
-            self::BOTH => "Both",
-        };
+        return __('panels/admin/resources/service.availability_options.' . $this->value);
     }
 
     public function getColor(): string

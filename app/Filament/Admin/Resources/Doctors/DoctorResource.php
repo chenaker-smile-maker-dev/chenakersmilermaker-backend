@@ -4,11 +4,14 @@ namespace App\Filament\Admin\Resources\Doctors;
 
 use App\Filament\Admin\AdminNavigation;
 use App\Filament\Admin\Resources\Doctors\Pages\CreateDoctor;
+use App\Filament\Admin\Resources\Doctors\Pages\DoctorCalendarPage;
 use App\Filament\Admin\Resources\Doctors\Pages\EditDoctor;
 use App\Filament\Admin\Resources\Doctors\Pages\EditDoctorContact;
 use App\Filament\Admin\Resources\Doctors\Pages\EditDoctorPhoto;
 use App\Filament\Admin\Resources\Doctors\Pages\ListDoctors;
 use App\Filament\Admin\Resources\Doctors\Pages\ManageDoctorAppointments;
+use App\Filament\Admin\Resources\Doctors\Pages\ManageDoctorAvailability;
+use App\Filament\Admin\Resources\Doctors\Pages\ManageDoctorBlocked;
 use App\Filament\Admin\Resources\Doctors\Pages\ViewDoctor;
 use App\Filament\Admin\Resources\Doctors\Pages\ManageDoctorSchedules;
 use App\Filament\Admin\Resources\Doctors\RelationManagers\AppointmentsRelationManager;
@@ -104,16 +107,19 @@ class DoctorResource extends Resource
             'edit-contact' => EditDoctorContact::route('/{record}/edit-contact'),
             'edit-photo' => EditDoctorPhoto::route('/{record}/edit-photo'),
             'manage-schedules' => ManageDoctorSchedules::route('/{record}/schedules'),
+            'manage-availability' => ManageDoctorAvailability::route('/{record}/availability'),
+            'manage-blocked' => ManageDoctorBlocked::route('/{record}/blocked'),
             'manage-appointments' => ManageDoctorAppointments::route('/{record}/appointments'),
+            'calendar' => DoctorCalendarPage::route('/{record}/calendar'),
         ];
     }
 
     public static function sidebar(Model $record): FilamentPageSidebar
     {
         $TITLE = $record->display_name;
-        $DESCRIPTION = $record->specialty ?? 'Doctor Details';
-        $DOCTOR_INFOS_GROUP = 'Edit Doctor Informations';
-        $DOCTOR_SCHEDULES_GROUP = 'Manage Doctor Schedules';
+        $DESCRIPTION = $record->specialty ?? __('panels/admin/resources/doctor.singular');
+        $DOCTOR_INFOS_GROUP = __('panels/admin/resources/doctor.sidebar.group_info');
+        $DOCTOR_SCHEDULES_GROUP = __('panels/admin/resources/doctor.sidebar.group_schedules');
 
         return FilamentPageSidebar::make()
             ->setTitle($TITLE)
@@ -121,41 +127,59 @@ class DoctorResource extends Resource
             // ->topbarNavigation()
             ->sidebarNavigation()
             ->setNavigationItems([
-                PageNavigationItem::make('View Doctor')
+                PageNavigationItem::make(__('panels/admin/resources/doctor.sidebar.view'))
                     ->icon('heroicon-o-eye')
                     // ->group($DOCTOR_INFOS_GROUP)
                     ->isActiveWhen(fn() => request()->routeIs(ViewDoctor::getRouteName()))
                     ->url(fn() => ViewDoctor::getUrl(['record' => $record->id])),
 
-                PageNavigationItem::make('Edit Doctor')
+                PageNavigationItem::make(__('panels/admin/resources/doctor.sidebar.edit'))
                     ->icon('heroicon-o-user')
                     ->group($DOCTOR_INFOS_GROUP)
                     ->isActiveWhen(fn() => request()->routeIs(EditDoctor::getRouteName()))
                     ->url(fn() => EditDoctor::getUrl(['record' => $record->id])),
 
-                PageNavigationItem::make('Edit Doctor Contact')
+                PageNavigationItem::make(__('panels/admin/resources/doctor.sidebar.edit_contact'))
                     ->icon('heroicon-o-phone')
                     ->group($DOCTOR_INFOS_GROUP)
                     ->isActiveWhen(fn() => request()->routeIs(EditDoctorContact::getRouteName()))
                     ->url(fn() => EditDoctorContact::getUrl(['record' => $record->id])),
 
-                PageNavigationItem::make('Edit Doctor Photo')
+                PageNavigationItem::make(__('panels/admin/resources/doctor.sidebar.edit_photo'))
                     ->icon('heroicon-o-camera')
                     ->group($DOCTOR_INFOS_GROUP)
                     ->isActiveWhen(fn() => request()->routeIs(EditDoctorPhoto::getRouteName()))
                     ->url(fn() => EditDoctorPhoto::getUrl(['record' => $record->id])),
 
-                PageNavigationItem::make('Manage Doctor Schedules')
+                PageNavigationItem::make(__('panels/admin/resources/doctor.sidebar.schedules'))
                     ->icon('heroicon-o-clock')
                     ->group($DOCTOR_SCHEDULES_GROUP)
                     ->isActiveWhen(fn() => request()->routeIs(ManageDoctorSchedules::getRouteName()))
                     ->url(fn() => ManageDoctorSchedules::getUrl(['record' => $record->id])),
 
-                PageNavigationItem::make('Manage Doctor Appointments')
+                PageNavigationItem::make(__('panels/admin/resources/doctor.sidebar.availability'))
+                    ->icon('heroicon-o-check-circle')
+                    ->group($DOCTOR_SCHEDULES_GROUP)
+                    ->isActiveWhen(fn() => request()->routeIs(ManageDoctorAvailability::getRouteName()))
+                    ->url(fn() => ManageDoctorAvailability::getUrl(['record' => $record->id])),
+
+                PageNavigationItem::make(__('panels/admin/resources/doctor.sidebar.blocked'))
+                    ->icon('heroicon-o-no-symbol')
+                    ->group($DOCTOR_SCHEDULES_GROUP)
+                    ->isActiveWhen(fn() => request()->routeIs(ManageDoctorBlocked::getRouteName()))
+                    ->url(fn() => ManageDoctorBlocked::getUrl(['record' => $record->id])),
+
+                PageNavigationItem::make(__('panels/admin/resources/doctor.sidebar.appointments'))
                     ->icon('heroicon-o-calendar-days')
                     ->group($DOCTOR_SCHEDULES_GROUP)
                     ->isActiveWhen(fn() => request()->routeIs(ManageDoctorAppointments::getRouteName()))
                     ->url(fn() => ManageDoctorAppointments::getUrl(['record' => $record->id])),
+
+                PageNavigationItem::make(__('panels/admin/resources/doctor.sidebar.calendar'))
+                    ->icon('heroicon-o-calendar')
+                    ->group($DOCTOR_SCHEDULES_GROUP)
+                    ->isActiveWhen(fn() => request()->routeIs(DoctorCalendarPage::getRouteName()))
+                    ->url(fn() => DoctorCalendarPage::getUrl(['record' => $record->id])),
 
             ]);
     }

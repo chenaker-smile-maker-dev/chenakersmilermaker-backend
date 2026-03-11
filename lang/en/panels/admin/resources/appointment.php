@@ -26,4 +26,10 @@ return [
         'cancelled' => 'Cancelled',
         'completed' => 'Completed',
     ],
+    'change_request_status' => [
+        'pending_cancellation' => 'Pending Cancellation',
+        'pending_reschedule'   => 'Pending Reschedule',
+        'approved'             => 'Approved',
+        'rejected'             => 'Rejected',
+    ],
 ];

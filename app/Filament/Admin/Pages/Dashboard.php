@@ -2,24 +2,26 @@
 
 namespace App\Filament\Admin\Pages;
 
-use App\Filament\Admin\Widgets\AppointmentCalendarWidget;
-use App\Filament\Admin\Widgets\PendingActionsWidget;
+use App\Filament\Admin\Widgets\BookingCalendarWidget;
+use App\Filament\Admin\Widgets\NewPatientsWidget;
 use App\Filament\Admin\Widgets\StatsOverviewWidget;
 use App\Filament\Admin\Widgets\TodayAppointmentsWidget;
-use App\Filament\Admin\Widgets\UrgentBookingsWidget;
 use Filament\Pages\Dashboard as BaseDashboard;
-use Filament\Widgets\FilamentInfoWidget;
 
 class Dashboard extends BaseDashboard
 {
     public function getWidgets(): array
     {
         return [
+            // Row 1 – Stats overview (full width)
             StatsOverviewWidget::class,
-            PendingActionsWidget::class,
-            UrgentBookingsWidget::class,
+
+            // Row 2 – Full-width booking calendar
+            BookingCalendarWidget::class,
+
+            // Row 3 – Today appointments (half) + New patients (half)
             TodayAppointmentsWidget::class,
-            AppointmentCalendarWidget::class,
+            NewPatientsWidget::class,
         ];
     }
 

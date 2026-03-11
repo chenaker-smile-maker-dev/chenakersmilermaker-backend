@@ -26,6 +26,7 @@ use Hammadzafar05\MobileBottomNav\MobileBottomNav;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
 use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
+use Filament\Pages\Enums\SubNavigationPosition;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -38,6 +39,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->spa()
             ->sidebarCollapsibleOnDesktop()
+            ->unsavedChangesAlerts()
             ->colors([
                 'primary' => Color::hex('#8FFDC6'),
                 'success' => Color::hex('#12D18E'),

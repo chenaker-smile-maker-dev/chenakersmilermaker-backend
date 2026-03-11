@@ -6,9 +6,7 @@ use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasIcon;
 use Filament\Support\Contracts\HasLabel;
 
-//fiiliament color label and iicon
-// enum Gender: string
-enum Gender: string implements HasLabel, HasColor
+enum Gender: string implements HasLabel, HasColor, HasIcon
 {
     case MALE = 'male';
     case FEMALE = 'female';
@@ -17,27 +15,25 @@ enum Gender: string implements HasLabel, HasColor
     {
         return array_column(self::cases(), 'value');
     }
+
     public function getLabel(): string
     {
-        return match ($this) {
-            self::MALE => 'Male',
-            self::FEMALE => "Female",
-        };
+        return __('panels/admin/resources/patient.tabs.' . $this->value);
     }
 
     public function getColor(): string
     {
         return match ($this) {
-            self::MALE => 'success',
-            self::FEMALE => "danger",
+            self::MALE   => 'info',
+            self::FEMALE => 'pink',
         };
     }
 
-    // public function getIcon(): string
-    // {
-    //     return match ($this) {
-    //         self::MALE => 'Male',
-    //         self::FEMALE => "Female",
-    //     };
-    // }
+    public function getIcon(): string
+    {
+        return match ($this) {
+            self::MALE   => 'heroicon-o-user',
+            self::FEMALE => 'heroicon-o-user-circle',
+        };
+    }
 }

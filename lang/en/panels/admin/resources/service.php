@@ -31,4 +31,9 @@ return [
         'active'   => 'Active',
         'inactive' => 'Inactive',
     ],
+    'availability_options' => [
+        'daytime'   => 'Working Hours',
+        'nighttime' => 'Night Urgency',
+        'both'      => 'Both',
+    ],
 ];

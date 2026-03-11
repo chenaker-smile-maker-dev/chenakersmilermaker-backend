@@ -51,14 +51,6 @@ class AppointmentsTable
                 TextColumn::make('change_request_status')
                     ->label('Change Request')
                     ->badge()
-                    ->color(fn($state) => match ($state) {
-                        'pending_cancellation' => 'danger',
-                        'pending_reschedule' => 'warning',
-                        'approved' => 'success',
-                        'rejected' => 'gray',
-                        default => null,
-                    })
-                    ->formatStateUsing(fn($state) => $state ? str_replace('_', ' ', ucfirst($state)) : '-')
                     ->placeholder('-'),
                 TextColumn::make('price')
                     ->label(__('panels/admin/resources/appointment.price'))
@@ -75,12 +67,7 @@ class AppointmentsTable
             ])
             ->filters([
                 SelectFilter::make('change_request_status')
-                    ->options([
-                        'pending_cancellation' => 'Pending Cancellation',
-                        'pending_reschedule' => 'Pending Reschedule',
-                        'approved' => 'Approved',
-                        'rejected' => 'Rejected',
-                    ])
+                    ->options(\App\Enums\Appointment\ChangeRequestStatus::class)
                     ->label('Change Request'),
                 SelectFilter::make('doctor_id')
                     ->relationship('doctor', 'name')

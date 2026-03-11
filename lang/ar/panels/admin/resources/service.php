@@ -31,4 +31,9 @@ return [
         'active'   => 'نشط',
         'inactive' => 'غير نشط',
     ],
+    'availability_options' => [
+        'daytime'   => 'ساعات العمل',
+        'nighttime' => 'طوارئ ليلية',
+        'both'      => 'كلاهما',
+    ],
 ];
