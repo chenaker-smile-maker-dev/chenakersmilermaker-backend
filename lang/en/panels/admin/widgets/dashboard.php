@@ -7,19 +7,19 @@ return [
     'todays_appointments' => "Today's Appointments",
     'this_month' => 'This Month',
     'this_month_suffix' => 'appointments',
-    'pending_actions' => 'Pending Actions',
-    'pending_actions_desc' => 'Appointments + urgent bookings',
+    'pending_actions' => 'Action Required',
+    'pending_actions_desc' => 'Appointments + urgent requests',
 
     // PendingActionsWidget
     'pending_appointments' => 'Pending Appointments',
-    'pending_appointments_desc' => 'Awaiting confirmation',
+    'pending_appointments_desc' => 'Require your confirmation',
     'cancellation_requests' => 'Cancellation Requests',
-    'cancellation_requests_desc' => 'Awaiting decision',
+    'cancellation_requests_desc' => 'Require your decision',
     'reschedule_requests' => 'Reschedule Requests',
-    'reschedule_requests_desc' => 'Awaiting decision',
+    'reschedule_requests_desc' => 'Require your decision',
 
     // UrgentBookingsWidget
-    'pending_urgent_bookings' => 'Pending Urgent Bookings',
+    'pending_urgent_bookings' => 'Pending Urgent Requests',
     'pending_urgent_bookings_desc' => 'Require immediate attention',
 
     // TodayAppointmentsWidget
@@ -40,7 +40,7 @@ return [
     'calendar_view_week'          => 'Week',
     'calendar_view_day'           => 'Day',
     'calendar_view_list'          => 'List',
-    'calendar_view_resource'      => 'By Doctor',
+    'calendar_view_resource'      => 'Doctor Schedules',
     'calendar_doctor_legend'      => 'Doctors',
     'calendar_status_legend'      => 'Status',
     'calendar_create_appointment' => 'New Appointment',

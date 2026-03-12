@@ -10,10 +10,10 @@ return [
     'event_date' => 'Event Date',
     'archived' => 'Archived',
     'not_archived' => 'Not Archived',
-    'created' => 'Created',
-    'updated' => 'Updated',
-    'deleted' => 'Deleted',
-    'not_deleted' => 'Not deleted',
+    'created' => 'Date Added',
+    'updated' => 'Last Updated',
+    'deleted' => 'Removed',
+    'not_deleted' => 'Active',
 
     // Filters
     'archived_status' => 'Archived Status',
@@ -22,9 +22,9 @@ return [
     'active_only' => 'Active only',
     'date_range' => 'Date Range',
     'no_location' => 'No location',
-    'created' => 'Created',
-    'updated' => 'Updated',
-    'deleted' => 'Deleted',
+    'created' => 'Added On',
+    'updated' => 'Updated On',
+    'deleted' => 'Removed On',
 
     // Infolist / sections
     'event_information' => 'Event Information',
@@ -41,8 +41,8 @@ return [
     'tabs' => [
         'all'       => 'All',
         'future'    => 'Future',
-        'happening' => 'Happening',
-        'archive'   => 'Archive',
-        'trashed'   => 'Trashed',
+        'happening' => 'Happening Now',
+        'archive'   => 'Archived',
+        'trashed'   => 'Deleted',
     ],
 ];

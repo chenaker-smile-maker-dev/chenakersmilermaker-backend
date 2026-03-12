@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'singular' => 'Urgent Booking',
-    'plural' => 'Urgent Bookings',
+    'singular' => 'Urgent Request',
+    'plural' => 'Urgent Requests',
 
     // Table columns
     'patient' => 'Patient',
@@ -28,8 +28,8 @@ return [
     'created_at' => 'Submitted At',
 
     // Actions
-    'accept' => 'Accept',
-    'reject' => 'Reject',
+    'accept' => 'Approve',
+    'reject' => 'Decline',
     'complete' => 'Mark Complete',
 
     // Action form fields
@@ -39,8 +39,8 @@ return [
     'rejection_reason' => 'Reason for Rejection',
 
     // Notifications
-    'accepted_notification' => 'Urgent booking accepted.',
-    'rejected_notification' => 'Urgent booking rejected.',
+    'accepted_notification' => 'Urgent request approved.',
+    'rejected_notification' => 'Urgent request declined.',
     'completed_notification' => 'Marked as completed.',
 
     // Global search

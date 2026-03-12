@@ -3,7 +3,7 @@
 return [
     'singular' => 'Service',
     'plural' => 'Services',
-    'no_image_uploaded' => 'No image uploaded',
+    'no_image_uploaded' => 'No image provided',
     'active' => 'Active',
     'inactive' => 'Inactive',
     'status' => 'Status',
@@ -18,12 +18,12 @@ return [
     'nighttime_services' => 'Nighttime Services',
     'both_times_services' => 'Both Times Services',
     'diplomas' => 'Diplomas',
-    'not_deleted' => 'Not deleted',
-    'created_at' => 'Created At',
-    'updated_at' => 'Updated At',
+    'not_deleted' => 'Available',
+    'created_at' => 'Date Added',
+    'updated_at' => 'Last Updated',
     'name' => 'Service Name',
     'price' => 'Price',
-    'duration' => 'Duration',
+    'duration' => 'Session Length',
     'availability' => 'Availability',
     'image' => 'Service Image',
     'tabs' => [
@@ -32,8 +32,8 @@ return [
         'inactive' => 'Inactive',
     ],
     'availability_options' => [
-        'daytime'   => 'Working Hours',
-        'nighttime' => 'Night Urgency',
-        'both'      => 'Both',
+        'daytime'   => 'Regular Hours',
+        'nighttime' => 'Night Emergencies',
+        'both'      => 'Always Available',
     ],
 ];
