@@ -1,6 +1,7 @@
+
 FROM ubuntu:24.04
 
-# Install dependencies required for the installer script and Laravel
+# Install dependencies required for the installer script, Laravel, and Node.js
 ENV TERM=xterm
 RUN apt-get update && apt-get install -y \
     curl \
@@ -8,8 +9,15 @@ RUN apt-get update && apt-get install -y \
     unzip \
     ca-certificates \
     procps \
+    # Node.js dependencies
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
-    
+
+# Alternatively, install latest Node.js from NodeSource (uncomment if you need newer version)
+# RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+#     apt-get install -y nodejs
+
 # Install PHP, Composer, and Laravel via the provided script
 RUN /bin/bash -c "$(curl -fsSL https://php.new/install/linux/8.4)"
 
@@ -40,6 +48,9 @@ ENV LOG_CHANNEL=stderr
 
 # Install PHP dependencies
 RUN composer install --optimize-autoloader
+
+# Install npm dependencies and build assets
+RUN npm install && npm run build
 
 # Setup SQLite database and permissions
 RUN mkdir -p database && touch database/database.sqlite && \
